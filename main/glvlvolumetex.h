@@ -72,8 +72,8 @@ public:
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 private:
-	template<class T> bool GLvlVolumeTex::fillIndexData(Bild<T> &src);
-	template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VImage &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
+	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);
+	template<class T,class ST> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T> &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
 };
 
 #endif
