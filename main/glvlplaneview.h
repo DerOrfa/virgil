@@ -25,6 +25,7 @@
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
 #include <primitives/sglquader.h>
+#include "../wshed/vincent_transform.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
 
@@ -71,6 +72,7 @@ public slots:
 	void	onCamChanged();
 	void	selectView(int view);
 	void	selectViewMode(int view);
+    virtual void onReached(vincent::lab_value h,unsigned short objs);
 };
 
 class GLvlPlaneView: public GLvlView

@@ -22,6 +22,7 @@
 
 #include "glvlplaneview.h"
 #include "sglqtmultispacemgr.h"
+#include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
 
@@ -42,6 +43,7 @@ public:
 	void doConfig();
 	void doBenchmark(time_t benchLen);
     void  loadIntoWShed();
+	void onReached(vincent::lab_value h,unsigned short objs);
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);

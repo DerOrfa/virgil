@@ -3,11 +3,11 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./wshed
 # Das Target ist eine Bibliothek:  
 
-CONFIG += release \
-          warn_on \
-          staticlib 
-TEMPLATE = lib 
-HEADERS += vincent_transform.h \
-           vincent_bild.h \
-           vincent_punkt.h 
+HEADERS += vincent_bild.h \
+           vincent_punkt.h \
+           vincent_transform.h 
 SOURCES += vincent_transform.cpp 
+CONFIG += release \
+warn_on \
+staticlib
+TEMPLATE = lib

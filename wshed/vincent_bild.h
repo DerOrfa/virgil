@@ -70,7 +70,7 @@ template <class T> class Bild_vimage : public Bild<T>
 		for(int i=size()-1;i>=0;i--)at(i)=value;
 	}
 	Bild_vimage(VImage _img):
-		Bild<T>(VImageNRows(_img),VImageNColumns(_img),VImageNBands(_img)),img(_img),
+		Bild<T>(VImageNColumns(_img),VImageNRows(_img),VImageNBands(_img)),img(_img),
 		lastBand(numeric_limits<int>::min())
 	{
 		int pixMax;

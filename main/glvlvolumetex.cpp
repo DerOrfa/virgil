@@ -29,24 +29,10 @@ template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src)
 	if(!xsize)return false;
 
 	{
-		T min=T(VPixelMinValue(src)),max=T(VPixelMaxValue(src));
+		T min=1,max=255;
 		int palsize=(max-min+1); //255-0 = 255 nicht 256 => +1
-		T num_max=numeric_limits<T>::max();
 		SGLprintInfo("%d-Farb-Palette wird initialisiert",palsize);
-		T *palette= (T*)malloc(palsize*sizeof(T)*2);
-		palette[1]=numeric_limits<T>::min();//wenn signed welches alpha ist dann Transparent ? 0,oder min()
-		for(int i=1;i<palsize;i++)
-		{
-			palette[i*2]=min+i;
-			palette[i*2+1]=num_max;
-		}
-		glColorTableEXT(TexType,GL_LUMINANCE_ALPHA,palsize,GL_LUMINANCE_ALPHA,gl_type,palette);
-		free(palette);
-		if(gluerr = glGetError())
-		{
-			SGLprintError("%s beim Laden der Palette [GLerror]",gluErrorString(gluerr));
-			return GL_FALSE;
-		}
+		setupPal(min,max,true);
 	}
 	
 	T *pixels_=(T*)calloc(xsize*ysize*zsize,sizeof(T));
@@ -376,4 +362,29 @@ void GLvlVolumeTex::loadTint(VImage i)
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=true;
 	multitex.reset(p);
+}
+
+
+/*!
+    \fn GLvlVolumeTex::setupPal(unsigned short start,unsigned short end)
+ */
+bool GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,bool scale)
+{
+	GLuint gluerr;
+	struct d_byte{GLfloat lum;GLfloat alpha;};
+	if(start<1){SGLprintError("Die Palette darf erst bei \"1\" beginnen, nicht bei \"%d\"",start);return false;}
+	d_byte *palette= (d_byte*)calloc(end+1,sizeof(d_byte));
+	for(unsigned short i=start;i<=end;i++)
+	{
+		palette[i].lum=scale ? (i-start)/float(end-start):i/float(end);
+		palette[i].alpha=1;
+	}
+	glColorTable(TexType,GL_LUMINANCE_ALPHA,end+1,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
+	free(palette);
+	if(gluerr = glGetError())
+	{
+		SGLprintError("%s beim Laden der Palette [GLerror]",gluErrorString(gluerr));
+		return GL_FALSE;
+	}
+	return true;
 }

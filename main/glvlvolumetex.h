@@ -85,6 +85,7 @@ public:
     void loadTint(VImage i);
     GLdouble mm2tex_Matrix[4][4];
 //    GLdouble gl2mm_Matrix[4][4];
+    bool setupPal(unsigned short start,unsigned short end,bool scale=false);
 private:
 	template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src);
 	template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VImage &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());

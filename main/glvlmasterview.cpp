@@ -25,8 +25,8 @@
 #include <EWorkOnCfgDlg.h>
 
 #include <vista/VImage.h>
-#include "../wshed/vincent_transform.h"
-#include <qfiledialog.h> 
+#include <qstatusbar.h> 
+
 
 using namespace boost;
 using namespace eclasses;
@@ -163,17 +163,21 @@ void  GLvlMasterView::loadIntoWShed()
 	{
 		case VUByteRepn:	
 		{
+			statusBar()->message("Initialisiere");
 			vincent::transform t(MasterImg);
-			VAttrList out_list = VCreateAttrList();
-//			QFileDialog::getSaveFileName().latin1()
-			FILE *out_file=fopen("/tmp/out.v","w");
-			VAppendAttr(out_list,"image",NULL,VImageRepn,MasterImg);
-			VImage im=t().im();
-			VAppendAttr(out_list,"WShed_new_direct",NULL,VImageRepn,im);
-			VWriteFile (out_file, out_list);
-			printf("Erzeugt\n");
+			((GLvlView*)this)->connect(&t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
+			t.test();
+			tex->setupPal(1,255);
+			glview->sendRedraw();
 		}break;
 	}
-
 }
+
+void GLvlMasterView::onReached(vincent::lab_value h,unsigned short objs)
+{
+	statusBar()->message("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden");
+	tex->setupPal(h,255);
+	glview->sendRedraw();
+}
+
 

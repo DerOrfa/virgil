@@ -483,3 +483,12 @@ void GLvlPlaneView::showCursHere(bool toggle)
 	if(toggle)glview->registerObj(cursor);
 	else glview->unregisterObj(cursor);
 }
+
+
+/*!
+    \fn GLvlView::onReached(lab_value h,unsigned short objs)
+ */
+void GLvlView::onReached(vincent::lab_value h,unsigned short objs)
+{
+    /// @todo implement me
+}

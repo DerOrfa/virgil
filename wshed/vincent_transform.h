@@ -29,6 +29,7 @@ typedef Bild_vimage<VBild_value> VBild;
 
 class transform : public QObject
 {
+Q_OBJECT
 	Bild_vimage<VUByte> im;
 public:
 	PunktList<VUByte> D;
@@ -36,6 +37,8 @@ public:
 	void test();
 	Bild_vimage<lab_value> operator()();
 
+signals:
+    void reached(vincent::lab_value h,unsigned short objs);
 };
 
 }

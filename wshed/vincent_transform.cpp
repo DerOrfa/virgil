@@ -34,7 +34,7 @@ unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short >::max(
 unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
 unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
 
-transform::transform(VImage src) : QObject(),im(src),D(im)
+transform::transform(VImage src) : im(src),D(im)
 {
 	printf("WShed-Graph mit %g Millionen Knoten initialisiert, %g MB belegt\n",
 	im.size()/1000000.,(im.size()/1048576.)*sizeof(iPunkt<VBild_value>));
@@ -45,11 +45,17 @@ transform::transform(VImage src) : QObject(),im(src),D(im)
 }
 
 void transform::test()	{
-	iPunkt<VBild_value> r=D[5000];
-	iPunkt<VBild_value> l[6];
-	unsigned short len=r.getNachb(l,im);
-	for(int i=0;i<len;i++)
-		printf("%d-%d-%d:%d\n",l[i].x(),l[i].y(),l[i].z(),im[l[i]]);
+	VAttrList out_list = VCreateAttrList();
+	FILE *out_file=fopen("/tmp/out.v","w");
+	VAppendAttr(out_list,"image",NULL,VImageRepn,im.im());
+	vincent::Bild_vimage<VShort> im1=operator()();
+	vincent::Bild_vimage<VUByte> im2(VCreateImage(vincent::VBild::zsize,vincent::VBild::ysize,vincent::VBild::xsize,VUByteRepn));
+	for(unsigned int i=0;i<im.size();i++)
+		im2.at(i)=(im1.at(i)-numeric_limits<VShort >::min()) %256;
+	VAppendAttr(out_list,"WShed_new_direct",NULL,VImageRepn,im2.im());
+	VWriteFile (out_file, out_list);
+	fclose(out_file);
+	printf("Erzeugt\n");
 }
 
 Bild_vimage<lab_value> transform::operator()()
@@ -72,8 +78,8 @@ Bild_vimage<lab_value> transform::operator()()
 	VBild_value h=h_min;
 	do
 	{
-		if(D[aktP].wert!=h)
-			printf("leeres h=%d\n",h);
+/*		if(D[aktP].wert!=h)
+			printf("leeres h=%d\n",h);*/
 		//Alle Punkte mit h markieren
 		for(unsigned int p=aktP;p<im.size() && D[p].wert==h;p++)
 		{
@@ -155,7 +161,8 @@ Bild_vimage<lab_value> transform::operator()()
 				}
 			}
 		}
-		printf("%d Minima\n",curlab-numeric_limits<lab_value >::min());
+		reached(h,curlab-numeric_limits<lab_value >::min());
+		printf("%d\n",curlab);
 	}while((h++)<h_max);
 	return lab;
 }
