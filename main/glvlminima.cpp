@@ -53,12 +53,11 @@ void GLvlMinima::generate()
 			mask|=1<<i;
 		}
 		if(!mask)continue;
+		glTranslatef(p.x()-old_pos[0],p.y()-old_pos[1],p.z()-old_pos[2]);
+		glCallList(caps+mask);
 		old_pos[0]=p.x();
 		old_pos[1]=p.y();
 		old_pos[2]=p.z();
-		glTranslatef(old_pos[0],old_pos[1],old_pos[2]);
-		glCallList(caps+mask);
-		glTranslatef(-old_pos[0],-old_pos[1],-old_pos[2]);
 	}
 	glPopMatrix();
 	glEnable(GL_NORMALIZE);

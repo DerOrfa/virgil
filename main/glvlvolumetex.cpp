@@ -319,8 +319,6 @@ pos/size_xy
  */
 void GLvlVolumeTex::calcMatr()
 {
-	printf("Rechne\n");
-
 	for(int i=0;i<15;i++)
 		((GLdouble*)mm2tex_Matrix)[i]=0;
 	((GLdouble*)mm2tex_Matrix)[15]=1;

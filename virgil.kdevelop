@@ -112,7 +112,7 @@
       </envvars>
     </run>
     <general>
-      <activedir>wshed</activedir>
+      <activedir></activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

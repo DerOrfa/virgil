@@ -57,7 +57,6 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VShortRepn));
 	lab.reset(WSHED_INIT);
 	
-	printf("Rechne\n");
 	PunktFifo<VBild_value> fifoA;
 	lab_value curlab=numeric_limits<lab_value >::min();
 	unsigned short curdistA;

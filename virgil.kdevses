@@ -1,18 +1,18 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="3" >
-  <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlminima.cpp" >
-   <View0 line="58" Type="Source" />
-  </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
    <View0 line="189" Type="Source" />
-  </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/wshed/vincent_punkt.h" >
-   <View0 line="104" Type="Source" />
-  </Doc2>
+  </Doc0>
  </DocsAndViews>
  <pluginList>
+  <kdevvalgrind>
+   <executable path="" params="" />
+   <valgrind path="" params="" />
+   <calltree path="" params="" />
+   <kcachegrind path="" />
+  </kdevvalgrind>
   <kdevdebugger>
    <breakpointList>
     <breakpoint0 location="D.px.m[D.px.size-1]" type="2" condition="" enabled="1" />
