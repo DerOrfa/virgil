@@ -13,7 +13,8 @@
 #include <libsgl/sglvektor.h>
 #include "glvlvolumetex.h"
 
-GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
+GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(false)
+
 {
 	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
 	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
@@ -46,7 +47,6 @@ shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
 shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
 
 shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
-bool GLvlMinima::incl_wshed=true;
 
 void GLvlMinima::setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org)
 {
@@ -72,13 +72,21 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 	{
 		if(this->topCap >=topBorder)
 		{
-			if(!incl_wshed){incl_wshed=true;update =true;}
+			if(!incl_wshed){
+				incl_wshed=true;
+				cout << "Mit WShed" << endl;
+				update =true;
+			}
 		}
 		else {this->topCap++;update =true;}
 	}
 	else if(Top_delta<0)//decr TopCap
 	{
-		if(incl_wshed){incl_wshed=false;update =true;}
+		if(incl_wshed){
+			incl_wshed=false;
+			cout << "Ohne WShed" << endl;
+			update =true;
+		}
 		else if(this->topCap>this->bottomCap){this->topCap--;update =true;}
 	}
 	
@@ -152,8 +160,19 @@ void GLvlMinima::generate()
 		const GLfloat x=p.x(img->xsize),y=p.y(img->xsize,img->ysize),z=p.z(img->xsize,img->ysize);
 		for(unsigned short i=0;i<6;i++)
 		{
-			if(	nachb[i].invalid() || //Kein Nachbar
-				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)) || //Nachbar gehört nich zum Segment [nicht(wert_gleich or wert_wshed)]
+			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed) //Nachbar is Wasserscheide, und die soll gez werden
+			{
+				const GLfloat x=nachb[i].x(img->xsize),
+					y=nachb[i].y(img->xsize,img->ysize),
+					z=nachb[i].z(img->xsize,img->ysize);
+				glTranslatef(x-old_pos[0],y-old_pos[1],z-old_pos[2]);
+				old_pos[0]=x;old_pos[1]=y;old_pos[2]=z;
+				glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+				glCallList(caps+0x3F);
+				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+			}//Watersheds werden als Drahtgitter gez - daher müssen  die voxel darunter trotzdem gez werden -> kein "else if"
+			if(nachb[i].invalid() || //Kein Nachbar
+				!(p.wert==nachb[i].wert) || //Nachbar gehört nich zum Segment [nicht(wert_gleich or wert_wshed)]
 				((*org)[nachb[i]]< bottomCap || (*org)[nachb[i]]> topCap) //Nachbar liegt außerhalb [bottomCap - topCap]
 			)
 			mask|=1<<i;

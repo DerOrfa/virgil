@@ -57,18 +57,16 @@ public:
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
     void redrawAktSegment();
-	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
+/*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{
 		public:
-		void operator()(boost::shared_ptr<MemConsumer> newob) const;
+		void operator()(const MemConsumer &newob) const;
 	}TexCreate;
 	class MemDeleteNotify:public MemConsumer::NotifyDeleteSlot<MemDeleteNotify>
 	{
 		public:
-		void operator()(MemConsumer *newob) const;
-	}TexDelete;
-//    bool loadSegmentTex(shared_ptr<GLvlMinima> img,EVektor<unsigned short> pos);
-//    void loadSegmentListTex(GLvlMinimaList &img);
+		void operator()(const MemConsumer &newob) const;
+	}TexDelete;*/
 
 protected:
     void doBenchmark();

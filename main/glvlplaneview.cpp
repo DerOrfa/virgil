@@ -430,10 +430,6 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 	}
 }
 
-
-/*!
-    \fn GLvlPlaneView::init()
- */
 void GLvlPlaneView::init()
 {
 	boost::shared_ptr<GLvlPlaneCam> cam(new GLvlPlaneCam(tex));
@@ -457,10 +453,6 @@ void GLvlPlaneView::init()
 	loadCfg();
 }
 
-
-/*!
-    \fn GLvlPlaneView::mouseDoubleClickEvent ( QMouseEvent * e ) 
- */
 void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	short top_resize=0,bottom_resize=0;

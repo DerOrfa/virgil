@@ -27,19 +27,22 @@ void GLvlSegment::redisplay()
 	EVektor<unsigned short> pos;
 	pos.fromArray(3,minEdge.koord);
 	
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		(*i)->compileNextTime();
+	
 	myTex->loadSegment(*this);
 	myTex->calcMatr(SGLVektor(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z')).linearprod(pos));
 	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
 	targetTex->changed();
 }
 
-void GLvlSegment::display()
+bool GLvlSegment::display()
 {
-/*	for(GLvlSegment::iterator i=begin();i!=end();i++)
-		target3D->showObj(*i);*/
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		if((*i)->size() <= MAX_MINIMA_SIZE)
+			target3D->showObj(*i);
 	
 	EVektor<unsigned short> pos;
-	pos.fromArray(3,minEdge.koord);
 	myTex=boost::shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex());
 	myTex->renderMode=SGL_MTEX_MODE_COLORMASK;
 	
@@ -47,22 +50,25 @@ void GLvlSegment::display()
 	myTex->envColor[0]=0;
 	myTex->envColor[1]=1;
 	myTex->envColor[2]=0;
-	myTex->calcMatr(SGLVektor(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z')).linearprod(pos));
+	SGLVektor offset(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z'));
+	pos.fromArray(3,minEdge.koord);
+	myTex->calcMatr(offset.linearprod(pos));
 	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
 	myTex->weich=false;
 	targetTex->addMTexEnd(myTex,true);
+	return true;
 }
 void GLvlSegment::undisplay()
 {
 	if(myTex)targetTex->delMTex(myTex,true);
 	myTex=boost::shared_ptr<GLvlVolumeTex>();
-/*	for(GLvlSegment::iterator i=begin();i!=end();i++)
-		target3D->unshowObj(*i);*/
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		target3D->unshowObj(*i);
 }
 
 void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
 {
-//	target3D=_target3D;
+	target3D=_target3D;
 	targetTex=_targetTex;
 }
 

@@ -92,7 +92,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>testdata.v</programargs>
+      <programargs>brain.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -105,8 +105,8 @@
       <activedir>main</activedir>
     </general>
     <make>
-      <abortonerror>false</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <abortonerror>true</abortonerror>
+      <numberofjobs>3</numberofjobs>
       <dontact>false</dontact>
       <makebin></makebin>
       <prio>0</prio>

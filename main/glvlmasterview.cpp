@@ -236,7 +236,11 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 
 void GLvlMasterView::showSegmentAt(unsigned int index)
 {
-	if(v_transform && v_transform->last_erg && index<v_transform->last_erg->size())
+	if(	index!= std::numeric_limits<unsigned int>::max() && 
+		v_transform && 
+		v_transform->last_erg && 
+		index<v_transform->last_erg->size()
+	)
 	{
 		vincent::lab_value id=v_transform->last_erg->at(index);
 		if(id==vincent::WSHED_WSHED)return;
@@ -247,11 +251,8 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 			{
 				if(aktMinima)
 					aktMinima->undisplay();
-				if(it->second->front()->size() <= MAX_MINIMA_SIZE)
-				{
-					it->second->display();
+				if(it->second->display());
 					aktMinima=it->second;
-				}
 			}
 		}
 		else {SGLprintWarning("Ungültiges Objekt %d",id);}
@@ -284,11 +285,11 @@ void GLvlMasterView::redrawAktSegment()
 	glview->sendRedraw();
 }
 
-void GLvlMasterView::MemCreateNotify::operator()(boost::shared_ptr<MemConsumer> newob) const
-{
-	cout << "Ob " << newob << " erzeugt " << MemConsumer::list.size() << " Consumer registriert" << endl;
-}
-void GLvlMasterView::MemDeleteNotify::operator()(MemConsumer *newob) const
-{
-	cout << "Ob " << newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
-}
+// void GLvlMasterView::MemCreateNotify::operator()(const MemConsumer &newob) const
+// {
+// 	cout << "Ob " << &newob << " erzeugt " << MemConsumer::list.size() << " Consumer registriert" << endl;
+// }
+// void GLvlMasterView::MemDeleteNotify::operator()(const MemConsumer &newob) const
+// {
+// 	cout << "Ob " << &newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
+// }

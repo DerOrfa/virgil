@@ -104,9 +104,12 @@ bool GLvlVolumeTex::loadSegment(GLvlSegment &src)
 	//Pufferbild schreibem
 	for(GLvlSegment::iterator i=src.begin();i!=src.end();i++)
 	{
-		unsigned short offset[3]={1,1,1};
-		src.getOffset(offset,i);
-		(*i)->writeTex(offset,pixels);
+		if((*i)->size() <= MAX_MINIMA_SIZE)
+		{
+			unsigned short offset[3]={1,1,1};
+			src.getOffset(offset,i);
+			(*i)->writeTex(offset,pixels);
+		}
 	}
 
 	glTexImage3DEXT(TexType,0,GL_ALPHA4,size[0],size[1],size[2],0,GL_ALPHA,gl_type,&pixels.at(0));
@@ -442,8 +445,14 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short yindex=Info.Y.TexKoord2Index(koord.SGLV_Y);
 	const unsigned short zindex=Info.Z.TexKoord2Index(koord.SGLV_Z);
 	
-	return xindex+
-		yindex*Info.X.getCnt('X')+ //jede Zeile enth Info.X.holeSize() x'e
+	//Ungültige Koord werden numeric_limits<unsigned short>::max(), was ja auch gößer als Info.X.getCnt('X') is
+	//@todo hab ich jetzt beschlossen ...
+	if(	xindex >= Info.X.getCnt('X') ||
+		yindex >= Info.Y.getCnt('Y') ||
+		zindex >= Info.Z.getCnt('Z'))
+		return std::numeric_limits<unsigned int>::max();
+	else return xindex+
+		yindex*Info.X.getCnt('X')+ 
 		zindex*Info.X.getCnt('X')*Info.Y.getCnt('Y');
 }
 
@@ -478,14 +487,6 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
 }
-
-// inline SGLVektor GLvlVolumeTex::offset()
-// {
-// 	SGLVektor ret(mm2tex_Matrix[3][0]/mm2tex_Matrix[0][0],mm2tex_Matrix[3][1]/mm2tex_Matrix[1][1],mm2tex_Matrix[3][2]/mm2tex_Matrix[2][2]);
-// 	return	SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
-// 		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)-ret;
-// }
-
 
 /*!
     \fn GLvlVolumeTex::loadTint(VImage i)
@@ -530,32 +531,5 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	}
 	return size;
 }
-
-// void GLvlVolumeTex::loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
-// {
-// 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-// 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-// 	p->Load3DImage(img);
-// 	memcpy(p->envColor,color,3*sizeof(GLfloat));
-// 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-// 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-// 	p->weich=false;
-// 	multitex=p;
-// }
-// 
-// void GLvlVolumeTex::loadColorMask(GLvlMinima &img,EVektor<unsigned short> pos,GLfloat color[3])
-// {
-// 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-// 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-// 	
-// 	GLvlMinimaList t(img);
-// 	p->loadMinimaMask(t);
-// 	memcpy(p->envColor,color,3*sizeof(GLfloat));
-// 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-// 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-// 	p->weich=false;
-// 	multitex=p;
-// }
-// 
 
 SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

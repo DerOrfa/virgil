@@ -34,7 +34,7 @@ public:
 	GLvlSegment();
 	GLvlSegment(shared_ptr<GLvlMinima> img);
 	static void setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex);
-	void display();
+	bool display();
 	void redisplay();
 	void undisplay();
 	void getDim(dim &X,dim &Y, dim &Z);
