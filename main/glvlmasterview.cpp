@@ -22,11 +22,10 @@
 #include <qaction.h> 
 #include <qtabwidget.h>
 #include "glvlplanecam.h"
-#include <list>
 #include <EWorkOnCfgDlg.h>
-#include <image.h>
 
 #include <vista/VImage.h>
+#include "../wshed/vincent_transform.h"
 
 using namespace boost;
 using namespace eclasses;
@@ -163,13 +162,11 @@ void  GLvlMasterView::loadIntoWShed()
 	{
 		case VUByteRepn:	
 		{
-			ws_image<VUByte> i(MasterImg);
-			i.test();
+			vincent::transform t(MasterImg);
+			t.test();
+			printf("Erzeugt\n");
 		}break;
 	}
 
 }
 
-unsigned short PunktList<VUByte>::size_x=numeric_limits<unsigned short>::max();
-unsigned short PunktList<VUByte>::size_y=numeric_limits<unsigned short>::max();
-unsigned short PunktList<VUByte>::size_z=numeric_limits<unsigned short>::max();

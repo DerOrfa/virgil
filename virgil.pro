@@ -12,4 +12,5 @@ CONFIG += debug \
           thread \
           x11 
 TEMPLATE = subdirs 
-SUBDIRS += main 
+SUBDIRS += wshed \
+           main 

@@ -33,8 +33,6 @@
 #include <stdlib.h>
 //</vista-zeuch>
 
-#include "pixel.h"
-
 int main( int argc, char ** argv ) 
 {
 //<vista-zeuch>

@@ -3,7 +3,9 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./main
 # Das Target ist eine Anwendung:  virgil
 
-LIBS += -lqt_glue \
+TARGETDEPS += ../wshed/libwshed.so 
+LIBS += -lwshed \
+        -lqt_glue \
         -leclasses2 \
         -lvista \
         -lsgl \
@@ -12,12 +14,13 @@ INCLUDEPATH = ../../qt_glue \
               /opt/prog/eclasses/eclasses2/ \
               $(HOME)/emath/ \
               ../../libsgl/ 
-QMAKE_LIBDIR = ../../qt_glue \
+QMAKE_LIBDIR = ../wshed \
+               ../../qt_glue \
                /opt/prog/eclasses/eclasses2 \
                ../../libsgl 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
-CONFIG += release \
+CONFIG += debug \
           warn_off \
           qt \
           opengl \
@@ -25,16 +28,13 @@ CONFIG += release \
 TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui 
-HEADERS += bild.h \
-           glvlcutplane.h \
+HEADERS += glvlcutplane.h \
            glvlmasterview.h \
            glvlpin.h \
            glvlplanecam.h \
            glvlplanecursor.h \
            glvlplaneview.h \
-           glvlvolumetex.h \
-           image.h \
-           pixel.h 
+           glvlvolumetex.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
            glvlmasterview.cpp \
@@ -42,6 +42,4 @@ SOURCES += main.cpp \
            glvlplanecam.cpp \
            glvlplanecursor.cpp \
            glvlplaneview.cpp \
-           glvlvolumetex.cpp \
-           image.cpp \
-           pixel.cpp 
+           glvlvolumetex.cpp 
