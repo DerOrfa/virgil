@@ -361,7 +361,9 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	struct d_byte{GLfloat lum;GLfloat alpha;};
 	unsigned short size=1;
 	while(size<(end+1))size<<=1;
-	if(start<1){SGLprintError("Die Palette darf erst bei \"1\" beginnen, nicht bei \"%d\"",start);start=1;}
+	if(!start){
+		SGLprintWarning("Ignoriere Paletteneintrag 0");start=1;
+	}
 	d_byte *palette= (d_byte*)calloc(size,sizeof(d_byte));
 	for(unsigned short i=start;i<=end;i++)
 	{

@@ -55,11 +55,14 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	rahmen->setDiag(SGLVektor(0,0,0),tex->dim.size);
 	rahmen->DrahtGitter(true);
 	
-	
+	//Lichtabnahme komplett aus
+	glview->StdLight->Abnahme.Linear=0;
+	glview->StdLight->Abnahme.Quadratisch=0;
+	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
+
 	glview->setGridsSize((tex->dim.size.SGLV_X >? tex->dim.size.SGLV_Y >? tex->dim.size.SGLV_Z)*1.1);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
-//	glview->registerObj(test);
 
 	mw = glview;
 	onNewSpace(mw);
@@ -165,30 +168,48 @@ void  GLvlMasterView::loadIntoWShed()
 	{
 		case VUByteRepn:	
 		{
-//			glview->SetQuality(0);
-			statusBar()->message("Initialisiere");
-			vincent::transform *t = new vincent::transform(MasterImg);
-			((GLvlView*)this)->connect(t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
-			t->start();
-/*			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
-			tex->setupPal(1,255);
-			glview->sendRedraw();
-			GLvlMinima dummy(0);
-			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(dummy.end)));*/
+			glview->SetQuality(0);
+			v_transform = shared_ptr<vincent::transform>(new vincent::transform(MasterImg));
+			((GLvlView*)this)->connect(&*v_transform,SIGNAL(reached(vincent::VBild_value ,unsigned short)),SLOT(onReached(vincent::VBild_value,unsigned short )));
+			((GLvlView*)this)->connect(&*v_transform,SIGNAL(msg(QString,bool)),SLOT(onMsg(QString,bool)));
+			((GLvlView*)this)->connect(&*v_transform,SIGNAL(end()),SLOT(onTransformEnd()));
+			qApp->processEvents();
+			v_transform->run();
 		}break;
 	}
 }
-
-void GLvlMasterView::onReached(vincent::lab_value h,unsigned short objs)
+	
+void GLvlMasterView::onTransformEnd()
 {
-	if(!qApp->tryLock())return;
-	statusBar()->message("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden");
-/*	if(h<255)
+	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
+	GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,v_transform->last_erg);
+	tex->setupPal(1,255);
+	glview->sendRedraw();
+	shared_ptr<GLvlMinima> m1=shared_ptr<GLvlMinima>(new GLvlMinima(0));
+	shared_ptr<GLvlMinima> m2=shared_ptr<GLvlMinima>(new GLvlMinima(m1->end));
+	glview->registerObj(m1);
+	glview->registerObj(m2);
+	glview->sendRedraw();
+}
+
+void GLvlMasterView::onReached(vincent::VBild_value h,unsigned short objs)
+{
+	if(h<255)
 	{
 		tex->setupPal(h+1,255);
 		glview->sendRedraw();
-	}*/
-	qApp->unlock();
+	}
+	onMsg("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden",true);
 }
 
-
+void GLvlMasterView::onMsg(QString msg,bool canskip)
+{
+	if(canskip)
+	{
+		if(!qApp->tryLock())return;
+	}
+	else qApp->lock();
+	statusBar()->message(msg);
+	qApp->unlock();
+	qApp->processEvents();
+}

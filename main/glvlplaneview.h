@@ -72,7 +72,9 @@ public slots:
 	void	onCamChanged();
 	void	selectView(int view);
 	void	selectViewMode(int view);
-    virtual void onReached(vincent::lab_value h,unsigned short objs);
+    virtual void onReached(vincent::VBild_value h,unsigned short objs);
+	virtual void onMsg(QString msg,bool canskip);
+	virtual void onTransformEnd();
 };
 
 class GLvlPlaneView: public GLvlView

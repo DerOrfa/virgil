@@ -32,10 +32,13 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
 void GLvlMinima::generate()
 {
 	vincent::lab_value ID=(*plist)[start].wert;
-	cout << tex->texIndex2texKoord((*plist)[start].pos) << endl;
+	cout << tex->texIndex2texKoord((*plist)[start].pos) << endl;//@todo wiso is X hier und .x() unten um 20 verschieden ?
 	glColor3f(1,1,1);
 	glScalef(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize);
 	glDisable(GL_NORMALIZE);
+	 short old_pos[]={0,0,0};
+	glPushMatrix();
+	glTranslatef(-.5,-.5,-.5);
 	for(unsigned int i=start;i<end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
@@ -50,11 +53,14 @@ void GLvlMinima::generate()
 			mask|=1<<i;
 		}
 		if(!mask)continue;
-		glPushMatrix();
-		glTranslatef(p.x()-.5,p.y()-.5,p.z()-.5);
+		old_pos[0]=p.x();
+		old_pos[1]=p.y();
+		old_pos[2]=p.z();
+		glTranslatef(old_pos[0],old_pos[1],old_pos[2]);
 		glCallList(caps+mask);
-		glPopMatrix();
+		glTranslatef(-old_pos[0],-old_pos[1],-old_pos[2]);
 	}
+	glPopMatrix();
 	glEnable(GL_NORMALIZE);
 }
 

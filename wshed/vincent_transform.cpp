@@ -13,7 +13,7 @@
 #include "vincent_punkt.h"
 #include "vincent_bild.h"
 #include <assert.h>
-
+#include <qstring.h>
 
 namespace vincent
 {
@@ -34,13 +34,7 @@ template<> unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned sh
 template<> unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
 template<> unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
 
-transform::transform(VImage src) : im(src),D(im)
-{
-	printf("WShed-Graph mit %g Millionen Knoten wird initialisiert, %g MB\n",
-	im.size()/1000000.,(im.size()/1048576.)*sizeof(iPunkt<VBild_value>));
-	sort_q<VBild_value> comp;
-	std::sort(D.m, D.m + im.size(),comp);
-}
+transform::transform(VImage src) : im(src),D(im){}
 
 void transform::test()	{
 	VAttrList out_list = VCreateAttrList();
@@ -161,12 +155,15 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 		}
 		reached(h,curlab-numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
+	msg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(curlab-numeric_limits<lab_value >::min()) + " Objekte gefunden",false);
 	return boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 }
 
 void transform::run()
 {
-	last_threaded_erg =operator ( )();
+	init();
+	last_erg =operator ( )();
+	end();
 }
 
 boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)
@@ -179,4 +176,12 @@ boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage
 
 }
 
-
+/*!
+    \fn vincent::transform::init()
+ */
+void vincent::transform::init()
+{
+	msg("WShed-Graph mit " +QString::number(im.size()/1000000.)+ " Millionen Knoten wird initialisiert, "+ QString::number((im.size()/1048576.)*sizeof(iPunkt<VBild_value>))+ "MB",false);
+	sort_q<VBild_value> comp;
+	std::sort(D.m, D.m + im.size(),comp);
+}

@@ -39,16 +39,19 @@ Q_OBJECT
 	Bild_vimage<VUByte> im;
 public:
 	PunktList<VUByte> D;
-	boost::shared_ptr< Bild_vimage<lab_value> > last_threaded_erg;
+	boost::shared_ptr< Bild_vimage<lab_value> > last_erg;
 	
 	transform(VImage src);
 	void test();
 	void run();
 	boost::shared_ptr< Bild_vimage<lab_value> > operator()();
 	static boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im);
+    void init();
 
 signals:
-    void reached(vincent::lab_value h,unsigned short objs);
+    void reached(vincent::VBild_value h,unsigned short objs);
+    void msg(QString msg,bool canskip);
+	void end();
 };
 
 }

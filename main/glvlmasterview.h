@@ -43,8 +43,12 @@ public:
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
-    void  loadIntoWShed();
-	void onReached(vincent::lab_value h,unsigned short objs);
+    void loadIntoWShed();
+	void onReached(vincent::VBild_value h,unsigned short objs);
+	void onMsg(QString msg,bool canskip);
+	void onTransformEnd();
+
+
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
@@ -53,6 +57,7 @@ private:
 	ERegistry *masterReg;
 	shared_ptr<SGLCube> rahmen;
 	shared_ptr<shared_pin_list> Pins;
+	shared_ptr<vincent::transform> v_transform;
 };
 
 #endif
