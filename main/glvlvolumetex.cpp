@@ -105,7 +105,8 @@ bool GLvlVolumeTex::loadSegment(GLvlSegment &src)
 	//Pufferbild schreibem
 	for(GLvlSegment::iterator i=src.begin();i!=src.end();i++)
 	{
-		if((*i)->size() <= MAX_MINIMA_SIZE)
+//		if((*i)->volume() <= MAX_MINIMA_SIZE)
+		//@todo wenn ich zu große tex nicht schreibe, brauch ich sie auch nicht anlegen
 		{
 			unsigned short offset[3]={1,1,1};
 			src.getOffset(offset,i);

@@ -12,6 +12,7 @@
 #ifndef SGLOBJGLVLMINIMA_H
 #define SGLOBJGLVLMINIMA_H
 
+#include <libsgl/sglsignal.h>
 #include <libsgl/primitives/sglflobj.h>
 #include "../wshed/vincent_transform.h"
 #include "../wshed/vincent_punkt.h"
@@ -40,23 +41,28 @@ class GLvlMinima:public SGLFlObj
 		SGLcheckGLError;
 	}
 public:
+	SGLSignal<void()> redisplay;
 	union EdgeData{
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	inline VUByte GLvlMinima::bottomBorder()const{return (*org)[(*plist)[end-1]];};
+	inline VUByte GLvlMinima::bottomBorder()const{return (*org)[(*plist)[start]];};
 	inline VUByte GLvlMinima::topBorder()const{return (*org)[(*plist)[end-1]];};
 
 	static boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
 	static boost::shared_ptr< vincent::Bild_vimage<VUByte> > org;
 	VUByte bottomCap,topCap;
 	
+	
 	unsigned int start,end;
 	static boost::shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinima(unsigned int pos);
 	bool incl_wshed;
-	inline const unsigned int size(){return end-start;}
-    void chCap(short topdelta,short bottomdelta);
+	inline unsigned int volume()const{return end-start;}
+    bool chCapRel(signed char topdelta,signed char bottomdelta);
+    bool chCapAbs(VUByte top,VUByte bottom);
+    bool chCapAbsTop(VUByte top);
+    bool chCapAbsBottom(VUByte bottom);
 	dim getXDim()const;
 	dim getYDim()const;
 	dim getZDim()const;
@@ -83,6 +89,8 @@ public:
     SGLVektor getCenter();
     boost::shared_ptr<Bild_mem<VBit> > genTex();
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
+	void getPktKoord(const unsigned int indexRel,unsigned short &x,unsigned short &y,unsigned short &z)const;
+	vincent::lab_value getID()const;
 };
 
 //#include "glvlvolumetex.h"

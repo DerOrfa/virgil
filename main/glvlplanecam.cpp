@@ -61,6 +61,7 @@ void GLvlPlaneCam::generate()
 	recalcEcken();
 	myPlane->resetTexKoord();
 
+	glLineWidth(2);
 	glBegin(GL_LINES);
 		glColor3f(255,0,0); 
 		Ecken[0]->DrawPureVertex();
@@ -78,6 +79,7 @@ void GLvlPlaneCam::generate()
 		Ecken[3]->DrawPureVertex();
 		Ecken[0]->DrawPureVertex();
 	glEnd();
+	glLineWidth(1);
 }
 
 /*!

@@ -13,7 +13,7 @@
 #include <libsgl/sglvektor.h>
 #include "glvlvolumetex.h"
 
-GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(false)
+GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(true)
 
 {
 	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
@@ -40,13 +40,50 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(false)
 		topCap = (*org)[(*plist)[end-1]];
 		//getPixel verwendet stable_sort -> die Punkte eines Objektes sind noch der Größe nach geordnet
 	}
-	else{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
+	else{SGLprintError("GLvlMinima::setup wurde nicht ausgeführt, das Objekt kann nicht angelegt werden");abort();}
+	assert(topCap == topBorder());
+	assert(bottomBorder()== bottomCap);
 }
 
-void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
+bool GLvlMinima::chCapAbsTop(VUByte Top)
+{
+	if(Top!=topCap)
+	{
+		if(Top<=bottomBorder())Top=bottomBorder()+1;
+		topCap= topBorder() <? Top;
+		if(topCap<=bottomCap)
+			bottomCap=topCap-1;
+		redisplay();
+		return true;
+	}
+	else return false;
+}
+bool GLvlMinima::chCapAbsBottom(VUByte Bottom)
+{
+	if(Bottom!=bottomCap)
+	{
+		if(Bottom>=topBorder())Bottom=topBorder()-1;
+		bottomCap= bottomBorder() >? Bottom;
+		if(bottomCap>=topCap)
+			topCap=bottomCap+1;
+		redisplay();
+		return true;
+	}
+	else return false;
+}
+bool GLvlMinima::chCapAbs(VUByte Top,VUByte Bottom)
+{
+	if(Bottom>=Top)Top=Bottom+1;
+	bool update=chCapAbsTop(Top);
+	if(chCapAbsBottom(Bottom))update=true;
+	if(update)redisplay();
+	return  update;
+}
+
+bool GLvlMinima::chCapRel(signed char Top_delta,signed char Bottom_delta)
 {
 	bool update;
-	if(Top_delta==numeric_limits<short>::max())//Maximize TopCap
+	if(Top_delta==numeric_limits<signed char>::max())//Maximize TopCap
 	{
 		if(this->topCap!=topBorder())
 		{
@@ -61,7 +98,6 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 		{
 			if(!incl_wshed){
 				incl_wshed=true;
-				cout << "Mit WShed" << endl;
 				update =true;
 			}
 		}
@@ -71,7 +107,6 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 	{
 		if(incl_wshed){
 			incl_wshed=false;
-			cout << "Ohne WShed" << endl;
 			update =true;
 		}
 		else if(this->topCap>this->bottomCap){this->topCap--;update =true;}
@@ -92,7 +127,7 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 		if(this->bottomCap > bottomBorder())
 		{this->bottomCap--;update =true;}
 	}
-	
+	return update;
 }
 
 dim GLvlMinima::getXDim()const
@@ -297,6 +332,19 @@ void GLvlMinima::setup(
 	GLvlMinima::scale=scale;
 }
 
+vincent::lab_value GLvlMinima::getID()const
+{
+	vincent::lab_value ret=GLvlMinima::plist->operator[](start).wert;
+	return ret;
+}
+void GLvlMinima::getPktKoord(const unsigned int indexRel,unsigned short &x,unsigned short &y,unsigned short &z)const
+{
+	vincent::iPunkt<vincent::lab_value> p=(*GLvlMinima::plist)[start+indexRel];
+	x=p.x(img->xsize);
+	y=p.y(img->xsize,img->ysize);
+	z=p.z(img->xsize,img->ysize);
+}
+
 SGLVektor GLvlMinima::getCenter(){
     /// @todo implement me
 }
@@ -304,7 +352,7 @@ SGLVektor GLvlMinima::getCenter(){
 boost::shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
 {
 	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,0);
-	for(unsigned int i=GLvlMinima::start;i<GLvlMinima::end;i++)
+	for(unsigned int i=start;i<end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinima::plist)[i];
 		if(bottomCap > (*org)[p])continue;
@@ -327,7 +375,7 @@ boost::shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
 
 void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const
 {
-	for(unsigned int i=GLvlMinima::start;i<GLvlMinima::end;i++)
+	for(unsigned int i=start;i<end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinima::plist)[i];
 		if(bottomCap > (*org)[p])continue;
@@ -340,7 +388,12 @@ void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)c
 		unsigned short nachb_cnt=p.getNachb(nachb,*img);
 		for(unsigned short i=0;i<nachb_cnt;i++)
 			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
+			{
+				const unsigned short x=nachb[i].x(img->xsize)-minEdge.x + offset[0];
+				const unsigned short y=nachb[i].y(img->xsize,img->ysize)-minEdge.y + offset[1];
+				const unsigned short z=nachb[i].z(img->xsize,img->ysize)-minEdge.z + offset[2];
 				textur.at(x,y,z)=numeric_limits<GLubyte>::max();
+			}
 	}
 	textur.xsize.setElsize(img->xsize.getElsize('X'));
 	textur.ysize.setElsize(img->ysize.getElsize('Y'));

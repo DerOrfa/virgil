@@ -127,6 +127,7 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 		}
 		reached(h,curlab-std::numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
+	msg("Watershedtransformation abgeschlossen",true);
 	last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 	last_erg->xsize.setElsize(im.xsize.getElsize('X'));
 	last_erg->ysize.setElsize(im.ysize.getElsize('Y'));

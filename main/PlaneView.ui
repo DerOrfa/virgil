@@ -8,19 +8,22 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>489</width>
-            <height>457</height>
+            <width>628</width>
+            <height>575</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form2</string>
     </property>
-    <property name="opaqueMoving">
-        <bool>true</bool>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>1</number>
+        </property>
+        <property name="spacing">
+            <number>1</number>
         </property>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
@@ -39,106 +42,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Navigation</string>
-                </attribute>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>canKippBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Kippen</string>
-                        </property>
-                        <property name="accel">
-                            <string>Ctrl+K</string>
-                        </property>
-                        <property name="toggleButton">
-                            <bool>true</bool>
-                        </property>
-                        <property name="on">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>canGierBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Gieren</string>
-                        </property>
-                        <property name="accel">
-                            <string>Ctrl+G</string>
-                        </property>
-                        <property name="toggleButton">
-                            <bool>true</bool>
-                        </property>
-                        <property name="on">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>canRollBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Rollen</string>
-                        </property>
-                        <property name="accel">
-                            <string>Ctrl+R</string>
-                        </property>
-                        <property name="toggleButton">
-                            <bool>true</bool>
-                        </property>
-                        <property name="on">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QComboBox">
-                        <item>
-                            <property name="text">
-                                <string>Oben</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Unten</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Rechts</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Links</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Vorn</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Hinten</string>
-                            </property>
-                        </item>
-                        <property name="name">
-                            <cstring>viewSelector</cstring>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>C&amp;amera</string>
+                    <string>&amp;Kamera</string>
                 </attribute>
                 <hbox>
                     <property name="name">
@@ -442,47 +346,6 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Schnitt</string>
-                </attribute>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>showInOthersBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>in Anderen anzeigen</string>
-                        </property>
-                        <property name="toggleButton">
-                            <bool>true</bool>
-                        </property>
-                        <property name="on">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>showOthersHereBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Andere anzeigen</string>
-                        </property>
-                        <property name="toggleButton">
-                            <bool>true</bool>
-                        </property>
-                        <property name="on">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>TabPage</cstring>
-                </property>
-                <attribute name="title">
                     <string>&amp;Cursor</string>
                 </attribute>
                 <hbox>
@@ -553,6 +416,23 @@
                 </hbox>
             </widget>
         </widget>
+        <widget class="Line" row="3" column="1">
+            <property name="name">
+                <cstring>line_black</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="lineWidth">
+                <number>3</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
         <widget class="QFrame" row="2" column="1">
             <property name="name">
                 <cstring>glViewContainer</cstring>
@@ -571,10 +451,13 @@
             <property name="frameShadow">
                 <enum>Raised</enum>
             </property>
+            <property name="lineWidth">
+                <number>2</number>
+            </property>
         </widget>
         <widget class="Line" row="1" column="1">
             <property name="name">
-                <cstring>line1</cstring>
+                <cstring>line_red</cstring>
             </property>
             <property name="paletteForegroundColor">
                 <color>
@@ -590,48 +473,7 @@
                 <enum>Plain</enum>
             </property>
             <property name="lineWidth">
-                <number>2</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="Line" row="2" column="0">
-            <property name="name">
-                <cstring>line2</cstring>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>0</red>
-                    <green>255</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>VLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>2</number>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-        </widget>
-        <widget class="Line" row="3" column="1">
-            <property name="name">
-                <cstring>line3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="lineWidth">
-                <number>2</number>
+                <number>3</number>
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
@@ -639,7 +481,7 @@
         </widget>
         <widget class="Line" row="2" column="2">
             <property name="name">
-                <cstring>line4</cstring>
+                <cstring>line_blue</cstring>
             </property>
             <property name="paletteForegroundColor">
                 <color>
@@ -655,7 +497,31 @@
                 <enum>Plain</enum>
             </property>
             <property name="lineWidth">
-                <number>2</number>
+                <number>3</number>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+        </widget>
+        <widget class="Line" row="2" column="0">
+            <property name="name">
+                <cstring>line_green</cstring>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>0</red>
+                    <green>255</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>VLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="lineWidth">
+                <number>3</number>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -671,15 +537,30 @@
         <action name="fileKonfigurationAction"/>
         <action name="start_benchmark"/>
         <separator/>
-        <action name="fileSegmentierungAction"/>
+        <action name="viewsNeue_SichtAction"/>
         <separator/>
         <action name="fileExitAction"/>
     </item>
-    <item text="Views" name="unnamed">
-        <action name="viewsNeue_SichtAction"/>
-    </item>
-    <item text="Schalter" name="Schalter">
+    <item text="&amp;Schalter" name="Schalter">
         <action name="followSegments"/>
+        <action name="schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction"/>
+        <action name="schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction"/>
+        <action name="schalterKippen_zulassenAction"/>
+        <action name="schalterGieren_zulassenAction"/>
+        <action name="schalterRollen_zulassenAction"/>
+    </item>
+    <item text="&amp;Dialoge" name="Dialoge">
+        <action name="fileSegmentierungAction"/>
+    </item>
+    <item text="Standart&amp;ansichten" name="Standartansichten">
+        <action name="sicht_von_obenAction"/>
+        <action name="sicht_von_untenAction"/>
+        <separator/>
+        <action name="sicht_von_rechtsAction"/>
+        <action name="sicht_von_linksAction"/>
+        <separator/>
+        <action name="sicht_von_vornAction"/>
+        <action name="sicht_von_hintenAction"/>
     </item>
 </menubar>
 <toolbars>
@@ -780,6 +661,184 @@
             <string>Space</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>diesen Schnitt in anderen Ansichten zeigen</string>
+        </property>
+        <property name="menuText">
+            <string>diesen Schnitt in anderen Ansichten zeigen</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>andere Schnitte in dieser Ansicht zeigen</string>
+        </property>
+        <property name="menuText">
+            <string>andere Schnitte in dieser Ansicht zeigen</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_obenAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;oben</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;oben</string>
+        </property>
+        <property name="accel">
+            <string>F5</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_untenAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;unten</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;unten</string>
+        </property>
+        <property name="accel">
+            <string>F6</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_rechtsAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;rechts</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;rechts</string>
+        </property>
+        <property name="accel">
+            <string>F7</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_linksAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;links</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;links</string>
+        </property>
+        <property name="accel">
+            <string>F8</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_vornAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;vorn</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;vorn</string>
+        </property>
+        <property name="accel">
+            <string>F9</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sicht_von_hintenAction</cstring>
+        </property>
+        <property name="text">
+            <string>von &amp;hinten</string>
+        </property>
+        <property name="menuText">
+            <string>von &amp;hinten</string>
+        </property>
+        <property name="accel">
+            <string>F10</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>schalterKippen_zulassenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Kippen zulassen</string>
+        </property>
+        <property name="menuText">
+            <string>Kippen zulassen</string>
+        </property>
+        <property name="accel">
+            <string>F2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>schalterGieren_zulassenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Gieren zulassen</string>
+        </property>
+        <property name="menuText">
+            <string>Gieren zulassen</string>
+        </property>
+        <property name="accel">
+            <string>F3</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>schalterRollen_zulassenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Rollen zulassen</string>
+        </property>
+        <property name="menuText">
+            <string>Rollen zulassen</string>
+        </property>
+        <property name="accel">
+            <string>F4</string>
+        </property>
+    </action>
 </actions>
 <connections>
     <connection>
@@ -807,12 +866,6 @@
         <slot>doBenchmark()</slot>
     </connection>
     <connection>
-        <sender>viewSelector</sender>
-        <signal>activated(int)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>selectView(int)</slot>
-    </connection>
-    <connection>
         <sender>showCursHereBtn</sender>
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
@@ -823,18 +876,6 @@
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>showCursThere(bool)</slot>
-    </connection>
-    <connection>
-        <sender>showInOthersBtn</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>showInOthers(bool)</slot>
-    </connection>
-    <connection>
-        <sender>canRollBtn</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>canRoll(bool)</slot>
     </connection>
     <connection>
         <sender>scaleMode</sender>
@@ -879,28 +920,76 @@
         <slot>setCoordCam()</slot>
     </connection>
     <connection>
-        <sender>canGierBtn</sender>
-        <signal>toggled(bool)</signal>
+        <sender>fileSegmentierungAction</sender>
+        <signal>activated()</signal>
         <receiver>GLvlViewBase</receiver>
-        <slot>canGier(bool)</slot>
+        <slot>loadWShedDlg()</slot>
     </connection>
     <connection>
-        <sender>canKippBtn</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>canKipp(bool)</slot>
-    </connection>
-    <connection>
-        <sender>showOthersHereBtn</sender>
+        <sender>schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction</sender>
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>showOthersHere(bool)</slot>
     </connection>
     <connection>
-        <sender>fileSegmentierungAction</sender>
+        <sender>schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>showInOthers(bool)</slot>
+    </connection>
+    <connection>
+        <sender>schalterGieren_zulassenAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>canGier(bool)</slot>
+    </connection>
+    <connection>
+        <sender>schalterKippen_zulassenAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>canKipp(bool)</slot>
+    </connection>
+    <connection>
+        <sender>schalterRollen_zulassenAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>canRoll(bool)</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_hintenAction</sender>
         <signal>activated()</signal>
         <receiver>GLvlViewBase</receiver>
-        <slot>loadWShedDlg()</slot>
+        <slot>sichtVonHinten()</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_linksAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>sichtVonLinks()</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_obenAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>sichtVonOben()</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_rechtsAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>sichtVonRechts()</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_untenAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>sichtVonUnten()</slot>
+    </connection>
+    <connection>
+        <sender>sicht_von_vornAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>sichtVonVorn()</slot>
     </connection>
 </connections>
 <slots>
@@ -920,6 +1009,12 @@
     <slot>showCursThere(bool toggle)</slot>
     <slot>doBenchmark()</slot>
     <slot>loadWShedDlg()</slot>
+    <slot>sichtVonHinten()</slot>
+    <slot>sichtVonVorn()</slot>
+    <slot>sichtVonOben()</slot>
+    <slot>sichtVonUnten()</slot>
+    <slot>sichtVonRechts()</slot>
+    <slot>sichtVonLinks()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

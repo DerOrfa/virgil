@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>329</width>
-            <height>367</height>
+            <width>420</width>
+            <height>432</height>
         </rect>
     </property>
     <property name="caption">
@@ -26,6 +26,9 @@
             <property name="text">
                 <string>Waterschedtransformation starten</string>
             </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -34,11 +37,11 @@
             <property name="title">
                 <string>Segmentierung</string>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QListView">
+                <widget class="QListView" row="0" column="0" rowspan="1" colspan="2">
                     <column>
                         <property name="text">
                             <string>Objekt</string>
@@ -72,101 +75,37 @@
                             <bool>true</bool>
                         </property>
                     </column>
-                <item>
-                    <property name="text">
-                        <string>Item</string>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <item>
-                        <property name="text">
-                            <string>Subitem</string>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                    </item>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>New Item</string>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap></pixmap>
-                    </property>
-                    <item>
-                        <property name="text">
-                            <string>Subitem</string>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                    </item>
-                </item>
                     <property name="name">
                         <cstring>segList</cstring>
                     </property>
-                    <property name="selectionMode">
-                        <enum>Extended</enum>
+                    <property name="rootIsDecorated">
+                        <bool>true</bool>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>new_seg_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>neues Segment</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>apply_seg_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Segment anwenden</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>aktuelles Minima</string>
+                <string>Minima</string>
             </property>
             <grid>
                 <property name="name">
@@ -180,15 +119,7 @@
                         <string>Koordinaten:</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>coord_text</cstring>
-                    </property>
-                    <property name="text">
-                        <string>0</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="3">
+                <widget class="QLabel" row="0" column="2">
                     <property name="name">
                         <cstring>textLabel3</cstring>
                     </property>
@@ -196,15 +127,7 @@
                         <string>Volumen:</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="5">
-                    <property name="name">
-                        <cstring>volume_tex</cstring>
-                    </property>
-                    <property name="text">
-                        <string>0</string>
-                    </property>
-                </widget>
-                <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="7">
+                <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>groupBox3</cstring>
                     </property>
@@ -231,40 +154,6 @@
                                 <string>unten</string>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="0" column="4">
-                            <property name="name">
-                                <cstring>cap_spinBox_top</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="1" column="4">
-                            <property name="name">
-                                <cstring>cap_spinBox_bottom</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSlider" row="1" column="2">
-                            <property name="name">
-                                <cstring>cap_slider_bottom</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                        </widget>
-                        <widget class="QSlider" row="0" column="2">
-                            <property name="name">
-                                <cstring>cap_slider_top</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="3">
-                            <property name="name">
-                                <cstring>bottom_cap_max_text</cstring>
-                            </property>
-                            <property name="text">
-                                <string>255</string>
-                            </property>
-                        </widget>
                         <widget class="QLabel" row="0" column="1">
                             <property name="name">
                                 <cstring>top_cap_min_text</cstring>
@@ -281,6 +170,14 @@
                                 <string>0</string>
                             </property>
                         </widget>
+                        <widget class="QSlider" row="0" column="2">
+                            <property name="name">
+                                <cstring>top_cap_slider</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
                         <widget class="QLabel" row="0" column="3">
                             <property name="name">
                                 <cstring>top_cap_max_text</cstring>
@@ -289,7 +186,88 @@
                                 <string>255</string>
                             </property>
                         </widget>
+                        <widget class="QCheckBox" row="0" column="4">
+                            <property name="name">
+                                <cstring>incl_wshed</cstring>
+                            </property>
+                            <property name="text">
+                                <string>incl. 
+WShed</string>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="1" column="2">
+                            <property name="name">
+                                <cstring>bottom_cap_slider</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="3">
+                            <property name="name">
+                                <cstring>bottom_cap_max_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>255</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="4">
+                            <property name="name">
+                                <cstring>cap_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>0-255</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignCenter</set>
+                            </property>
+                        </widget>
                     </grid>
+                </widget>
+                <widget class="QLabel" row="0" column="3">
+                    <property name="name">
+                        <cstring>volume_tex</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>pushButton2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>übertragen an</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>comboBox1</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Bounding Box:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="3">
+                    <property name="name">
+                        <cstring>boundig_box_text</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0 0 0 - 50 50 50</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>coord_text</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
                 </widget>
             </grid>
         </widget>
@@ -297,66 +275,43 @@
 </widget>
 <connections>
     <connection>
-        <sender>cap_slider_top</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>cap_spinBox_top</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_spinBox_top</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>cap_slider_top</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_slider_bottom</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>cap_spinBox_bottom</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_spinBox_bottom</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>cap_slider_bottom</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_slider_top</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SegmentDialog</receiver>
-        <slot>topCapChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_slider_bottom</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SegmentDialog</receiver>
-        <slot>bottomCapChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_spinBox_top</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SegmentDialog</receiver>
-        <slot>topCapChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>cap_spinBox_bottom</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SegmentDialog</receiver>
-        <slot>bottomCapChanged(int)</slot>
-    </connection>
-    <connection>
         <sender>startWShedBtn</sender>
-        <signal>clicked()</signal>
+        <signal>pressed()</signal>
         <receiver>SegmentDialog</receiver>
         <slot>startTransform()</slot>
+    </connection>
+    <connection>
+        <sender>top_cap_slider</sender>
+        <signal>sliderMoved(int)</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>setTopCapAbsCurrMinima(int)</slot>
+    </connection>
+    <connection>
+        <sender>bottom_cap_slider</sender>
+        <signal>sliderMoved(int)</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>setBottomCapAbsCurrMinima(int)</slot>
+    </connection>
+    <connection>
+        <sender>new_seg_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>newSegment()</slot>
+    </connection>
+    <connection>
+        <sender>segList</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>onSelectItem(QListViewItem*)</slot>
     </connection>
 </connections>
 <slots>
     <slot>onWatershedReady(bool)</slot>
-    <slot>topCapChanged(int)</slot>
-    <slot>bottomCapChanged(int)</slot>
     <slot>onSelectItem(QListViewItem*)</slot>
     <slot>startTransform()</slot>
+    <slot>setTopCapAbsCurrMinima(int)</slot>
+    <slot>setBottomCapAbsCurrMinima(int)</slot>
+    <slot>newSegment()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -28,6 +28,7 @@
 #include <qstatusbar.h> 
 #include <qapplication.h> 
 #include <qcheckbox.h>
+#include <qframe.h> 
 
 using namespace boost;
 using namespace efc;
@@ -37,8 +38,17 @@ GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("
 rahmen(new SGLCube()),Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
-	toolTabs->removePage(toolTabs->page(3));
-	followSegments->setDisabled(true);
+	followSegments->setVisible(false);
+	followSegments->setEnabled(false);
+	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setVisible(false);
+	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setVisible(false);
+	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setEnabled(false);
+	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setEnabled(false);
+
+	line_red->hide();
+	line_green->hide();
+	line_blue->hide();
+	line_black->hide();
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
@@ -106,11 +116,14 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 		return;
 	}
 	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg,Pins);
+	
+	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
+	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
 	view->init();
 	onNewSpace(view->glview);
-	view->showInOthers(view->showInOthersBtn->isOn());
-	view->showOthersHere(view->showOthersHereBtn->isOn());
+	view->showInOthers(view->schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
+	view->showOthersHere(view->schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
 
 	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
@@ -167,17 +180,17 @@ void GLvlMasterView::doBenchmark(time_t benchLen)
 void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 
 
-/*!
-    \fn GLvlMasterView::loadIntoWShed()
- */
 void  GLvlMasterView::loadWShedDlg()
 {
-	wshed = boost::shared_ptr<GLvlSegmentDialog>(new GLvlSegmentDialog(MasterImg));
-	for(list<GLvlPlaneView *>::iterator i=views.begin();i!=views.end();i++)
+	if(!wshed)
 	{
-		wshed->connect(*i,SIGNAL(onVoxel(unsigned int)),SLOT(findMinima(unsigned int)));
-		wshed->connect(*i,SIGNAL(onResizeSegment(short,short)),SLOT(resizeCurrMinima(short,short)));
-		wshed->connect(*i,SIGNAL(selectSegment()),SLOT(addCurrMinima()));
+		wshed = boost::shared_ptr<GLvlSegmentDialog>(new GLvlSegmentDialog(this,MasterImg));
+		for(list<GLvlPlaneView *>::iterator i=views.begin();i!=views.end();i++)
+		{
+			wshed->connect(*i,SIGNAL(onVoxel(unsigned int)),SLOT(findMinima(unsigned int)));
+			wshed->connect(*i,SIGNAL(onResizeSegment(signed char ,signed char)),SLOT(chCapRelCurrMinima(signed char ,signed char )));
+			wshed->connect(*i,SIGNAL(selectSegment()),SLOT(addCurrMinima()));
+		}
 	}
 	wshed->show();
 }

@@ -22,6 +22,7 @@
 #define GLVLPLANEVIEW_H
 
 #include <libsgl/sglqtspace.h>
+#include "glvlsegmentdialog.h"
 #include "glvlplanecam.h"
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
@@ -29,6 +30,7 @@
 #include "../wshed/vincent_transform.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
+#include <vista/VImage.h>
 
 #include <eclasses/EWndRegistry.h>
 
@@ -53,6 +55,9 @@ public:
 	void showOthersHere(bool toggle);
 	void showObjList();
 	boost::shared_ptr<GLvlVolumeTex> tex;
+	static boost::shared_ptr<GLvlSegmentDialog> wshed;
+	void	selectView(const SGLVektor dir[3]);
+
 protected:
 	EWndRegistry *myReg;
 	void setupSpace(SGLqtSpace *space);
@@ -71,8 +76,14 @@ public slots:
 	void	setRollDeg(int deg);
 	void	setCoordCam();
 	void	onCamChanged();
-	void	selectView(int view);
 	void	selectViewMode(int view);
+	void sichtVonHinten();
+	void sichtVonVorn();
+	void sichtVonOben();
+	void sichtVonUnten();
+	void sichtVonRechts();
+	void sichtVonLinks();
+
 	virtual void onMsg(QString msg,bool canskip);
 };
 
@@ -112,7 +123,7 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent * e );
 signals:
     void onVoxel(unsigned int index);
-	void onResizeSegment(short,short);
+	void onResizeSegment(signed char ,signed char );
 	void selectSegment();
 };
 

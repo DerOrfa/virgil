@@ -21,7 +21,6 @@
 #define GLVLMASTERVIEW_H
 
 #include "glvlplaneview.h"
-#include "glvlsegmentdialog.h"
 #include <libsgl/sglqtmultispacemgr.h>
 #include "../wshed/vincent_transform.h"
 #include <list>
@@ -53,7 +52,6 @@ public:
 	void doBenchmark(time_t benchLen);
     void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
-	boost::shared_ptr<GLvlSegmentDialog> wshed;
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{
 		public:

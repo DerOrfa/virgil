@@ -38,6 +38,7 @@
 #include <qaction.h>
 #include <qlineedit.h>
 
+
 using namespace boost;
 using namespace efc;
 
@@ -59,7 +60,9 @@ Pins(Pins)
 //	toolTabs->removePage(toolTabs->page(0));
 /*	menuBar()->removeItemAt (0);
 	menuBar()->removeItemAt (0);*/
-	fileSegmentierungAction->setDisabled(true);
+	fileSegmentierungAction->disconnect();
+	viewsNeue_SichtAction->disconnect();
+	
 	fileExitAction->setMenuText("Sicht schließen");
 	myReg->Suicide=true;
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
@@ -90,18 +93,18 @@ GLvlPlaneView::~GLvlPlaneView()
 
 bool GLvlPlaneView::loadCfg()
 {
-	showInOthersBtn->setOn(myReg->getbVal("Andere anzeigen",true));
-	showOthersHereBtn->setOn(myReg->getbVal("In anderen anzeigen",true));
+	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setOn(myReg->getbVal("Andere anzeigen",true));
+	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setOn(myReg->getbVal("In anderen anzeigen",true));
 	GLvlView::loadCfg();
 }
 
 bool GLvlPlaneView::saveCfg()
 {
 	GLvlView::saveCfg();	
-	if(!showInOthersBtn->isHidden())
-		myReg->setbVal("Andere anzeigen",showInOthersBtn->isOn());
-	if(!showOthersHereBtn->isHidden())
-		myReg->setbVal("In Anderen anzeigen",showOthersHereBtn->isOn());
+	if(schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isVisible())
+		myReg->setbVal("Andere anzeigen",schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
+	if(schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isVisible())
+		myReg->setbVal("In Anderen anzeigen",schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
 }
 
 
@@ -227,7 +230,7 @@ void GLvlView::onCamChanged()
 	yCoordAim->setValue((int)LookAt.SGLV_Y);
 	zCoordAim->setValue((int)LookAt.SGLV_Z);
 	
-	if(	GLvlView::default_oben[0].VektWink(cam.Pos)<5 &&
+/*	if(	GLvlView::default_oben[0].VektWink(cam.Pos)<5 &&
 		GLvlView::default_oben[1].VektWink(cam.LookAt)<5 &&
 		GLvlView::default_oben[2].VektWink(cam.UpVect)<5)
 		viewSelector->setCurrentItem(0);
@@ -250,50 +253,25 @@ void GLvlView::onCamChanged()
 	else if(	GLvlView::default_hinten[0].VektWink(cam.Pos)<5 &&
 				GLvlView::default_hinten[1].VektWink(cam.LookAt)<5 &&
 				GLvlView::default_hinten[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(5);
+				viewSelector->setCurrentItem(5);*/
+	//View selector gibts nich mehr
 	selfChange=false;
 }
 
 
-/*!
-    \fn GLvlView::selectView(int view)
- */
-void GLvlView::selectView(int view)
+void GLvlView::sichtVonHinten(){selectView(GLvlView::default_hinten);}
+void GLvlView::sichtVonVorn(){selectView(GLvlView::default_vorn);}
+void GLvlView::sichtVonOben(){selectView(GLvlView::default_oben);}
+void GLvlView::sichtVonUnten(){selectView(GLvlView::default_unten);}
+void GLvlView::sichtVonRechts(){selectView(GLvlView::default_rechts);}
+void GLvlView::sichtVonLinks(){selectView(GLvlView::default_links);}
+
+
+void GLvlView::selectView(const SGLVektor dir[3])
 {
-	switch(view)
-	{
-		case 0:
-			glview->Camera->Pos=GLvlView::default_oben[0];
-			glview->Camera->LookAt=GLvlView::default_oben[1];
-			glview->Camera->UpVect=GLvlView::default_oben[2];
-			break;
-		case 1:
-			glview->Camera->Pos=GLvlView::default_unten[0];
-			glview->Camera->LookAt=GLvlView::default_unten[1];
-			glview->Camera->UpVect=GLvlView::default_unten[2];
-			break;
-		case 2:
-			glview->Camera->Pos=GLvlView::default_rechts[0];
-			glview->Camera->LookAt=GLvlView::default_rechts[1];
-			glview->Camera->UpVect=GLvlView::default_rechts[2];
-			break;
-		case 3:
-			glview->Camera->Pos=GLvlView::default_links[0];
-			glview->Camera->LookAt=GLvlView::default_links[1];
-			glview->Camera->UpVect=GLvlView::default_links[2];
-			break;
-		case 4:
-			glview->Camera->Pos=GLvlView::default_vorn[0];
-			glview->Camera->LookAt=GLvlView::default_vorn[1];
-			glview->Camera->UpVect=GLvlView::default_vorn[2];
-			break;
-		case 5:
-			glview->Camera->Pos=GLvlView::default_hinten[0];
-			glview->Camera->LookAt=GLvlView::default_hinten[1];
-			glview->Camera->UpVect=GLvlView::default_hinten[2];
-			break;
-		default: SGLprintWarning("Unbekannte Sicht %d",view);return;break;
-	}
+	glview->Camera->Pos=dir[0];
+	glview->Camera->LookAt=dir[1];
+	glview->Camera->UpVect=dir[2];
 	glview->Camera->ViewMatr.outDated=true;
 	glview->Camera->Compile();
 	onCamChanged();
@@ -399,6 +377,7 @@ SGLVektor GLvlView::default_hinten[3]={SGLVektor(200,0,0),SGLVektor(0,0,0),SGLVe
 SGLVektor GLvlView::default_rechts[3]={SGLVektor(0,200,0),SGLVektor(0,0,0),SGLVektor(0,0,-1)};
 SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
 
+boost::shared_ptr<GLvlSegmentDialog> GLvlView::wshed;
 
 /*!
     \fn GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
@@ -465,7 +444,7 @@ void GLvlPlaneView::init()
 
 void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
 {
-	short top_resize=0,bottom_resize=0;
+	VUByte  top_resize=0,bottom_resize=0;
 	bool done=false;
 	if(e->state() & Qt::ControlButton)
 	{

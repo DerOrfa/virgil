@@ -26,20 +26,24 @@ class GLvlSegmentDialog : public SegmentDialog
 {
   Q_OBJECT
 
+	void displayMinimaData(const GLvlMinima &m);
 	boost::shared_ptr<vincent::transform> v_transform;
-	void setMinCapData(VUByte minValue,VUByte Value,VUByte maxValue);
 public:
 	class MinimaItem:public QListViewItem, public boost::shared_ptr<GLvlMinima>
 	{
 	public:
 		MinimaItem(QListViewItem *parent,boost::shared_ptr<GLvlMinima> min);
+		void showInf();
 	};
-	class SegmentItem:public QListViewItem,public boost::shared_ptr<GLvlSegment>
+	class SegmentItem:public QListViewItem,public GLvlSegment
 	{
 	public:
-		SegmentItem(QListView *parent,boost::shared_ptr<GLvlSegment> seg);
+		SegmentItem(QListView *parent,boost::shared_ptr<GLvlMinima> min);
+		void addMinima(boost::shared_ptr<GLvlMinima> min);
+		void showInf();
+		
 	};
-	GLvlSegmentDialog(VImage &Img);
+	GLvlSegmentDialog(QWidget* parent,VImage &Img);
 	~GLvlSegmentDialog();
 	/*$PUBLIC_FUNCTIONS$*/
 	void registerSegment(boost::shared_ptr<GLvlSegment> seg);
@@ -49,20 +53,23 @@ public:
 
 	map<vincent::lab_value,boost::shared_ptr<GLvlSegment> > objs;
 	boost::shared_ptr<GLvlSegment> aktMinima;
-	boost::shared_ptr<GLvlSegment> aktSegment;
+	SegmentItem* aktSegment;
 	
 
 public slots:
 	/*$PUBLIC_SLOTS$*/
 	virtual void          onSelectItem(QListViewItem*);
 	virtual void          startTransform();
-	virtual void          bottomCapChanged(int);
-	virtual void          topCapChanged(int);
 	virtual void          onWatershedReady(bool=false);
 	virtual void findMinima(unsigned int index);
+	virtual void findMinima(vincent::lab_value id);
 	virtual void addCurrMinima();
-	virtual void resizeCurrMinima(short topdelta,short bottomdelta);
+	virtual void chCapRelCurrMinima(signed char topdelta,signed char bottomdelta);
 	virtual void onReached(vincent::VBild_value,unsigned short );
+    virtual void setTopCapAbsCurrMinima(int);
+    virtual void setBottomCapAbsCurrMinima(int);
+	virtual void onMsg(QString,bool);
+    void newSegment();
 
 protected:
   /*$PROTECTED_FUNCTIONS$*/

@@ -20,7 +20,7 @@ GLvlCutPlane::GLvlCutPlane(boost::shared_ptr<GLvlVolumeTex> volumeTex): SGL3DPla
 	is_free=true;
 	resetTexKoord();
 	is_free=old_free;
-	volumeTex->changed.connect(compileNextTime);
+	volumeTex->changed.connect(compileNextTime,boost::signals::at_front);
 }
 
 void GLvlCutPlane::resetTexKoord()
