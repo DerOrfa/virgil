@@ -27,7 +27,7 @@ public:
 		int cnt;
 		float Elsize;
 		double mm_size,outer_mm_size;
-		int startgap_cnt,endgap_cnt;
+		short startgap_cnt,endgap_cnt;
 		double startgap_mm,endgap_mm;
 		inline void calcGap(int start,int end)
 		{
@@ -35,13 +35,17 @@ public:
 			endgap_cnt=end;endgap_mm=endgap_cnt*Elsize;
 			outer_mm_size=(start+cnt+end)*Elsize;
 		}
-		inline unsigned int holeSize()
+		inline unsigned short holeSize()
 		{
 			return startgap_cnt +cnt+endgap_cnt;
 		}
-		inline unsigned int outerTexKoord2Index(double Koord)
+		inline unsigned short outerTexKoord2Index(const double &Koord)
 		{
-			return  uint(Koord*outer_mm_size*holeSize());
+			return  (unsigned short)(Koord*outer_mm_size*holeSize());
+		}
+		inline double Index2outerTexKoord(const unsigned short &idx)
+		{
+			return  idx/(outer_mm_size*holeSize());
 		}
 	};
 	struct texInfo
@@ -78,14 +82,15 @@ public:
 	}dim;
 
 	void loadImageInfo(VImage &src);
-	SGLVektor weltKoord2texKoord(SGLVektor welt);
-	SGLVektor texKoord2weltKoord(SGLVektor welt);
-	unsigned int texKoord2texIndex(SGLVektor koord,unsigned int *x=NULL,unsigned int *y=NULL,unsigned int *z=NULL);
+	SGLVektor weltKoord2texKoord(const SGLVektor &welt);
+	SGLVektor texKoord2weltKoord(const SGLVektor &welt);
+	SGLVektor texIndex2texKoord(const unsigned int &idx);
+	unsigned int texKoord2texIndex(const SGLVektor &koord);
     void calcMatr();
     void loadTint(VImage i);
     GLdouble mm2tex_Matrix[4][4];
 //    GLdouble gl2mm_Matrix[4][4];
-    bool setupPal(unsigned short start,unsigned short end,bool scale=false);
+    unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 private:
 	template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src);
 	template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VImage &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());

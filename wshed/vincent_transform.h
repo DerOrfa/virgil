@@ -36,6 +36,7 @@ public:
 	transform(VImage src);
 	void test();
 	Bild_vimage<lab_value> operator()();
+	PunktList<lab_value> getVoxels(Bild_vimage<lab_value> im);
 
 signals:
     void reached(vincent::lab_value h,unsigned short objs);

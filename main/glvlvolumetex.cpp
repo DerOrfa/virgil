@@ -28,16 +28,10 @@ template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src)
 	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!xsize)return false;
 
-	{
-		T min=1,max=255;
-		int palsize=(max-min+1); //255-0 = 255 nicht 256 => +1
-		SGLprintInfo("%d-Farb-Palette wird initialisiert",palsize);
-		setupPal(min,max,true);
-	}
-	
+	T min=numeric_limits<T>::max(),max=numeric_limits<T>::min();
 	T *pixels_=(T*)calloc(xsize*ysize*zsize,sizeof(T));
 	register T *pixels=pixels_;
-	
+
 	int pixMax;
 	VPointer data;
 	int z=0;
@@ -45,21 +39,34 @@ template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src)
 	pixels+=xsize*ysize;//die erste Ebene
 	for(;z<dim.Z.cnt && VSelectBand("Vol2Tex",src,z,&pixMax,&data);z++)
 	{
-		double min=VPixelMinValue(src),max=VPixelMaxValue(src);
 		VUByte *pix= (VUByte *)data;
 		
 		pixels+=xsize;//erste Zeile leer lassen
 		for(int y=0;y<dim.Y.cnt;y++)
 		{
 			pixels++;//ersten pixel leer lassen
-			pixMax-=dim.X.cnt ;
-			memcpy(pixels,pix,dim.X.cnt);pixels+=dim.X.cnt;pix+=dim.X.cnt;//Pixel kopieren
 			if(xsize-dim.X.cnt-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			for(int x=0;x<dim.X.cnt;x++)
+			{
+				if(min > *pix)
+					min =  *pix;
+				if(max < *pix)
+					max = *pix;
+				(*pixels)=(*pix);
+				pixels++;pix++;
+				pixMax--;
+			}
 			pixels+=(xsize-dim.X.cnt-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			//@todo müsste das nich "0" gesetzt werden
 		}
 		pixels+=xsize*(ysize-dim.Y.cnt-1);//die restlichen y-Zeilen
 		if(pixMax){SGLprintError("Es wurden nicht alle Voxel gelesen");}
 	}
+	
+	unsigned short palsize=setupPal(min,max,true);
+	if(palsize){SGLprintInfo("%d-Farb-Palette initialisiert",palsize);}
+	else {SGLprintError("Palette konnte nicht initialisiert werden");}
+	
 	glTexImage3DEXT(TexType,0,GL_COLOR_INDEX8_EXT,xsize,ysize,zsize,0,GL_COLOR_INDEX,gl_type,pixels_);
 	free(pixels_);
 	if(gluerr = glGetError())
@@ -290,7 +297,7 @@ void GLvlVolumeTex::loadImageInfo(VImage &src)
 	);
 }
 
-SGLVektor GLvlVolumeTex::texKoord2weltKoord(SGLVektor tex)
+SGLVektor GLvlVolumeTex::texKoord2weltKoord(const SGLVektor &tex)
 {
 	return tex; //Texturkoordinaten und Weltkoordinaten sind (zur Zeit) gleich
 }
@@ -301,7 +308,7 @@ SGLVektor GLvlVolumeTex::texKoord2weltKoord(SGLVektor tex)
 	Die ermittelten Koordinaten beziehen sich auf die "outer_tex"
 	wenn absolut true, dann in mm sonst in openGL-texturcoordinaten (0-1)
  */
-SGLVektor GLvlVolumeTex::weltKoord2texKoord(SGLVektor welt)
+SGLVektor GLvlVolumeTex::weltKoord2texKoord(const SGLVektor &welt)
 {
 /*	EMatrix<GLdouble> mult;
 	mult.fromArray(4,4,(GLdouble*)mm2tex_Matrix);*/
@@ -311,18 +318,28 @@ SGLVektor GLvlVolumeTex::weltKoord2texKoord(SGLVektor welt)
 }
 
 //@todo noch nich getestet
-unsigned int GLvlVolumeTex::texKoord2texIndex(SGLVektor koord,unsigned int *x,unsigned int *y,unsigned int *z)
+unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)
 {
-	unsigned int xindex=dim.X.outerTexKoord2Index(koord.SGLV_Z);
-	unsigned int yindex=dim.Y.outerTexKoord2Index(koord.SGLV_Z);
-	unsigned int zindex=dim.Z.outerTexKoord2Index(koord.SGLV_Z);
+	const unsigned short xindex=dim.X.outerTexKoord2Index(koord.SGLV_X);
+	const unsigned short yindex=dim.Y.outerTexKoord2Index(koord.SGLV_Y);
+	const unsigned short zindex=dim.Z.outerTexKoord2Index(koord.SGLV_Z);
 	
-	if(x)*x=xindex;
-	if(y)*y=yindex;
-	if(z)*z=zindex;
 	return xindex+
 		yindex*dim.X.holeSize()+ //jede Zeile enth dim.X.holeSize() x'e
 		zindex*dim.X.holeSize()*dim.Y.holeSize();
+}
+
+SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)
+{
+	const double x=dim.X.Index2outerTexKoord(xidx);
+	const double y=dim.Y.Index2outerTexKoord(yidx);
+	const double x=dim.Z.Index2outerTexKoord(zidx);
+/*
+X:pos%size_x
+Y:(pos/size_x)%size_y
+pos/size_xy
+*/
+	return SGLVektor(x,y,z);
 }
 
 /*!
@@ -368,23 +385,25 @@ void GLvlVolumeTex::loadTint(VImage i)
 /*!
     \fn GLvlVolumeTex::setupPal(unsigned short start,unsigned short end)
  */
-bool GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,bool scale)
+unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,bool scale)
 {
 	GLuint gluerr;
 	struct d_byte{GLfloat lum;GLfloat alpha;};
-	if(start<1){SGLprintError("Die Palette darf erst bei \"1\" beginnen, nicht bei \"%d\"",start);return false;}
-	d_byte *palette= (d_byte*)calloc(end+1,sizeof(d_byte));
+	unsigned short size=1;
+	while(size<(end+1))size<<=1;
+	if(start<1){SGLprintError("Die Palette darf erst bei \"1\" beginnen, nicht bei \"%d\"",start);start=1;}
+	d_byte *palette= (d_byte*)calloc(size,sizeof(d_byte));
 	for(unsigned short i=start;i<=end;i++)
 	{
 		palette[i].lum=scale ? (i-start)/float(end-start):i/float(end);
 		palette[i].alpha=1;
 	}
-	glColorTable(TexType,GL_LUMINANCE_ALPHA,end+1,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
+	glColorTable(TexType,GL_LUMINANCE_ALPHA,size,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
 	free(palette);
 	if(gluerr = glGetError())
 	{
 		SGLprintError("%s beim Laden der Palette [GLerror]",gluErrorString(gluerr));
-		return GL_FALSE;
+		return 0;
 	}
-	return true;
+	return size;
 }

@@ -33,7 +33,7 @@ using namespace eclasses;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
 GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
-rahmen(new SGLCube()),
+rahmen(new SGLCube()),test(new GLvlMinima()),
 Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
@@ -58,6 +58,7 @@ Pins(new shared_pin_list)
 	glview->setGridsSize((tex->dim.top_left_front.SGLV_X >? tex->dim.top_left_front.SGLV_Y >? tex->dim.top_left_front.SGLV_Z)*1.1);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
+	glview->registerObj(test);
 
 	mw = glview;
 	onNewSpace(mw);

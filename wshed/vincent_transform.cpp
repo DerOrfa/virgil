@@ -36,26 +36,25 @@ unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max(
 
 transform::transform(VImage src) : im(src),D(im)
 {
-	printf("WShed-Graph mit %g Millionen Knoten initialisiert, %g MB belegt\n",
+	printf("WShed-Graph mit %g Millionen Knoten wird initialisiert, %g MB\n",
 	im.size()/1000000.,(im.size()/1048576.)*sizeof(iPunkt<VBild_value>));
-	printf("Sortiere\n");
 	sort_q<VBild_value> comp;
 	std::sort(D.m, D.m + im.size(),comp);
-	printf("fertsch\n");
 }
 
 void transform::test()	{
 	VAttrList out_list = VCreateAttrList();
 	FILE *out_file=fopen("/tmp/out.v","w");
 	VAppendAttr(out_list,"image",NULL,VImageRepn,im.im());
-	vincent::Bild_vimage<VShort> im1=operator()();
-	vincent::Bild_vimage<VUByte> im2(VCreateImage(vincent::VBild::zsize,vincent::VBild::ysize,vincent::VBild::xsize,VUByteRepn));
+	Bild_vimage<lab_value> im1=operator()();
+	PunktList<lab_value> voxels =getVoxels(im1);
+	printf("Voxelliste Erzeugt\n");
+/*	vincent::Bild_vimage<VUByte> im2(VCreateImage(vincent::VBild::zsize,vincent::VBild::ysize,vincent::VBild::xsize,VUByteRepn));
 	for(unsigned int i=0;i<im.size();i++)
 		im2.at(i)=(im1.at(i)-numeric_limits<VShort >::min()) %256;
 	VAppendAttr(out_list,"WShed_new_direct",NULL,VImageRepn,im2.im());
 	VWriteFile (out_file, out_list);
-	fclose(out_file);
-	printf("Erzeugt\n");
+	fclose(out_file);*/
 }
 
 Bild_vimage<lab_value> transform::operator()()
@@ -74,7 +73,6 @@ Bild_vimage<lab_value> transform::operator()()
 	VBild_value h_min=D[0].wert;
 	VBild_value h_max=D[im.size()-1].wert;
 	
-	printf("%d-%d\n",h_min,h_max);
 	VBild_value h=h_min;
 	do
 	{
@@ -165,6 +163,15 @@ Bild_vimage<lab_value> transform::operator()()
 	}while((h++)<h_max);
 	return lab;
 }
+
+PunktList<lab_value> transform::getVoxels(Bild_vimage<lab_value> im)
+{
+	PunktList<lab_value> D(im);
+	sort_q<lab_value> comp;
+	std::sort(D.m, D.m + im.size(),comp);
+	return D;
+}
+
 }
 
 
