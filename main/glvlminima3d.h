@@ -29,6 +29,7 @@ public:
 	);
     SGLVektor getCenter();
     shared_ptr<Bild_mem<VBit> > genTex();
+	void writeTex(unsigned short offset[3],Bild<GLubyte> &textur)const;
 };
 
 #endif

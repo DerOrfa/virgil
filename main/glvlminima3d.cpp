@@ -11,7 +11,8 @@
 //
 #include "glvlminima3d.h"
 
-GLvlMinima3D::GLvlMinima3D(unsigned int pos):GLvlMinimaBase(pos){}
+GLvlMinima3D::GLvlMinima3D(unsigned int pos):
+GLvlMinimaBase(pos){}
 
 /*!
     \fn GLvlMinima3D::generate()
@@ -211,4 +212,26 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 	ret->ysize.Elsize=img->ysize.Elsize;
 	ret->zsize.Elsize=img->zsize.Elsize;
 	return shared_ptr<Bild_mem<VBit> >(ret);
+}
+
+void GLvlMinima3D::writeTex(unsigned short offset[3],Bild<GLubyte> &textur)const
+{
+	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::end;i++)
+	{
+		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinimaBase::plist)[i];
+		if(bottomCap > (*org)[p])continue;
+		if(topCap < (*org)[p])break;
+		const unsigned short x=p.x(img->xsize)-minEdge.x + offset[0];
+		const unsigned short y=p.y(img->xsize,img->ysize)-minEdge.y + offset[1];
+		const unsigned short z=p.z(img->xsize,img->ysize)-minEdge.z + offset[2];
+		textur.at(x,y,z)=numeric_limits<GLubyte>::max();
+		vincent::iPunkt<vincent::lab_value>  nachb[6];
+		unsigned short nachb_cnt=p.getNachb(nachb,*img);
+		for(unsigned short i=0;i<nachb_cnt;i++)
+			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
+				textur.at(x,y,z)=numeric_limits<GLubyte>::max();
+	}
+	textur.xsize.Elsize=img->xsize.Elsize;
+	textur.ysize.Elsize=img->ysize.Elsize;
+	textur.zsize.Elsize=img->zsize.Elsize;
 }

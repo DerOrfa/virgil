@@ -87,6 +87,7 @@ public:
 		}
 	}
 	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z){init(initVal);}
+	Bild_mem(T src[],unsigned short x,unsigned short y,unsigned short z):Bild<T>(x,y,z){data=src;}
 	virtual ~Bild_mem(){free(data);}
 	inline T &at(const unsigned int index){return data[index];}
 };
