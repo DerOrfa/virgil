@@ -42,7 +42,6 @@ public:
 	unsigned int start,end;
 	GLvlMinima(unsigned int pos);
     void generate();
-    void makePoly(unsigned short dir);
     SGLVektor getCenter();
     static void setup(
 		SGLVektor norm,

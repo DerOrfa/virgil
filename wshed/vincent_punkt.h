@@ -77,7 +77,8 @@ public:
 	
 		return pCnt;
 	}
-	void getNachbStruct(iPunkt<T> p[],const Bild_vimage<T> &img)
+	
+	void getNachbStruct(iPunkt<T> p[],const Bild_vimage<T> &img)const
 	{
 		unsigned short posx=x();
 		unsigned short posy=y();
@@ -102,16 +103,16 @@ public:
 	inline bool invalid()	{return pos==numeric_limits<unsigned int>::max();}
 	
 	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){return pos%size_x;}
-	inline  unsigned short x(){return iPunkt::pos2x(pos,Bild<T>::xsize);}
+	inline  unsigned short x()const{return iPunkt::pos2x(pos,Bild<T>::xsize);}
 	
 	inline static unsigned short pos2y(const unsigned int pos,const unsigned short size_x,const unsigned short size_y){return	(pos/size_x)%size_y;}
-	inline  unsigned short y(){return iPunkt::pos2y(pos,Bild<T>::xsize,Bild<T>::ysize);}
+	inline  unsigned short y()const{return iPunkt::pos2y(pos,Bild<T>::xsize,Bild<T>::ysize);}
 
 	inline static unsigned short pos2z(const unsigned int pos,const unsigned int size_xy){return pos/size_xy;}	
-	inline  unsigned short z(){return iPunkt::pos2z(pos,Bild<T>::xsize*Bild<T>::ysize);}
+	inline  unsigned short z()const{return iPunkt::pos2z(pos,Bild<T>::xsize*Bild<T>::ysize);}
 	
 	inline static unsigned short pos2xy(const unsigned int pos,const unsigned int size_xy){return pos%size_xy;}
-	inline unsigned int xy(){return iPunkt::pos2xy(pos,Bild<T>::xsize*Bild<T>::ysize);}
+	inline unsigned int xy()const{return iPunkt::pos2xy(pos,Bild<T>::xsize*Bild<T>::ysize);}
 };
 
 template<class T> class PunktList{

@@ -165,13 +165,16 @@ void  GLvlMasterView::loadIntoWShed()
 	{
 		case VUByteRepn:	
 		{
+			glview->SetQuality(0);
 			statusBar()->message("Initialisiere");
 			vincent::transform t(MasterImg);
 			((GLvlView*)this)->connect(&t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
-			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
+			GLvlMinima::setup2(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
 			tex->setupPal(1,255);
 			glview->sendRedraw();
-			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(2000000)));
+			GLvlMinima dummy(0);
+			cout << dummy.end << endl;
+			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(dummy.end)));
 		}break;
 	}
 }
