@@ -25,7 +25,7 @@
 class GLvlMinimaBase
 {
 public:
-	union {
+	union EdgeData{
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
@@ -43,6 +43,20 @@ public:
 	dim getXDim()const;
 	dim getYDim()const;
 	dim getZDim()const;
+	template <class T> inline static void writeEdgeData(const vincent::iPunkt<T> &p, EdgeData &min,EdgeData &max)
+	{
+		const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
+		const unsigned short y=p.y(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
+		const unsigned short z=p.z(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
+			
+		min.x = min.x <? x;
+		min.y = min.y <? y;
+		min.z = min.z <? z;
+	
+		max.x = max.x >? x;
+		max.y = max.y >? y;
+		max.z = max.z >? z;
+	}
 };
 
 #endif

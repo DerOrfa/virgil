@@ -24,18 +24,13 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 		bottomCap = (*org)[p];
 		do 
 		{
-			const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
-			const unsigned short y=p.y(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
-			const unsigned short z=p.z(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
-			
-			minEdge.x = minEdge.x <? x;
-			minEdge.y = minEdge.y <? y;
-			minEdge.z = minEdge.z <? z;
-	
-			maxEdge.x = maxEdge.x >? x;
-			maxEdge.y = maxEdge.y >? y;
-			maxEdge.z = maxEdge.z >? z;
-			
+			writeEdgeData(p,minEdge,maxEdge);
+			vincent::iPunkt<vincent::lab_value>  nachb[6];
+			const unsigned short nachb_cnt=p.getNachb(nachb,*img);
+			for(unsigned short i=0;i<nachb_cnt;i++)
+				if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
+					writeEdgeData(nachb[i],minEdge,maxEdge);
+
 			p=(*plist)[++end]; 
 		}
 		while(end<plist->size && p.wert==ID);
@@ -50,7 +45,7 @@ shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinimaBase::img;
 shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinimaBase::org;
 
 shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinimaBase::plist;
-bool GLvlMinimaBase::incl_wshed=false;
+bool GLvlMinimaBase::incl_wshed=true;
 
 void GLvlMinimaBase::setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org)
 {

@@ -46,7 +46,7 @@ void GLvlMinima3D::generate()
 		for(unsigned short i=0;i<6;i++)
 		{
 			if(	nachb[i].invalid() || //Kein Nachbar
-				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)) || //Nachbar gehˆrt nich zum Segment
+				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)) || //Nachbar gehˆrt nich zum Segment [nicht(wert_gleich or wert_wshed)]
 				((*org)[nachb[i]]< bottomCap || (*org)[nachb[i]]> topCap) //Nachbar liegt auﬂerhalb [bottomCap - topCap]
 			)
 			mask|=1<<i;

@@ -27,6 +27,7 @@
 #include <vista/VImage.h>
 #include <qstatusbar.h> 
 #include <qapplication.h> 
+#include <qcheckbox.h>
 
 using namespace boost;
 using namespace efc;
@@ -37,6 +38,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 	toolTabs->removePage(toolTabs->page(3));
+	followSegments->hide();
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
@@ -206,9 +208,7 @@ void GLvlMasterView::onTransformEnd()
 		vincent::lab_value id=GLvlMinima3D::plist->operator[](index).wert;
 		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,shared_ptr<GLvlMinima3D>(new GLvlMinima3D(index))));
 	}
-	EVektor<unsigned short> pos;
-	pos.fromArray(3,selMinima.minEdge.koord);
-	loadSegmentListTex(selMinima,pos);
+	loadSegmentListTex(selMinima);
 	glview->sendRedraw();
 	
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
@@ -265,9 +265,7 @@ void GLvlMasterView::selectCurrSegment()
 {
 	if(!aktMinima)return;
 	selMinima.push_back(aktMinima);
-	EVektor<unsigned short> pos;
-	pos.fromArray(3,selMinima.minEdge.koord);
-	loadSegmentListTex(selMinima,pos);
+	loadSegmentListTex(selMinima);
 	glview->sendRedraw();
 }
 
@@ -330,15 +328,17 @@ bool GLvlMasterView::loadSegmentTex(shared_ptr<GLvlMinima3D> img,EVektor<unsigne
 /*!
     \fn GLvlMasterView::loadSegmentListTex(GLvlMinima3DList &img,EVektor<unsigned short> pos)
  */
-void GLvlMasterView::loadSegmentListTex(GLvlMinima3DList &lst,EVektor<unsigned short> pos)
+void GLvlMasterView::loadSegmentListTex(GLvlMinima3DList &lst)
 {
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	
 	p->loadMinimaMask(lst);
 	p->envColor[0]=0;
-	p->envColor[1]=0;
+	p->envColor[1]=1;
 	p->envColor[2]=1;
+	EVektor<unsigned short> pos;
+	pos.fromArray(3,lst.minEdge.koord);
 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=false;

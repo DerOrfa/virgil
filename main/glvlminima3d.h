@@ -36,10 +36,7 @@ public:
 class GLvlMinima3DList : public list<shared_ptr<GLvlMinima3D> >
 {
 public:
-	union {
-		struct {unsigned short x,y,z;};
-		unsigned short koord[3];
-	}minEdge,maxEdge;
+	GLvlMinimaBase::EdgeData minEdge,maxEdge;
 	GLvlMinima3DList(shared_ptr<GLvlMinima3D> img);
 	GLvlMinima3DList();
 	void getDim(dim &X,dim &Y, dim &Z);

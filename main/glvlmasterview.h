@@ -58,7 +58,7 @@ public:
 	void selectCurrSegment();
     void redrawAktSegment();
     bool loadSegmentTex(shared_ptr<GLvlMinima3D> img,EVektor<unsigned short> pos);
-    void loadSegmentListTex(GLvlMinima3DList &img,EVektor<unsigned short> pos);
+    void loadSegmentListTex(GLvlMinima3DList &img);
 
 protected:
     void doBenchmark();

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>560</width>
-            <height>468</height>
+            <width>489</width>
+            <height>457</height>
         </rect>
     </property>
     <property name="caption">
@@ -485,41 +485,38 @@
                 <attribute name="title">
                     <string>Segmente</string>
                 </attribute>
-                <widget class="QCheckBox">
+                <hbox>
                     <property name="name">
-                        <cstring>followSegment</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>10</y>
-                            <width>90</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>verfolgen</string>
-                    </property>
-                    <property name="accel">
-                        <string>Space</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>pushButton8</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>390</x>
-                            <y>10</y>
-                            <width>130</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>erzeugen</string>
-                    </property>
-                </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>followSegments</cstring>
+                        </property>
+                        <property name="text">
+                            <string>verfolgen</string>
+                        </property>
+                        <property name="accel">
+                            <string>Space</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton">
+                        <property name="name">
+                            <cstring>genSegmentsBtn</cstring>
+                        </property>
+                        <property name="text">
+                            <string>erzeugen</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>infoSegments</cstring>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                    </widget>
+                </hbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -912,7 +909,7 @@
         <slot>canKipp(bool)</slot>
     </connection>
     <connection>
-        <sender>pushButton8</sender>
+        <sender>genSegmentsBtn</sender>
         <signal>clicked()</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>loadIntoWShed()</slot>
