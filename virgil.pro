@@ -3,8 +3,6 @@
 # Subdir relative project main directory: .
 # Target is a subdirs project 
 
-DEFINES = GL_GLEXT_PROTOTYPES \
-          BOOST_HAS_PTHREADS 
 CONFIG += debug \
           warn_on \
           qt \

@@ -5,6 +5,7 @@
 
 CONFIG += debug \
           warn_on \
+          thread \
           staticlib 
 TEMPLATE = lib 
 HEADERS += vincent_bild.h \

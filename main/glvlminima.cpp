@@ -44,8 +44,10 @@ void GLvlMinima::generate()
 		p.getNachbStruct(nachb,*img);
 		for(unsigned short i=0;i<6;i++)
 		{
-			if(nachb[i].invalid() || p.wert!=nachb[i].wert)
-				mask|=1<<i;
+			if(	nachb[i].invalid() || 
+				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
+			)
+			mask|=1<<i;
 		}
 		if(!mask)continue;
 		glPushMatrix();
@@ -70,6 +72,8 @@ GLuint GLvlMinima::caps=0;
 shared_ptr<GLvlVolumeTex> GLvlMinima::tex;
 shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
 shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
+bool GLvlMinima::incl_wshed=false;
+
 /*!
     \fn GLvlMinima::setup_norm(SGLVektor norm)
  */

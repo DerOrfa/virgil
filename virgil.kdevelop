@@ -10,7 +10,6 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>Unterstützung für ClearCase (KDevelop)</part>
       <part>KDevcopyto</part>
       <part>Dateibaum (KDevelop)</part>
       <part>Dateigruppen-Komponente (KDevelop)</part>
@@ -20,7 +19,6 @@
       <part>Unterstützung für Subversion (KDevelop)</part>
       <part>Unterstützung für CTags (KDevelop)</part>
       <part>Unterstützung für CVSService (KDevelop)</part>
-      <part>Unterstützung für Doxygen (KDevelop)</part>
       <part>Lesezeichen-Unterstützung (KDevelop)</part>
       <part>Unterstützung für Paketerstellung (KDevelop)</part>
       <part>VisualBoy Advance (KDevelop)</part>
@@ -104,7 +102,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>/home/enni/cgtbsmMK3T.v</programargs>
+      <programargs>../sample/cgtbsmMK3T.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>

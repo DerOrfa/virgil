@@ -13,6 +13,7 @@
 #define TRANSFORM_H
 
 #include <qobject.h>
+#include <qthread.h>
 #include "vincent_bild.h"
 #include "vincent_punkt.h"
 #include <vista/Vlib.h>
@@ -28,14 +29,21 @@ typedef VUByte VBild_value;
 typedef VShort lab_value;
 typedef Bild_vimage<VBild_value> VBild;
 
-class transform : public QObject
+extern const lab_value WSHED_INIT;
+extern const lab_value WSHED_MASK;
+extern const lab_value WSHED_WSHED;
+
+class transform : public QObject, public QThread
 {
 Q_OBJECT
 	Bild_vimage<VUByte> im;
 public:
 	PunktList<VUByte> D;
+	boost::shared_ptr< Bild_vimage<lab_value> > last_threaded_erg;
+	
 	transform(VImage src);
 	void test();
+	void run();
 	boost::shared_ptr< Bild_vimage<lab_value> > operator()();
 	static boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im);
 

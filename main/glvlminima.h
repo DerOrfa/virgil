@@ -40,6 +40,7 @@ class GLvlMinima: public SGLFlObj{
 	static const GLshort GLvlMinima::diff[6][5][3];
 public:
 	unsigned int start,end;
+	static bool incl_wshed;
 	GLvlMinima(unsigned int pos);
     void generate();
     SGLVektor getCenter();

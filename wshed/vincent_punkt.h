@@ -118,16 +118,25 @@ public:
 template<class T> class PunktList{
 public:
 	iPunkt<T> *m;
+	unsigned int size;
+	inline size_t m_size()const{return size*sizeof(PunktList<T>);}
 	PunktList(unsigned int xsize,unsigned int ysize=1,unsigned int zsize=1)
 	{
 		m= (iPunkt<T>*)malloc(xsize*ysize*zsize*sizeof(iPunkt<T>));
 		for(unsigned int i=0;i<xsize*ysize*zsize;i++)m[i].pos=i;
 	}
-	PunktList(const Bild_vimage<T> &img)
+	PunktList(const Bild_vimage<T> &img):size(img.size())
+	{
+		m= (iPunkt<T>*)malloc(size*sizeof(iPunkt<T>));
+		for(unsigned int i=0;i<size;i++)
+			m[i]=iPunkt<T>(i,img);
+	}
+	PunktList(const Bild_vimage<T> &img,T exclude):size(0)
 	{
 		m= (iPunkt<T>*)malloc(img.size()*sizeof(iPunkt<T>));
 		for(unsigned int i=0;i<img.size();i++)
-			m[i]=iPunkt<T>(i,img);
+			if(img.at(i)!=exclude)m[size++]=iPunkt<T>(i,img);
+		m=(iPunkt<T>*)realloc(m,m_size());
 	}
 	~PunktList(){free(m);}
 	inline iPunkt<T> &operator[](unsigned int idx)

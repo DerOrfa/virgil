@@ -24,6 +24,7 @@ CONFIG += debug \
           warn_off \
           qt \
           opengl \
+          thread \
           x11 
 TEMPLATE = app 
 FORMS += newPinDlg.ui \

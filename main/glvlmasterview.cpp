@@ -27,7 +27,7 @@
 #include <vista/VImage.h>
 #include <qstatusbar.h> 
 #include "../wshed/vincent_punkt.h"
-
+#include <qapplication.h> 
 
 using namespace boost;
 using namespace eclasses;
@@ -167,26 +167,28 @@ void  GLvlMasterView::loadIntoWShed()
 		{
 //			glview->SetQuality(0);
 			statusBar()->message("Initialisiere");
-			vincent::transform t(MasterImg);
-			((GLvlView*)this)->connect(&t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
-			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
+			vincent::transform *t = new vincent::transform(MasterImg);
+			((GLvlView*)this)->connect(t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
+			t->start();
+/*			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
 			tex->setupPal(1,255);
 			glview->sendRedraw();
-			GLvlMinima dummy1(0);
-			GLvlMinima dummy2(dummy1.end);
-			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(dummy2.end)));
+			GLvlMinima dummy(0);
+			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(dummy.end)));*/
 		}break;
 	}
 }
 
 void GLvlMasterView::onReached(vincent::lab_value h,unsigned short objs)
 {
+	if(!qApp->tryLock())return;
 	statusBar()->message("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden");
-	if(h<255)
+/*	if(h<255)
 	{
 		tex->setupPal(h+1,255);
 		glview->sendRedraw();
-	}
+	}*/
+	qApp->unlock();
 }
 
 
