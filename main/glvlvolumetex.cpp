@@ -13,16 +13,15 @@
 #include <GL/glu.h>
 #include <assert.h>
 
-//@todo das ding is vieel zu groß :-(
 template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 {
 	GLint size[3];
 	#define xsize	size[0]
 	#define ysize	size[1]
 	#define zsize	size[2]
-	xsize=Info.X.cnt+2;
-	ysize=Info.Y.cnt+2;
-	zsize=Info.Z.cnt+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	xsize=Info.X.getCnt('X')+2;
+	ysize=Info.Y.getCnt('Y')+2;
+	zsize=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
 	
 	GLenum gl_type;
 	if(sizeof(T)==sizeof(GLubyte))gl_type=GL_UNSIGNED_BYTE;
@@ -38,18 +37,18 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	register T *pixels=pixels_;
 
 	pixels+=xsize*ysize;//die erste Ebene
-	for(int z=0;z<Info.Z.cnt;z++)
+	for(int z=0;z<Info.Z.getCnt('Z');z++)
 	{
 		pixels+=xsize;//erste Zeile leer lassen
-		for(int y=0;y<Info.Y.cnt;y++)
+		for(int y=0;y<Info.Y.getCnt('Y');y++)
 		{
 			pixels++;//ersten pixel leer lassen
-			if(xsize-Info.X.cnt-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
 			pixels=src.copy_line(y,z,pixels);
-			pixels+=(xsize-Info.X.cnt-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
 			//@todo müsste das nich "0" gesetzt werden (hinterer Rand wurde ja überschrieben)
 		}
-		pixels+=xsize*(ysize-Info.Y.cnt-1);//die restlichen y-Zeilen
+		pixels+=xsize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
 	
 	glTexImage3DEXT(TexType,0,GL_ALPHA4,xsize,ysize,zsize,0,GL_ALPHA,gl_type,pixels_);
@@ -64,14 +63,64 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
-	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
+	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
 	return true;
 	#undef xsize
 	#undef ysize
 	#undef zsize
+}
+
+bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3D &src)
+{
+	if(ID!=0)freeTexture();
+	assert(TexType==GL_TEXTURE_3D);//Textype muss 3D sein
+	
+	const GLenum gl_type=GL_UNSIGNED_BYTE; //gl_type is hier auch fest
+	GLint size[3];
+	
+	//Dim dieser Tex werden direkt ermittelt
+	(*static_cast<dim*>(&Info.X))=src.getXDim();
+	(*static_cast<dim*>(&Info.Y))=src.getYDim();
+	(*static_cast<dim*>(&Info.Z))=src.getZDim();
+	
+	Info.size=SGLVektor(Info.X.mm_size(1),Info.Y.mm_size(1),Info.Z.mm_size(1));
+
+	size[0]=Info.X.getCnt('X')+2;
+	size[1]=Info.Y.getCnt('Y')+2;
+	size[2]=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	
+	//Textur initialisieren
+	glGenTextures(1, &ID);
+	glBindTexture(TexType, ID);
+	//und prüfen	
+	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
+	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	if(!size[0])return false;
+	
+	//Pufferbild anlegen, wenn tex vorraussichtlich passt
+	Bild_mem<GLubyte> pixels(size[0],size[1],size[2],0);
+	
+	//Pufferbild schreibem
+	const unsigned short offset[3]={1,1,1};
+	src.writeTex(offset,pixels);
+	
+	glTexImage3DEXT(TexType,0,GL_ALPHA4,size[0],size[1],size[2],0,GL_ALPHA,gl_type,&pixels.at(0));
+	
+	GLenum gluerr;
+	if(gluerr = glGetError())
+	{
+		SGLprintError("%s beim Laden der Textur [GLerror]",gluErrorString(gluerr));
+		return GL_FALSE;
+	}
+	assert(size[0]>Info.X.getCnt('X')-1);
+	assert(size[1]>Info.Y.getCnt('Y')-1);
+	assert(size[2]>Info.Z.getCnt('Z')-1);
+	
+	Info.calcGaps(1,size[0]-Info.X.getCnt('X')-1,1,size[1]-Info.Y.getCnt('Y')-1,1,size[2]-Info.Z.getCnt('Z')-1);
+	return true;
 }
 
 
@@ -94,9 +143,9 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	#define xsize	size[0]
 	#define ysize	size[1]
 	#define zsize	size[2]
-	xsize=Info.X.cnt+2;
-	ysize=Info.Y.cnt+2;
-	zsize=Info.Z.cnt+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	xsize=Info.X.getCnt('X')+2;
+	ysize=Info.Y.getCnt('Y')+2;
+	zsize=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
 	if(!genValidSize(GL_COLOR_INDEX8_EXT,size,3, GL_COLOR_INDEX,gl_type,false))return false;
 	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!xsize)return false;
@@ -107,14 +156,14 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 
 	int index=0;
 	pixels+=xsize*ysize;//die erste Ebene
-	for(int z=0;z<Info.Z.cnt;z++)
+	for(int z=0;z<Info.Z.getCnt('Z');z++)
 	{
 		pixels+=xsize;//erste Zeile leer lassen
-		for(int y=0;y<Info.Y.cnt;y++)
+		for(int y=0;y<Info.Y.getCnt('Y');y++)
 		{
 			pixels++;//ersten pixel leer lassen
-			if(xsize-Info.X.cnt-1 <= 0){SGLprintError("Das Bild ist zu groß");}
-			for(int x=0;x<Info.X.cnt;x++)
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			for(int x=0;x<Info.X.getCnt('X');x++)
 			{
 				T pix=src.at(index);
 				min = min <? pix;
@@ -122,10 +171,10 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 				(*pixels)=pix;
 				pixels++;index++;
 			}
-			pixels+=(xsize-Info.X.cnt-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
 			//@todo müsste das nich "0" gesetzt werden
 		}
-		pixels+=xsize*(ysize-Info.Y.cnt-1);//die restlichen y-Zeilen
+		pixels+=xsize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
 	
 	unsigned short palsize=setupPal(min,max,true);
@@ -143,10 +192,10 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
-	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
+	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
 	return true;
 	#undef xsize
 	#undef ysize
@@ -229,9 +278,9 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	}
 	//Größe der Textur ("+2" ist für den Rand)
 	GLint size[3];
-	xsize=Info.X.cnt+2;
-	ysize=Info.Y.cnt+2;
-	zsize=Info.Z.cnt+2;
+	xsize=Info.X.getCnt('X')+2;
+	ysize=Info.Y.getCnt('Y')+2;
+	zsize=Info.Z.getCnt('Z')+2;
 	if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
 	//@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
 	
@@ -241,23 +290,23 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	
 	int z=0;
 	
-	for(;z<Info.Z.cnt ;z++)
+	for(;z<Info.Z.getCnt('Z') ;z++)
 	{
 		T *pix= &src.at(0,0,z);
 		
 		pixels+=xsize*voxelElemSize;//erste Zeile leer lassen
-		for(int y=0;y<Info.Y.cnt;y++)
+		for(int y=0;y<Info.Y.getCnt('Y');y++)
 		{
 			pixels+=voxelElemSize;//ersten Voxel (und seinen alpha) leer lassen
 			
 			if(intFormat== GL_LUMINANCE_ALPHA)
-				copyXline(pixels,pix,Info.X.cnt);
+				copyXline(pixels,pix,Info.X.getCnt('X'));
 			else 
-				mapXline(pixels,pix,Info.X.cnt,PosColor,NegColor);
-			if(xsize-Info.X.cnt-1 <= 0){SGLprintError("Das Bild ist zu groß");}
-			pixels+=(xsize-Info.X.cnt-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+				mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
 		}
-		pixels+=xsize*voxelElemSize*(ysize-Info.Y.cnt-1);//die restlichen y-Zeilen
+		pixels+=xsize*voxelElemSize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
 	glTexImage3DEXT(TexType,0,intFormat,xsize,ysize,zsize,0,intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,pixels_);
 	free(pixels_);
@@ -271,10 +320,10 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
-	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
+	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
 	return true;
 	#undef xsize
 	#undef ysize
@@ -366,17 +415,17 @@ bool GLvlVolumeTex::Load3DImage(VImage src)
 
 template<class T> void GLvlVolumeTex::loadImageInfo(Bild<T> &src)
 {
-	Info.X=*((GLvlVolumeTex::dimData*)&src.xsize);
-	Info.Y=*((GLvlVolumeTex::dimData*)&src.ysize);;
-	Info.Z=*((GLvlVolumeTex::dimData*)&src.zsize);;
+	(*static_cast<dim*>(&Info.X))=src.xsize;
+	(*static_cast<dim*>(&Info.Y))=src.ysize;;
+	(*static_cast<dim*>(&Info.Z))=src.zsize;;
 	
-	if(Info.X.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in X-Richtung. Darstellung ist nicht möglich.");}
-	if(Info.Y.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in Y-Richtung. Darstellung ist nicht möglich.");}
-	if(Info.Z.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in Z-Richtung. Darstellung ist nicht möglich.");}
+	Info.X.getCnt('X');
+	Info.Y.getCnt('Y');
+	Info.Z.getCnt('Z');
 	
-	if(Info.X.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in X-Richtung, nehme 1mm an");Info.X.Elsize=1;}
-	if(Info.Y.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in Y-Richtung, nehme 1mm an");Info.Y.Elsize=1;}
-	if(Info.Z.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in Z-Richtung, nehme 1mm an");Info.Z.Elsize=1;}
+	Info.X.getElsize('X');
+	Info.Y.getElsize('Y');
+	Info.Z.getElsize('Z');
 	
 	Info.size=SGLVektor(
 		Info.X.mm_size(1),
@@ -392,15 +441,15 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short zindex=Info.Z.TexKoord2Index(koord.SGLV_Z);
 	
 	return xindex+
-		yindex*Info.X.cnt+ //jede Zeile enth Info.X.holeSize() x'e
-		zindex*Info.X.cnt*Info.Y.cnt;
+		yindex*Info.X.getCnt('X')+ //jede Zeile enth Info.X.holeSize() x'e
+		zindex*Info.X.getCnt('X')*Info.Y.getCnt('Y');
 }
 
 SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Texturraumkoordinaten aus Voxelindexen
 {
-	const double x=Info.X.Index2TexKoord(idx%Info.X.cnt);
-	const double y=Info.Y.Index2TexKoord((idx/Info.X.cnt)%Info.Y.cnt);
-	const double z=Info.Z.Index2TexKoord(idx/(Info.X.cnt*Info.Y.cnt));
+	const double x=Info.X.Index2TexKoord(idx%Info.X.getCnt('X'));
+	const double y=Info.Y.Index2TexKoord((idx/Info.X.getCnt('X'))%Info.Y.getCnt('Y'));
+	const double z=Info.Z.Index2TexKoord(idx/(Info.X.getCnt('X')*Info.Y.getCnt('Y')));
 	return SGLVektor(x,y,z);
 }
 
@@ -415,7 +464,7 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 
 	offset =
 		SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
-		+SGLVektor(Info.X.Elsize/2,Info.Y.Elsize/2,Info.Z.Elsize/2)//@todo warum muss das um nen halben Pixel verschoben werden 
+		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden 
 		//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
 		-offset-GLvlVolumeTex::masteroffset;
 	
@@ -432,7 +481,7 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 // {
 // 	SGLVektor ret(mm2tex_Matrix[3][0]/mm2tex_Matrix[0][0],mm2tex_Matrix[3][1]/mm2tex_Matrix[1][1],mm2tex_Matrix[3][2]/mm2tex_Matrix[2][2]);
 // 	return	SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
-// 		+SGLVektor(Info.X.Elsize/2,Info.Y.Elsize/2,Info.Z.Elsize/2)-ret;
+// 		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)-ret;
 // }
 
 
@@ -486,10 +535,23 @@ void GLvlVolumeTex::loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GL
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	p->Load3DImage(img);
 	memcpy(p->envColor,color,3*sizeof(GLfloat));
-	p->calcMatr(SGLVektor(p->Info.X.Elsize,p->Info.Y.Elsize,p->Info.Z.Elsize).linearprod(pos));
+	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=false;
 	multitex=p;
 }
+
+void GLvlVolumeTex::loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,GLfloat color[3])
+{
+	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+	p->renderMode=SGL_MTEX_MODE_COLORMASK;
+	p->loadMinimaMask(img);
+	memcpy(p->envColor,color,3*sizeof(GLfloat));
+	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
+	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+	p->weich=false;
+	multitex=p;
+}
+
 
 SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

@@ -10,6 +10,7 @@
 //
 //
 #include "glvlminima3d.h"
+#include "glvlvolumetex.h"
 
 GLvlMinima3D::GLvlMinima3D(unsigned int pos):
 GLvlMinimaBase(pos){}
@@ -208,13 +209,13 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
 				((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
 	}
-	ret->xsize.Elsize=img->xsize.Elsize;
-	ret->ysize.Elsize=img->ysize.Elsize;
-	ret->zsize.Elsize=img->zsize.Elsize;
+	ret->xsize.setElsize(img->xsize.getElsize('X'));
+	ret->ysize.setElsize(img->ysize.getElsize('Y'));
+	ret->zsize.setElsize(img->zsize.getElsize('Z'));
 	return shared_ptr<Bild_mem<VBit> >(ret);
 }
 
-void GLvlMinima3D::writeTex(unsigned short offset[3],Bild<GLubyte> &textur)const
+void GLvlMinima3D::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const
 {
 	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::end;i++)
 	{
@@ -231,7 +232,7 @@ void GLvlMinima3D::writeTex(unsigned short offset[3],Bild<GLubyte> &textur)const
 			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
 				textur.at(x,y,z)=numeric_limits<GLubyte>::max();
 	}
-	textur.xsize.Elsize=img->xsize.Elsize;
-	textur.ysize.Elsize=img->ysize.Elsize;
-	textur.zsize.Elsize=img->zsize.Elsize;
+	textur.xsize.setElsize(img->xsize.getElsize('X'));
+	textur.ysize.setElsize(img->ysize.getElsize('Y'));
+	textur.zsize.setElsize(img->zsize.getElsize('Z'));
 }

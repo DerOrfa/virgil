@@ -101,3 +101,28 @@ void GLvlMinimaBase::chCap(short Top_delta,short Bottom_delta)
 	}
 	
 }
+
+dim GLvlMinimaBase::getXDim()const
+{
+	dim ret;
+	assert(maxEdge.x-minEdge.x+1);
+	ret.setCnt(maxEdge.x-minEdge.x+1);
+	ret.setElsize(GLvlMinimaBase::img->xsize.getElsize('X'));
+	return ret;
+}
+dim GLvlMinimaBase::getYDim()const
+{
+	dim ret;
+	assert(maxEdge.y-minEdge.y+1);
+	ret.setCnt(maxEdge.y-minEdge.y+1);
+	ret.setElsize(GLvlMinimaBase::img->ysize.getElsize('Y'));
+	return ret;
+}
+dim GLvlMinimaBase::getZDim()const
+{
+	dim ret;
+	assert(maxEdge.z-minEdge.z+1);
+	ret.setCnt(maxEdge.z-minEdge.z+1);
+	ret.setElsize(GLvlMinimaBase::img->zsize.getElsize('Z'));
+	return ret;
+}

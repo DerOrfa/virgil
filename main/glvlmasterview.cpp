@@ -193,7 +193,7 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima3D::setup(SGLVektor(tex->Info.X.Elsize,tex->Info.Y.Elsize,tex->Info.Z.Elsize),*v_transform,MasterImg);
+	GLvlMinima3D::setup(SGLVektor(tex->Info.X.getElsize('X'),tex->Info.Y.getElsize('Y'),tex->Info.Z.getElsize('Z')),*v_transform,MasterImg);
 	qApp->processEvents();
 	
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();
@@ -249,7 +249,7 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 					EVektor<unsigned short> pos;
 					pos.fromArray(3,it->second->minEdge.koord);
 					tex->loadColorMask(
-						*(it->second->genTex()),
+						*it->second,
 						pos,it->second->color
 					);
 					for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)

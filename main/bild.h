@@ -30,15 +30,28 @@
 
 class dim
 {
-public:
 	unsigned short cnt;
 	float Elsize;
+public:
 	inline operator unsigned short()const{return cnt;}
 		
-		inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
-		inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
-		inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
-		inline unsigned short mm2idx(const double tex_koord){return (unsigned short)rint(tex_koord/Elsize);}
+	inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
+	inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
+	inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
+	inline unsigned short mm2idx(const double tex_koord){return (unsigned short)rint(tex_koord/Elsize);}
+	inline unsigned short getCnt(char dir){
+		if(cnt==0)
+		{SGLprintError("Der Datensatz hat keine Dimension in %c-Richtung. Darstellung ist nicht möglich.",dir);abort();}
+		else return cnt;
+	}
+	inline unsigned short setCnt(unsigned short c){return cnt=c;}
+	inline float& ElsizeRef(){return Elsize;};
+	inline float getElsize(char dir){
+		if(Elsize==0)
+		{SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in %c-Richtung, nehme 1mm an",dir);Elsize=1;}
+		return Elsize;
+	}
+	inline float setElsize(float s){return Elsize=s;}
 };
 
 template <class T> class Bild
@@ -50,10 +63,12 @@ public:
 	inline unsigned int size()const{return xsize*ysize*zsize;} 
 	Bild(unsigned short x,unsigned short y,unsigned short z)
 	{
-		xsize.cnt=x;
-		ysize.cnt=y;
-		zsize.cnt=z;
-		xsize.Elsize=ysize.Elsize=zsize.Elsize=0;
+		xsize.setCnt(x);
+		ysize.setCnt(y);
+		zsize.setCnt(z);
+		xsize.setElsize(0);
+		ysize.setElsize(0);
+		zsize.setElsize(0);
 	}
 	inline virtual T &at(const unsigned int index)=0;
 	inline T &at(const short x,const unsigned short y,const unsigned short z){
@@ -87,7 +102,6 @@ public:
 		}
 	}
 	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z){init(initVal);}
-	Bild_mem(T src[],unsigned short x,unsigned short y,unsigned short z):Bild<T>(x,y,z){data=src;}
 	virtual ~Bild_mem(){free(data);}
 	inline T &at(const unsigned int index){return data[index];}
 };
@@ -131,7 +145,7 @@ template <class T> class Bild_vimage : public Bild<T>
 			SGLprintWarning("Quelldaten für Bild_vimage - Konstruktor haben falschen Typ");
 		}
 		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
-			sscanf(AttrStr,"%f %f %f",&this->Columns.Elsize,&this->Rows.Elsize,&this->Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
+			sscanf(AttrStr,"%f %f %f",&this->Columns.ElsizeRef(),&this->Rows.ElsizeRef(),&this->Bands.ElsizeRef());//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
 	}
 
