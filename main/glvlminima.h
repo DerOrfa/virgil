@@ -33,28 +33,6 @@ public:
     SGLVektor getCenter();
 	static void setup(boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img);
 	static bool incl_wshed;
-};
-
-class GLvlMinima3D: public GLvlMinimaBase{
-	static GLuint caps;
-	static SGLVektor scale;
-	inline static void QuadBegin(GLuint id)
-	{
-		assert(glIsList(id));
-		glNewList(id,GL_COMPILE);
-	}
-	inline static void QuadEnd()
-	{
-		glEndList();
-		SGLcheckGLError;
-	}
-public:
-	GLvlMinima3D(unsigned int pos);
-    void generate();
-    static void setup(
-		SGLVektor norm,
-		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
-	);
 	inline const unsigned int size(){return end-start;}
 };
 

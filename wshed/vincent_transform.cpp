@@ -18,32 +18,20 @@
 namespace vincent
 {
 
-const lab_value WSHED_INIT=numeric_limits<lab_value >::max();
-const lab_value WSHED_MASK=numeric_limits<lab_value >::max()-1;
-const lab_value WSHED_WSHED=numeric_limits<lab_value >::min();
-
-template<> unsigned short Bild<VBild_value>::xsize=numeric_limits<unsigned short>::max();
-template<> unsigned short Bild<VBild_value>::ysize=numeric_limits<unsigned short>::max();
-template<> unsigned short Bild<VBild_value>::zsize=numeric_limits<unsigned short>::max();
-
-template<> unsigned short Bild<lab_value>::xsize=numeric_limits<unsigned short>::max();
-template<> unsigned short Bild<lab_value>::ysize=numeric_limits<unsigned short>::max();
-template<> unsigned short Bild<lab_value>::zsize=numeric_limits<unsigned short>::max();
-
-template<> unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short >::max();
-template<> unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
-template<> unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
+const lab_value WSHED_INIT=std::numeric_limits<lab_value >::max();
+const lab_value WSHED_MASK=std::numeric_limits<lab_value >::max()-1;
+const lab_value WSHED_WSHED=std::numeric_limits<lab_value >::min();
 
 transform::transform(VImage src) : im(src),D(im){}
 
 boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 {
-	Bild_mem<unsigned short> dist(VBild::xsize,VBild::ysize,VBild::zsize,0);
-	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VShortRepn));
+	Bild_mem<unsigned short> dist(im.xsize,im.ysize,im.zsize,0);
+	Bild_vimage<lab_value> lab(VCreateImage(im.zsize,im.ysize,im.xsize,VShortRepn));
 	lab.reset(WSHED_INIT);
 	
 	PunktFifo<VBild_value> fifoA;
-	lab_value curlab=numeric_limits<lab_value >::min();
+	lab_value curlab=std::numeric_limits<lab_value >::min();
 	unsigned short curdistA;
 
 // 	Start Flooding
@@ -85,7 +73,7 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 			if(p.invalid())//Marker
 			{
 				fifoA.push_null();
-				assert(curdistA<numeric_limits<unsigned short>::max());
+				assert(curdistA<std::numeric_limits<unsigned short>::max());
 				curdistA++;
 				continue;
 			}
@@ -117,7 +105,7 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 			dist[D[aktP]]=0;
 			if(lab[D[aktP]]==WSHED_MASK)//Alle Punkte, die jetzt noch keinem min zugeordnet werden konnten, sind lokales Min
 			{
-				assert(curlab<numeric_limits<lab_value>::max());
+				assert(curlab<std::numeric_limits<lab_value>::max());
 				lab[D[aktP]]=++curlab;
 				fifoA.push(D[aktP]);
 				while(fifoA.size())
@@ -137,7 +125,7 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 				}
 			}
 		}
-		reached(h,curlab-numeric_limits<lab_value >::min());
+		reached(h,curlab-std::numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
 	return last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 }

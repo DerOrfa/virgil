@@ -10,18 +10,20 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>KDevBookmarks</part>
-      <part>KDevCTags</part>
-      <part>KDevCTags2</part>
-      <part>KDevClearCase</part>
+      <part>Unterstützung für ClearCase (KDevelop)</part>
       <part>KDevcopyto</part>
-      <part>KDevDoxygen</part>
-      <part>KDevFileGroups</part>
-      <part>KDevFileView</part>
-      <part>KDevdistpart</part>
-      <part>KDevPerforce</part>
-      <part>KDevQuickOpen</part>
-      <part>KDevsubversion</part>
+      <part>Dateibaum (KDevelop)</part>
+      <part>Dateigruppen-Komponente (KDevelop)</part>
+      <part>KDevCTags2</part>
+      <part>Unterstützung für Perforce (KDevelop)</part>
+      <part>Schnellöffner-Komponente (KDevelop)</part>
+      <part>Unterstützung für Subversion (KDevelop)</part>
+      <part>Unterstützung für CTags (KDevelop)</part>
+      <part>Unterstützung für CVSService (KDevelop)</part>
+      <part>Unterstützung für Doxygen (KDevelop)</part>
+      <part>Lesezeichen-Unterstützung (KDevelop)</part>
+      <part>Unterstützung für Paketerstellung (KDevelop)</part>
+      <part>VisualBoy Advance (KDevelop)</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -112,7 +114,7 @@
       </envvars>
     </run>
     <general>
-      <activedir>main</activedir>
+      <activedir>wshed</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

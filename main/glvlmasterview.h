@@ -25,7 +25,7 @@
 #include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
-#include "glvlminima.h"
+#include "glvlminima3d.h"
 
 using namespace eclasses;
 using namespace boost;
@@ -33,8 +33,7 @@ using namespace boost;
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
 
-class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr
-{
+class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 public:
 	GLvlMasterView(std::list<VImage> src);
 	~GLvlMasterView();

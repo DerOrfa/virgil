@@ -33,7 +33,6 @@ namespace vincent
 {
 enum richtung {nord=0,sued=1,ost=2,west=3,ueber=4,unter=5};
 
-using namespace std;
 template<class T> class PunktList;
 template <class T> class Bild_vimage;
 template <class T> class Bild;
@@ -43,76 +42,76 @@ public:
 	T wert;
 	unsigned int pos;
 	
-	iPunkt(unsigned int _id=numeric_limits<unsigned int>::max()):pos(_id){}
+	iPunkt(unsigned int _id=std::numeric_limits<unsigned int>::max()):pos(_id){}
 	iPunkt(unsigned int _id,const Bild_vimage<T> &img):pos(_id)
 	{
-		if(	Bild<T>::xsize==numeric_limits<unsigned short>::max() && 
-			Bild<T>::ysize==numeric_limits<unsigned short>::max() &&
-			Bild<T>::zsize==numeric_limits<unsigned short>::max())
+		if(	img.xsize==std::numeric_limits<unsigned short>::max() && 
+			img.ysize==std::numeric_limits<unsigned short>::max() &&
+			img.zsize==std::numeric_limits<unsigned short>::max())
 			printf("die Bilddaten wurden möglicherweise noch nicht initialisiert\n");
 		wert=img.at(pos);
 	}
 	
 	unsigned short getNachb(iPunkt<T> p[],const Bild_vimage<T> &img)
 	{
-		unsigned short posx=x();
-		unsigned short posy=y();
-		unsigned short posz=z();
+		unsigned short posx=x(img.xsize);
+		unsigned short posy=y(img.xsize,img.ysize);
+		unsigned short posz=z(img.xsize,img.ysize);
 		
 		unsigned short pCnt=0;
-		if(posx+1<Bild<T>::xsize) /*nich in letzter Spalte*/
+		if(posx+1<img.xsize) /*nich in letzter Spalte*/
 			p[pCnt++]=iPunkt(pos+1,img);/*östlicher Nachb*/
 		if(posx)
 			p[pCnt++]=iPunkt(pos-1,img);/*westlicher Nachb*/
 		
-		if(posy+1<Bild<T>::ysize) /*nich in letzter Zeile*/
-			p[pCnt++]=iPunkt(pos+Bild<T>::xsize,img);/* südlicher Nachb */
+		if(posy+1<img.ysize) /*nich in letzter Zeile*/
+			p[pCnt++]=iPunkt(pos+img.xsize,img);/* südlicher Nachb */
 		if(posy) /*nich in letzter Zeile*/
-			p[pCnt++]=iPunkt(pos-Bild<T>::xsize,img);/* nördlicher Nachb */
+			p[pCnt++]=iPunkt(pos-img.xsize,img);/* nördlicher Nachb */
 	
-		if(posz+1<Bild<T>::zsize) /*nich in letzter Ebene*/
-			p[pCnt++]=iPunkt(pos+Bild<T>::ysize*Bild<T>::xsize,img);/*oberer Nachb*/
+		if(posz+1<img.zsize) /*nich in letzter Ebene*/
+			p[pCnt++]=iPunkt(pos+img.ysize*img.xsize,img);/*oberer Nachb*/
 		if(posz) /*nich in letzter Ebene*/
-			p[pCnt++]=iPunkt(pos-Bild<T>::ysize*Bild<T>::xsize,img);/*unterer Nachb*/
+			p[pCnt++]=iPunkt(pos-img.ysize*img.xsize,img);/*unterer Nachb*/
 	
 		return pCnt;
 	}
 	
 	void getNachbStruct(iPunkt<T> p[],const Bild_vimage<T> &img)const
 	{
-		unsigned short posx=x();
-		unsigned short posy=y();
-		unsigned short posz=z();
+		unsigned short posx=x(img.xsize);
+		unsigned short posy=y(img.xsize,img.ysize);
+		unsigned short posz=z(img.xsize,img.ysize);
 		
 		unsigned short pCnt=0;
-		if(posx+1<Bild<T>::xsize) /*nich in letzter Spalte*/
+		if(posx+1<img.xsize) /*nich in letzter Spalte*/
 			p[ost]=iPunkt(pos+1,img);/*östlicher Nachb*/
 		if(posx)
 			p[west]=iPunkt(pos-1,img);/*westlicher Nachb*/
 		
-		if(posy+1<Bild<T>::ysize) /*nich in letzter Zeile*/
-			p[nord]=iPunkt(pos+Bild<T>::xsize,img);/* südlicher Nachb */
+		if(posy+1<img.ysize) /*nich in letzter Zeile*/
+			p[nord]=iPunkt(pos+img.xsize,img);/* südlicher Nachb */
 		if(posy) /*nich in letzter Zeile*/
-			p[sued]=iPunkt(pos-Bild<T>::xsize,img);/* nördlicher Nachb */
+			p[sued]=iPunkt(pos-img.xsize,img);/* nördlicher Nachb */
 	
-		if(posz+1<Bild<T>::zsize) /*nich in letzter Ebene*/
-			p[ueber]=iPunkt(pos+Bild<T>::ysize*Bild<T>::xsize,img);/*oberer Nachb*/
+		if(posz+1<img.zsize) /*nich in letzter Ebene*/
+			p[ueber]=iPunkt(pos+img.ysize*img.xsize,img);/*oberer Nachb*/
 		if(posz) /*nich in letzter Ebene*/
-			p[unter]=iPunkt(pos-Bild<T>::ysize*Bild<T>::xsize,img);/*unterer Nachb*/
+			p[unter]=iPunkt(pos-img.ysize*img.xsize,img);/*unterer Nachb*/
 	}
-	inline bool invalid()	{return pos==numeric_limits<unsigned int>::max();}
+	inline bool invalid()	{return pos==std::numeric_limits<unsigned int>::max();}
 	
 	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){return pos%size_x;}
-	inline  unsigned short x()const{return iPunkt::pos2x(pos,Bild<T>::xsize);}
+	inline  unsigned short x(const unsigned short size_x)const{return iPunkt::pos2x(pos,size_x);}
 	
 	inline static unsigned short pos2y(const unsigned int pos,const unsigned short size_x,const unsigned short size_y){return	(pos/size_x)%size_y;}
-	inline  unsigned short y()const{return iPunkt::pos2y(pos,Bild<T>::xsize,Bild<T>::ysize);}
+	inline  unsigned short y(const unsigned short size_x,const unsigned short size_y)const{return iPunkt::pos2y(pos,size_x,size_y);}
 
 	inline static unsigned short pos2z(const unsigned int pos,const unsigned int size_xy){return pos/size_xy;}	
-	inline  unsigned short z()const{return iPunkt::pos2z(pos,Bild<T>::xsize*Bild<T>::ysize);}
+	inline  unsigned short z(const unsigned int size_x,const unsigned int size_y)const{return iPunkt::pos2z(pos,size_x*size_y);}
 	
 	inline static unsigned short pos2xy(const unsigned int pos,const unsigned int size_xy){return pos%size_xy;}
-	inline unsigned int xy()const{return iPunkt::pos2xy(pos,Bild<T>::xsize*Bild<T>::ysize);}
+	inline unsigned int xy(const unsigned int size_x,const unsigned int size_y)const{return iPunkt::pos2xy(pos,size_x*size_y);}
 };
 
 template<class T> class PunktList{
@@ -145,14 +144,14 @@ public:
 	}
 };
 
-template<class T> class PunktFifo:public deque< iPunkt<T> >{
+template<class T> class PunktFifo:public std::deque< iPunkt<T> >{
 public:
 	void push_null(){push_back(iPunkt<T>());}
 	void push(iPunkt<T> p){push_back(p);}
 	iPunkt<T> pop(){iPunkt<T> ret=this->front();this->pop_front();return ret;}
 };
 
-template <class T> class sort_q:public binary_function< iPunkt<T>, iPunkt<T>, bool >{
+template <class T> class sort_q:public std::binary_function< iPunkt<T>, iPunkt<T>, bool >{
 public:
 	inline bool operator()(iPunkt<T> p1,iPunkt<T> p2){return p1.wert <p2.wert;}
 };

@@ -27,7 +27,7 @@ namespace vincent
 {
 typedef VUByte VBild_value;
 typedef VShort lab_value;
-typedef Bild_vimage<VBild_value> VBild;
+typedef vincent::Bild_vimage<VBild_value> VBild;
 
 extern const lab_value WSHED_INIT;
 extern const lab_value WSHED_MASK;

@@ -53,8 +53,7 @@ public:
 			return idx2mm(idx);
 		}
 	};
-	struct texInfo
-	{
+	struct texInfo{
 		union {dimData X;dimData Columns;};
 		union {dimData Y;dimData Rows;};
 		union {dimData Z;dimData Bands;dimData layer;};

@@ -17,78 +17,28 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef BILD_H
-#define BILD_H
+#ifndef VBILD_H
+#define VBILD_H
 
-#include <vista/VImage.h>
 #include "vincent_punkt.h"
-#include <assert.h>
+#include "../main/bild.h"
 
 namespace vincent
 {
 
-template <class T> class Bild
-{
-	public:
-	static unsigned short xsize,ysize,zsize;
-	inline unsigned int size()const{return xsize*ysize*zsize;} 
-	Bild(unsigned short x,unsigned short y,unsigned short z)
-	{
-		xsize=x;
-		ysize=y;
-		zsize=z;
-	}
-};
-
-template <class T> class Bild_mem:Bild<T>
-{
-	T *data;
-	public:
-	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
-	{
-		Bild<T>::xsize=x;
-		Bild<T>::ysize=y;
-		Bild<T>::zsize=z;
-		if(data)free(data);
-		init(initVal);
-	}
-	void init(T initVal)
-	{
-		if(initVal==0)data=(T*)calloc(this->size(),sizeof(T));
-		else 
-		{
-			data=(T*)malloc(this->size()*sizeof(T));
-			for(int i=this->size()-1;i>=0;i--)data[i]=initVal;
-		}
-	}
-	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z){init(initVal);}
-	~Bild_mem(){free(data);}
+template <class T> class Bild_mem: 
+public ::Bild_mem<T>{
+public:
+	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal): 
+	::Bild_mem<T>(x,y,z,initVal){}
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return data[p.pos];}
 };
 
-template <class T> class Bild_vimage : public Bild<T>
-{
-	VImage img;//@todo was is, wenn die Umgebung das Img löscht
-	VPointer data;
-	int lastBand;
-	public:
-	inline void reset(T value)
-	{
-		for(int i=this->size()-1;i>=0;i--)at(i)=value;
-	}
-	Bild_vimage(VImage _img):
-		Bild<T>(VImageNColumns(_img),VImageNRows(_img),VImageNBands(_img)),img(_img),
-		lastBand(numeric_limits<int>::min())
-	{
-		int pixMax;
-		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
-		assert(pixMax==(int)this->size()); //@todo wenn z nicht richtich is, wird pixMax falsch
-	}
-
+template <class T> class Bild_vimage : 
+public ::Bild_vimage<T>{
+public:
+	Bild_vimage(VImage _img): ::Bild_vimage<T>(_img){}
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}
-	inline T &at(unsigned int pos){return ((T*)data)[pos];}
-	inline T at(unsigned int pos)const{return ((T*)data)[pos];}
-	VImage im(){return img;}
 };
 }
 #endif

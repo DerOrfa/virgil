@@ -223,7 +223,7 @@ template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VIma
 
 GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 {
-	weich=false;
+	weich=true;
 	repeat=MipMap=false;
 }
 
