@@ -23,7 +23,7 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 		end=start;
 		vincent::iPunkt<vincent::lab_value> p=(*plist)[start];
 		vincent::lab_value ID=p.wert;
-		buttomCap = (*org)[p];
+		bottomCap = (*org)[p];
 		do 
 		{
 			const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
@@ -61,3 +61,43 @@ void GLvlMinimaBase::setup(const vincent::transform &transform,boost::shared_ptr
 	org= shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(_org));
 }
 
+void GLvlMinimaBase::chCap(short Top_delta,short Bottom_delta)
+{
+	bool update;
+	const VUByte bottomBorder = (*org)[(*plist)[start]],topBorder = (*org)[(*plist)[end-1]];
+	if(Top_delta==numeric_limits<short>::max())
+	{
+		if(this->topCap!=topBorder)
+		{this->topCap=topBorder;update=true;}
+	}
+	else if(Top_delta>0)
+	{
+		if(this->topCap >=topBorder)
+		{
+			if(!incl_wshed){incl_wshed=true;update =true;}
+		}
+		else {this->topCap++;update =true;}
+	}
+	else if(Top_delta<0)
+	{
+		if(incl_wshed){incl_wshed=false;update =true;}
+		else if(this->topCap>this->bottomCap){this->topCap--;update =true;}
+	}
+	
+	if(Bottom_delta==numeric_limits<short>::min())
+	{
+		if(this->bottomCap!=bottomBorder)
+		{this->bottomCap=bottomBorder;update=true;}
+	}
+	if(Bottom_delta>0)
+	{
+		if(this->bottomCap <this->topCap)
+		{this->bottomCap++;update =true;}
+	}
+	else if(Bottom_delta<0)
+	{
+		if(this->bottomCap > bottomBorder)
+		{this->bottomCap--;update =true;}
+	}
+	
+}

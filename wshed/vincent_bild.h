@@ -38,7 +38,7 @@ template <class T> class Bild_vimage :
 public ::Bild_vimage<T>{
 public:
 	Bild_vimage(VImage _img): ::Bild_vimage<T>(_img){}
-	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}
+	template <class PT> inline T &operator[](const iPunkt<PT> &p){return at(p.pos);}
 };
 }
 #endif

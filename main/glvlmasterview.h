@@ -54,12 +54,14 @@ public:
 	void onMsg(QString msg,bool canskip);
 	void onTransformEnd();
 	void showSegmentAt(unsigned index);
-	
+	void resizeCurrSegment(short topdelta,short bottomdelta);
+    void redrawAktSegment();
+
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> > objs;
-	shared_obj aktMinima;
+	shared_ptr<GLvlMinima3D> aktMinima;
 };
 
 #endif

@@ -108,6 +108,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 	view->showOthersHere(view->showOthersHereBtn->isOn());
 
 	((GLvlView*)this)->connect(view,SIGNAL(onVoxel(unsigned int)),SLOT(showSegmentAt(unsigned int)));
+	((GLvlView*)this)->connect(view,SIGNAL(onResizeSegment(short,short)),SLOT(resizeCurrSegment(short,short)));
 	
 	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
@@ -252,10 +253,9 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 						pos,it->second->color
 					);
 					for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
-					{
 						(*it)->registerDynamicTex(*tex->multitex);
-						updatePlanes.forward(tex->multitex->changed);
-					}
+					updatePlanes.forward(tex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
+					//direktes connect(cam->myPlane->compileNextTime) ginge zwar auf, müsste hier aber erst erkennen, ob (*it) Plane is
 					tex->multitex->changed();
 					glview->showObj(aktMinima=it->second);
 				}
@@ -265,3 +265,34 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 	}
 }
 
+void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
+{
+	if(!aktMinima)return;
+	aktMinima->chCap(topdelta,bottomdelta);
+	redrawAktSegment();
+}
+
+
+/*!
+    \fn GLvlMasterView::showAktSegment()
+ */
+void GLvlMasterView::redrawAktSegment()
+{
+	assert(aktMinima);
+	tex->multitex=boost::shared_ptr<SGLBaseTex>();
+		
+		EVektor<unsigned short> pos;
+		pos.fromArray(3,aktMinima->minEdge.koord);
+		tex->loadColorMask(
+			*(aktMinima->genTex()),
+			pos,aktMinima->color
+		);
+		for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
+			(*it)->registerDynamicTex(*tex->multitex);
+		updatePlanes.forward(tex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
+		//direktes connect(cam->myPlane->compileNextTime) ginge zwar auf, müsste hier aber erst erkennen, ob (*it) Plane is
+		tex->multitex->changed();
+		aktMinima->compileNextTime();
+		glview->sendRedrawOther();
+		glview->sendRedraw();
+}

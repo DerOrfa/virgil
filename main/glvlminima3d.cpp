@@ -35,14 +35,17 @@ void GLvlMinima3D::generate()
 	for(unsigned int i=start;i<end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
+		if(bottomCap > (*org)[p])continue;
+		if(topCap < (*org)[p])break;
 		vincent::iPunkt<vincent::lab_value> nachb[6];
 		unsigned short mask=0x0;
 		p.getNachbStruct(nachb,*img);
 		const GLfloat x=p.x(img->xsize),y=p.y(img->xsize,img->ysize),z=p.z(img->xsize,img->ysize);
 		for(unsigned short i=0;i<6;i++)
 		{
-			if(	nachb[i].invalid() || 
-				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
+			if(	nachb[i].invalid() || //Kein Nachbar
+				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)) || //Nachbar gehˆrt nich zum Segment
+				((*org)[nachb[i]]< bottomCap || (*org)[nachb[i]]> topCap) //Nachbar liegt auﬂerhalb [bottomCap - topCap]
 			)
 			mask|=1<<i;
 		}
@@ -192,6 +195,8 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinimaBase::plist)[i];
+		if(bottomCap > (*org)[p])continue;
+		if(topCap < (*org)[p])break;
 		const unsigned short x=p.x(img->xsize)-minEdge.x;
 		const unsigned short y=p.y(img->xsize,img->ysize)-minEdge.y;
 		const unsigned short z=p.z(img->xsize,img->ysize)-minEdge.z;

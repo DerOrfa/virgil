@@ -460,15 +460,34 @@ void GLvlPlaneView::init()
  */
 void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
 {
-	newPinDlg dlg;
-	if(dlg.exec()==QDialog::Accepted)
+	short top_resize=0,bottom_resize=0;
+	bool done=false;
+	if(e->state() & Qt::ControlButton)
 	{
-		shared_ptr<GLvlPin> pin=
-			shared_ptr<GLvlPin>(new GLvlPin(cursor->OldPos,dlg.pinNameEdit->text()));
-		pin->setCamera(glview->Camera.get());
-		glview->registerObj(pin);
-		glview->sendShowObj(pin);
-		Pins->push_back(pin);
+		done=true;
+		top_resize=numeric_limits<short>::max();
+	}
+	if(e->state() & Qt::ShiftButton)
+	{
+		done=true;
+		bottom_resize=numeric_limits<short>::min();
+	}
+	if(done)
+	{
+		onResizeSegment(top_resize,bottom_resize);
+		e->accept();
+	}else 
+	{
+		newPinDlg dlg;
+		if(dlg.exec()==QDialog::Accepted)
+		{
+			shared_ptr<GLvlPin> pin=
+				shared_ptr<GLvlPin>(new GLvlPin(cursor->OldPos,dlg.pinNameEdit->text()));
+			pin->setCamera(glview->Camera.get());
+			glview->registerObj(pin);
+			glview->sendShowObj(pin);
+			Pins->push_back(pin);
+		}
 	}
 }
 
@@ -497,4 +516,25 @@ void GLvlView::onMsg(QString msg,bool canskip){}
 void GLvlView::onTransformEnd(){};
 
 void GLvlPlaneView::showSegmentAt(unsigned int index){}
+void GLvlPlaneView::resizeCurrSegment(short topdelta,short bottomdelta){};
+void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
+{
+	short top_resize=0,bottom_resize=0;
+	bool done=false;
+	if(e->state() & Qt::ControlButton)
+	{
+		done=true;
+		top_resize=e->delta() > 0 ? -1:1;
+	}
+	if(e->state() & Qt::ShiftButton)
+	{
+		done=true;
+		bottom_resize=e->delta() > 0 ? -1:1;
+	}
+	if(done)
+	{
+		onResizeSegment(top_resize,bottom_resize);
+		e->accept();
+	}else e->ignore();
+}
 
