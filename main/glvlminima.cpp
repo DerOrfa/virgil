@@ -144,7 +144,7 @@ void GLvlMinima::setup(
 		/*011100*/	{strip,8,6,2,5,1,4,0,7,3}, //über & west & ost
 		/*011101*/	{strip,8,6,2,5,1,4,0,7,3,quad,4,0,1,2,3}, //über & west & ost & nord
 		/*011110*/	{strip,8,6,2,5,1,4,0,7,3,quad,4,7,6,5,4}, //über & west & ost & sued
-		/*011111*/	{strip,6,6,2,5,1,4,0,quad,8,0,1,2,3,7,6,5,4}, //über & west & ost & sued & nord
+		/*011111*/	{strip,8,6,2,5,1,4,0,7,3,quad,8,0,1,2,3,7,6,5,4}, //über & west & ost & sued & nord
 		/*100000*/	{quad,4,3,2,6,7}, // unter 
 		/*100001*/	{strip,6,0,1,3,2,7,6}, // unter & nord 
 		/*100010*/	{strip,6,5,4,6,7,2,3}, // unter & sued

@@ -197,6 +197,7 @@ void GLvlMasterView::onTransformEnd()
 		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima> >(id,m));
 	}
 	glview->sendRedraw();
+	
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
@@ -222,5 +223,21 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 
 void GLvlMasterView::showSegmentAt(unsigned int index)
 {
-    /// @todo implement me
+	if(objs.size() && v_transform->last_erg)
+	{
+		map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator it=objs.find(v_transform->last_erg->at(index));
+		
+		if(it!=objs.end())
+		{
+			if(aktMinima!=it->second)
+			{
+				if(aktMinima)glview->unshowObj(aktMinima);
+				if(it->second->size() <= MAX_MINIMA_SIZE)
+				{
+					aktMinima=it->second;
+					glview->showObj(aktMinima);
+				}
+			}
+		}
+	}
 }

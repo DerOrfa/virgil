@@ -18,6 +18,8 @@
 #include <glvlvolumetex.h>
 #include <GL/glu.h>
 
+#define MAX_MINIMA_SIZE 500000
+
 /**
 @author Enrico Reimer,,,
 */
@@ -48,6 +50,7 @@ public:
 		boost::shared_ptr<GLvlVolumeTex> tex,
 		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
 	);
+	inline const unsigned int size(){return end-start;}
 };
 
 #endif
