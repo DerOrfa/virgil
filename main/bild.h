@@ -59,16 +59,15 @@ template <class T> class Bild_vimage : public Bild<T>
 	public:
 	Bild_vimage(VImage _img):
 		Bild<T>(VImageNRows(_img),VImageNColumns(_img),VImageNBands(_img)),img(_img),
-		lastBand(-1)
-		{}
+		lastBand(-1){}
 	inline T &operator[](Punkt &p)
 	{
 		int pixMax;
 		if(lastBand!=p.posz)VSelectBand("Vol2Tex",img,p.posz,&pixMax,&data);
-		assert(pixMax==xsize*ysize);
+		assert(pixMax==xsize*ysize*zsize);
 		return ((T*)data)[p.posx+p.posy*xsize];
 	}
-	inline T &operator[](PunktRef &p){return operator[](*p);}
+	inline T &operator[](PunktRef &p){Punkt ret(p); return operator[](ret);}
 };
 
 #endif

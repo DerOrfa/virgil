@@ -17,6 +17,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+ 
+ // $Id$
+ // $Revision$
+ 
 #include "pixel.h"
 
 #include <limits>
@@ -79,6 +83,7 @@ unsigned short PunktRef::getNachb(PunktRef p[])
 }
 
 Punkt::Punkt(unsigned short _x,unsigned short _y,unsigned short _z):posx(_x),posy(_y),posz(_z){};
+Punkt::Punkt(PunktRef ref){*this = Punkt(*ref);};
 
 
 PunktRef PunktList::operator [](unsigned int _id){return PunktRef(this,_id);}

@@ -28,18 +28,19 @@
 */
 
 using namespace std;
+class PunktRef;
 
 struct Punkt
 {
-  unsigned short posx,posy,posz;
-  Punkt(
-	unsigned short _x=numeric_limits<unsigned short>::max(),
-	unsigned short _y=numeric_limits<unsigned short>::max(),
-	unsigned short _z=numeric_limits<unsigned short>::max()
+	unsigned short posx,posy,posz;
+	Punkt(
+		unsigned short _x=numeric_limits<unsigned short>::max(),
+		unsigned short _y=numeric_limits<unsigned short>::max(),
+		unsigned short _z=numeric_limits<unsigned short>::max()
 	);
+	Punkt(PunktRef ref);
 };
 
-class PunktRef;
 
 class PunktList
 {
@@ -61,14 +62,14 @@ public:
 	PunktRef(PunktList *_list,unsigned int _id);
 	PunktRef();
 	
-	 Punkt operator *();
-	 Punkt *operator ->();
+	Punkt operator *();
+	Punkt *operator ->();
 	
-	 PunktRef operator +(unsigned int _id);
-	 PunktRef operator -(unsigned int _id);
+	PunktRef operator +(unsigned int _id);
+	PunktRef operator -(unsigned int _id);
 	
-	 PunktRef &operator ++();
-	 PunktRef operator ++(int);
+	PunktRef &operator ++();
+	PunktRef operator ++(int);
   
     operator unspecified_bool_type() const;
 

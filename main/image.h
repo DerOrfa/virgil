@@ -41,8 +41,9 @@ public:
 	sort_f(Bild_vimage<T> *_im,PunktList *_D):im(_im),D(_D){}
 	bool operator()(unsigned int p1,unsigned int p2)
 	{
-		T farbe1=im->operator [ ](*D->operator [ ](p1));
-		T farbe2=im->operator [ ](*D->operator [ ](p2));
+		Punkt P1(D->operator [ ](p1)),P2(D->operator [ ](p2));
+		T farbe1=im->operator [ ](P1);
+		T farbe2=im->operator [ ](P2);
 		return farbe1<farbe2;
 	}
 };

@@ -1,33 +1,33 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="7" >
+ <DocsAndViews NumberOfDocuments="5" >
   <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/pixel.cpp" >
-   <View0 line="36" Type="Source" />
+   <View0 line="22" Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/image.h" >
-   <View0 line="75" Type="Source" />
+   <View0 line="43" Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/pixel.h" >
-   <View0 line="63" Type="Source" />
+   <View0 line="40" Type="Source" />
   </Doc2>
   <Doc3 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/bild.h" >
-   <View0 line="48" Type="Source" />
+   <View0 line="69" Type="Source" />
   </Doc3>
   <Doc4 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
-   <View0 line="166" Type="Source" />
+   <View0 line="73" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/main.cpp" >
-   <View0 line="53" Type="Source" />
-  </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/image.cpp" >
-   <View0 line="19" Type="Source" />
-  </Doc6>
  </DocsAndViews>
  <pluginList>
+  <kdevvalgrind>
+   <executable path="" params="" />
+   <valgrind path="" params="" />
+   <calltree path="" params="" />
+   <kcachegrind path="" />
+  </kdevvalgrind>
   <kdevdebugger>
    <breakpointList>
-    <breakpoint0 location="/opt/prog/simpleGL/virgil/main/image.h:70" type="1" condition="" enabled="1" />
+    <breakpoint0 location="/opt/prog/simpleGL/virgil/main/image.h:71" type="1" condition="" enabled="1" />
    </breakpointList>
   </kdevdebugger>
  </pluginList>
