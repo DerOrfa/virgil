@@ -181,7 +181,6 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	int pixMax;
 	VPointer data;
 	int z=0;
-	double min=VPixelMinValue(src),max=VPixelMaxValue(src);
 	
 	for(;z<Info.Z.cnt && VSelectBand("Vol2Tex",src,z,&pixMax,&data);z++)
 	{

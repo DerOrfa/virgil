@@ -31,7 +31,7 @@ public ::Bild_mem<T>{
 public:
 	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal): 
 	::Bild_mem<T>(x,y,z,initVal){}
-	template <class PT> inline T &operator[](iPunkt<PT> &p){return data[p.pos];}
+	template <class PT> inline T &operator[](iPunkt<PT> &p){return this->data[p.pos];}
 };
 
 template <class T> class Bild_vimage : 

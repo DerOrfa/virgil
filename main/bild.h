@@ -24,6 +24,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <sglmisc.h>
+#include <math.h>
 
 class dim
 {
@@ -65,9 +66,10 @@ protected:
 public:
 	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		xsize.cnt=x;
-		ysize.cnt=y;
-		zsize.cnt=z;
+		
+		this->xsize.cnt=x;
+		this->ysize.cnt=y;
+		this->zsize.cnt=z;
 		if(data)free(data);
 		init(initVal);
 	}
@@ -103,7 +105,7 @@ template <class T> class Bild_vimage : public Bild<T>
 		char *AttrStr;
 
 		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
-			sscanf(AttrStr,"%f %f %f",&Columns.Elsize,&Rows.Elsize,&Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
+			sscanf(AttrStr,"%f %f %f",&this->Columns.Elsize,&this->Rows.Elsize,&this->Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
 		else	{SGLprintWarning("Keine Informationen zur Größe der Voxel gefunden! Nehme 1x1x1mm an.");}
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
 	}
