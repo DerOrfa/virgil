@@ -51,6 +51,7 @@ public:
 		xsize.cnt=x;
 		ysize.cnt=y;
 		zsize.cnt=z;
+		xsize.Elsize=ysize.Elsize=zsize.Elsize=0;
 	}
 	inline T &at(const unsigned short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
@@ -109,7 +110,6 @@ template <class T> class Bild_vimage : public Bild<T>
 
 		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
 			sscanf(AttrStr,"%f %f %f",&this->Columns.Elsize,&this->Rows.Elsize,&this->Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
-		else	{SGLprintWarning("Keine Informationen zur Größe der Voxel gefunden! Nehme 1x1x1mm an.");}
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
 	}
 

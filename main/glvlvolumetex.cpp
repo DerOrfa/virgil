@@ -282,6 +282,7 @@ GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 {
 	weich=true;
 	repeat=MipMap=false;
+	identity=true;
 	TexType=GL_TEXTURE_3D;
 }
 
@@ -365,6 +366,14 @@ template<class T> void GLvlVolumeTex::loadImageInfo(Bild<T> &src)
 	Info.X=*((GLvlVolumeTex::dimData*)&src.xsize);
 	Info.Y=*((GLvlVolumeTex::dimData*)&src.ysize);;
 	Info.Z=*((GLvlVolumeTex::dimData*)&src.zsize);;
+	
+	if(Info.X.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in X-Richtung. Darstellung ist nicht möglich.");}
+	if(Info.Y.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in Y-Richtung. Darstellung ist nicht möglich.");}
+	if(Info.Z.cnt == 0){SGLprintError("Der Datensatz hat keine Dimension in Z-Richtung. Darstellung ist nicht möglich.");}
+	
+	if(Info.X.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in X-Richtung, nehme 1mm an");Info.X.Elsize=1;}
+	if(Info.Y.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in Y-Richtung, nehme 1mm an");Info.Y.Elsize=1;}
+	if(Info.Z.Elsize == 0){SGLprintWarning("Die Voxel des Datensatzes haben keine Dimension in Z-Richtung, nehme 1mm an");Info.Z.Elsize=1;}
 	
 	Info.size=SGLVektor(
 		Info.X.mm_size(1),

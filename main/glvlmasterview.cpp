@@ -168,7 +168,7 @@ void  GLvlMasterView::loadIntoWShed()
 	Bild_mem<VBit> test(50,50,50,255);
 	
 	for(unsigned short i=0;i<20;i++)
-		static_cast<Bild<VBit>& >(test).at(i,i,i)=255;
+		static_cast<Bild<VBit>& >(test).at(0,i,0)=i*10;
 		
 	tex->loadBitMask(test);
 	
