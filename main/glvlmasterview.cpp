@@ -170,3 +170,6 @@ void  GLvlMasterView::loadIntoWShed()
 
 }
 
+unsigned short PunktList<VUByte>::size_x=numeric_limits<unsigned short>::max();
+unsigned short PunktList<VUByte>::size_y=numeric_limits<unsigned short>::max();
+unsigned short PunktList<VUByte>::size_z=numeric_limits<unsigned short>::max();

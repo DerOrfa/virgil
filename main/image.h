@@ -32,44 +32,21 @@
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
 
-template<class T> class gPunkt
-{
-	public:
-	unsigned int pos;
-	T wert;
-};
-
 template <class T> class sort_q:
-public binary_function< gPunkt<T>, gPunkt<T>, bool>
+public binary_function< iPunkt<T>, iPunkt<T>, bool>
 {
 public:
-	inline bool operator()(gPunkt<T> p1,gPunkt<T> p2)
+	inline bool operator()(iPunkt<T> p1,iPunkt<T> p2)
 	{
 		return p1.wert <p2.wert;
 	}
 };
 
-template <class T> class sort_f:
-public binary_function<unsigned int,unsigned int,bool>
-{
-	Bild_vimage<T> *im;
-	PunktList *D;
-public:
-	sort_f(Bild_vimage<T> *_im,PunktList *_D):im(_im),D(_D){}
-	inline bool operator()(unsigned int p1,unsigned int p2)
-	{
-		const T farbe1=im->at(PunktRef::pos2xy(p1,D->size_x*D->size_y),PunktRef::pos2z(p1,D->size_x*D->size_y));
-		const T farbe2=im->at(PunktRef::pos2xy(p2,D->size_x*D->size_y),PunktRef::pos2z(p2,D->size_x*D->size_y));
-		return farbe1<farbe2;
-	}
-};
-
-
 template<class T> class ws_image{
 	Bild_vimage<T> im;
 public:
-	PunktList D;
-	ws_image(VImage src):im(src),D(im.xsize,im.ysize,im.zsize)
+	PunktList<T> D;
+	ws_image(VImage src):im(src),D(im)
 	{
 		printf("Lege %d Punkte an\n",im.size());
 	}
@@ -77,35 +54,17 @@ public:
 		printf("Sortiere\n");
 		sort2();
 		printf("fertsch\n");
-		PunktRef r=D[5000];
-		Punkt l[6];
+		iPunkt<T> r=D[5000];
+		kPunkt<T> l[6];
 		unsigned short len=r.getNachb(l);
 		for(int i=0;i<len;i++)
 			printf("%d-%d-%d:%d\n",l[i].posx,l[i].posy,l[i].posz,im[l[i]]);
 	}
-	unsigned int* sort()
-	{
-		sort_f<T> comp(&im,&D);
-		const unsigned int N = im.size();
-		std::sort(D.m, D.m + N,comp);
-		return D.m;
-	}
 	unsigned int* sort2()
 	{
 		unsigned int s=im.size();
-		gPunkt<T> *pkts=new gPunkt<T>[s];
-		for(int i=0;i<s;i++)
-		{
-			pkts[i].wert=im.at(PunktRef::pos2xy(i,D.size_x*D.size_y),PunktRef::pos2z(i,D.size_x*D.size_y));
-			pkts[i].pos=i;
-		}
 		sort_q<T> comp;
-		std::sort(pkts, pkts + im.size(),comp);
-		for(int i=0;i<s;i++)
-		{
-			D.m[i]=pkts[i].pos;
-		}
-		delete pkts;
+		std::sort(D.m, D.m + im.size(),comp);
 	}
 };
 

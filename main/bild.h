@@ -47,8 +47,8 @@ template <class T> class Bild_mem:Bild<T>
 		}
 	}
 	~Bild_mem(){free(data);}
-	inline T &operator[](Punkt &p){return data[p.posx+p.posy*xsize+p.posz*xsize*ysize];}
-	inline T &operator[](PunktRef &p){return operator[](*p);}
+	inline T &operator[](kPunkt<T> &p){return data[p.posx+p.posy*xsize+p.posz*xsize*ysize];}
+	inline T &operator[](iPunkt<T> &p){return data[p.pos];}
 };
 
 template <class T> class Bild_vimage : public Bild<T>
@@ -60,7 +60,7 @@ template <class T> class Bild_vimage : public Bild<T>
 	Bild_vimage(VImage _img):
 		Bild<T>(VImageNRows(_img),VImageNColumns(_img),VImageNBands(_img)),img(_img),
 		lastBand(-1){}
-	inline T &operator[](Punkt &p)
+	inline T &operator[](kPunkt<T> &p)
 	{
 		int pixMax;
 		if(lastBand!=p.posz)
@@ -71,7 +71,7 @@ template <class T> class Bild_vimage : public Bild<T>
 //		assert(pixMax==xsize*ysize); @todo was zum Teufel is pixMax
 		return ((T*)data)[p.posx+p.posy*xsize];
 	}
-	inline T &operator[](PunktRef p){return at(p.xy(),p.z());}
+	inline T &operator[](iPunkt<T> p){return at(p.xy(),p.z());}
 	inline T &at(unsigned int xy,unsigned short z)
 	{
 		int pixMax;

@@ -28,88 +28,105 @@
 */
 
 using namespace std;
-class PunktRef;
+template<class T> class PunktList;
+template <class T> class Bild_vimage;
 
-struct Punkt
+template<class T> class kPunkt
 {
+public:
 	unsigned short posx,posy,posz;
-	Punkt(
+	T wert;
+	kPunkt(
 		unsigned short _x=numeric_limits<unsigned short>::max(),
 		unsigned short _y=numeric_limits<unsigned short>::max(),
 		unsigned short _z=numeric_limits<unsigned short>::max()
-	);
+	):posx(_x),posy(_y),posz(_z){}
 };
 
-
-class PunktList
+template<class T> class iPunkt
 {
 public:
-	unsigned int size_x,size_y,size_z;
-	unsigned int *m;
-	PunktRef operator[](unsigned int _id);
-	PunktList(unsigned int xsize,unsigned int ysize=1,unsigned int zsize=1);
+	T wert;
+	unsigned int pos;
+	
+	iPunkt(unsigned int _id=numeric_limits<unsigned int>::max()):pos(_id){}
+	
+	static kPunkt<T> pos2koord(const unsigned int pos){
+		iPunkt<T> p(pos);
+		return kPunkt<T>(p.x(),p.y(),p.z());
+	}
+	unsigned short getNachb(kPunkt<T> p[])
+	{
+		unsigned short posx=x();
+		unsigned short posy=y();
+		unsigned short posz=z();
+		
+		unsigned short size_x=PunktList<T>::size_x;
+		unsigned short size_y=PunktList<T>::size_y;
+		unsigned short size_z=PunktList<T>::size_z;
+		
+		unsigned short pCnt=0;
+		if(posx+1<size_x) /*nich in letzter Spalte*/
+			p[pCnt++]=iPunkt::pos2koord(pos+1);/*östlicher Nachb*/
+		if(posx)
+			p[pCnt++]=iPunkt::pos2koord(pos-1);/*westlicher Nachb*/
+		
+		if(posy+1<size_y) /*nich in letzter Zeile*/
+			p[pCnt++]=iPunkt::pos2koord(pos+size_x);/* südlicher Nachb */
+		if(posy) /*nich in letzter Zeile*/
+			p[pCnt++]=iPunkt::pos2koord(pos-size_x);/* nördlicher Nachb */
+	
+		if(posz+1<size_z) /*nich in letzter Ebene*/
+			p[pCnt++]=iPunkt::pos2koord(pos+size_y*size_x);/*oberer Nachb*/
+		if(posz) /*nich in letzter Ebene*/
+			p[pCnt++]=iPunkt::pos2koord(pos-size_y*size_x);/*unterer Nachb*/
+	
+		return pCnt;
+	}
+
+	
+	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){return pos%size_x;}
+	inline  unsigned short x(){return iPunkt::pos2x(pos,PunktList<T>::size_x);}
+	
+	inline static unsigned short pos2y(const unsigned int pos,const unsigned short size_x,const unsigned short size_y){return	(pos/size_x)%size_y;}
+	inline  unsigned short y(){return iPunkt::pos2y(pos,PunktList<T>::size_x,PunktList<T>::size_y);}
+
+	inline static unsigned short pos2z(const unsigned int pos,const unsigned short size_xy){return pos/size_xy;}	
+	inline  unsigned short z(){return iPunkt::pos2z(pos,PunktList<T>::size_x*PunktList<T>::size_y);}
+	
+	inline static unsigned short pos2xy(const unsigned int pos,const unsigned short size_xy){return pos%size_xy;}
+	inline unsigned int xy(){return iPunkt::pos2xy(pos,PunktList<T>::size_x*PunktList<T>::size_y);}
 };
 
-class PunktRef
+template<class T> class PunktList
 {
-	PunktList *list;
-	unsigned int id;
 public:
-    typedef PunktList* PunktRef::*unspecified_bool_type;
-	
-	PunktRef(PunktList *_list,unsigned int _id);
-	PunktRef();
-	
-	static Punkt pos2Punkt(const unsigned int pos,PunktList *list);
-	Punkt operator *();
-	Punkt *operator ->();
-	
-	PunktRef operator +(unsigned int _id);
-	PunktRef operator -(unsigned int _id);
-	
-	PunktRef &operator ++();
-	PunktRef operator ++(int);
-  
-    operator unspecified_bool_type() const;
-
-	unsigned short PunktRef::getNachb(Punkt p[]);
-	
-	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){
-		return pos%size_x;
+	static unsigned short size_x,size_y,size_z;
+	iPunkt<T> *m;
+	PunktList(unsigned int xsize,unsigned int ysize=1,unsigned int zsize=1)
+	{
+		size_x=xsize;
+		size_y=ysize;
+		size_z=zsize;
+		m= (iPunkt<T>*)malloc(xsize*ysize*zsize*sizeof(iPunkt<T>));
+		for(unsigned int i=0;i<xsize*ysize*zsize;i++)m[i].pos=i;
 	}
-	inline  unsigned short x(){
-		return PunktRef::pos2x(list->m[id],list->size_x);
+	PunktList(Bild_vimage<T> &img)
+	{
+		size_x=img.xsize ;
+		size_y=img.ysize;
+		size_z=img.zsize;
+		m= (iPunkt<T>*)malloc(img.size()*sizeof(iPunkt<T>));
+		for(unsigned int i=0;i<img.size();i++)
+		{
+			iPunkt<T> p(i);
+			p.wert=img.at(p.xy(),p.z());
+			m[i]=p;
+		}
 	}
-	
-	inline static unsigned short pos2y(const unsigned int pos,const unsigned short size_x,const unsigned short size_y){
-		return	(pos/size_x)%size_y; 
-	}
-	inline  unsigned short y(){
-		return PunktRef::pos2y(list->m[id],list->size_x,list->size_y);
-	}
-
-	inline static unsigned short pos2z(const unsigned int pos,const unsigned short size_xy){
-		return pos/size_xy; /*Z-Achse (Band)*/
-	}	
-	inline  unsigned short z(){
-		return PunktRef::pos2z(list->m[id],list->size_x*list->size_y);
-	}
-	
-	inline static unsigned short pos2xy(const unsigned int pos,const unsigned short size_xy){
-		return pos%size_xy;
-	}
-	inline  unsigned int xy(){
-		return PunktRef::pos2xy(list->m[id],list->size_x*list->size_y);
-	}
+	inline iPunkt<T> &operator[](unsigned int idx){return m[idx];}
 
 };
 
-class ptr_fifo:public deque<PunktRef>
-{
-	public:
-	void push_null();
-	void push(PunktRef p);
-	PunktRef pop();
-};
 
 #endif
