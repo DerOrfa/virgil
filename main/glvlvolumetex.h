@@ -25,7 +25,7 @@ class GLvlVolumeTex : public SGLBaseTex
 {
 public:
 	GLvlVolumeTex();
-	bool loadMinimaMask(GLvlMinima3D &src);
+	bool loadMinimaMask(GLvlMinima3DList &src);
 	bool Load3DImage(VImage src);
 	template<class T> bool Load3DImage(Bild<T> &img);
 	class dimData:public dim{

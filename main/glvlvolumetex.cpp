@@ -73,7 +73,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	#undef zsize
 }
 
-bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3D &src)
+bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3DList &src)
 {
 	if(ID!=0)freeTexture();
 	assert(TexType==GL_TEXTURE_3D);//Textype muss 3D sein
@@ -82,9 +82,7 @@ bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3D &src)
 	GLint size[3];
 	
 	//Dim dieser Tex werden direkt ermittelt
-	(*static_cast<dim*>(&Info.X))=src.getXDim();
-	(*static_cast<dim*>(&Info.Y))=src.getYDim();
-	(*static_cast<dim*>(&Info.Z))=src.getZDim();
+	src.getDim(*static_cast<dim*>(&Info.X),*static_cast<dim*>(&Info.Y),*static_cast<dim*>(&Info.Z));
 	
 	Info.size=SGLVektor(Info.X.mm_size(1),Info.Y.mm_size(1),Info.Z.mm_size(1));
 
@@ -104,9 +102,13 @@ bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3D &src)
 	Bild_mem<GLubyte> pixels(size[0],size[1],size[2],0);
 	
 	//Pufferbild schreibem
-	const unsigned short offset[3]={1,1,1};
-	src.writeTex(offset,pixels);
-	
+	for(GLvlMinima3DList::iterator i=src.begin();i!=src.end();i++)
+	{
+		unsigned short offset[3]={1,1,1};
+		src.getOffset(offset,i);
+		i->writeTex(offset,pixels);
+	}
+
 	glTexImage3DEXT(TexType,0,GL_ALPHA4,size[0],size[1],size[2],0,GL_ALPHA,gl_type,&pixels.at(0));
 	
 	GLenum gluerr;
@@ -545,7 +547,9 @@ void GLvlVolumeTex::loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,
 {
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-	p->loadMinimaMask(img);
+	
+	GLvlMinima3DList t(img);
+	p->loadMinimaMask(t);
 	memcpy(p->envColor,color,3*sizeof(GLfloat));
 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);

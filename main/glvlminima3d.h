@@ -2,6 +2,7 @@
 #define GLVLMINIMA3D_H
 
 #include <glvlminima.h>
+#include <list>
 
 /**
 @author Enrico Reimer,,,
@@ -30,6 +31,18 @@ public:
     SGLVektor getCenter();
     shared_ptr<Bild_mem<VBit> > genTex();
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
+};
+
+class GLvlMinima3DList : public list< GLvlMinima3D >
+{
+public:
+	union {
+		struct {unsigned short x,y,z;};
+		unsigned short koord[3];
+	}minEdge,maxEdge;
+	GLvlMinima3DList(GLvlMinima3D &img);
+	void getDim(dim &X,dim &Y, dim &Z);
+	void getOffset(unsigned short offset[3],GLvlMinima3DList::iterator i);
 };
 
 #endif

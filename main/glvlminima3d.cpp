@@ -236,3 +236,43 @@ void GLvlMinima3D::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur
 	textur.ysize.setElsize(img->ysize.getElsize('Y'));
 	textur.zsize.setElsize(img->zsize.getElsize('Z'));
 }
+
+GLvlMinima3DList::GLvlMinima3DList(GLvlMinima3D &img)
+{
+	push_back(img);
+}
+
+void GLvlMinima3DList::getOffset(unsigned short offset[3],GLvlMinima3DList::iterator i)
+{
+	assert(i->minEdge.x-minEdge.x >= 0);
+	assert(i->minEdge.y-minEdge.y >= 0);
+	assert(i->minEdge.z-minEdge.z >= 0);
+	
+	offset[0]+= (i->minEdge.x-minEdge.x);
+	offset[1]+= (i->minEdge.y-minEdge.y);
+	offset[2]+= (i->minEdge.z-minEdge.z);
+}
+
+void GLvlMinima3DList::getDim(dim &X,dim &Y, dim &Z)
+{
+	X.setElsize(GLvlMinimaBase::img->xsize.getElsize('X'));
+	Y.setElsize(GLvlMinimaBase::img->ysize.getElsize('Y'));
+	Z.setElsize(GLvlMinimaBase::img->zsize.getElsize('Z'));
+	
+	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
+	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
+
+	for(GLvlMinima3DList::iterator i=begin();i!=end();i++)
+	{
+		minEdge.x = minEdge.x <? i->minEdge.x;
+		minEdge.y = minEdge.y <? i->minEdge.y;
+		minEdge.z = minEdge.z <? i->minEdge.z;
+	
+		maxEdge.x = maxEdge.x >? i->maxEdge.x;
+		maxEdge.y = maxEdge.y >? i->maxEdge.y;
+		maxEdge.z = maxEdge.z >? i->maxEdge.z;
+	}
+	X.setCnt(maxEdge.x-minEdge.x+1);
+	Y.setCnt(maxEdge.y-minEdge.y+1);
+	Z.setCnt(maxEdge.z-minEdge.z+1);
+}
