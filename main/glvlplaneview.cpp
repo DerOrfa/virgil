@@ -22,6 +22,7 @@
 #include "glvlplaneview.h"
 #include "glvlplanecam.h"
 #include "newPinDlg.h"
+#include "glvlmasterview.h"
 
 #include <qframe.h>
 #include <qlayout.h>
@@ -76,6 +77,15 @@ Pins(Pins)
 	AimXStatus.setText("0");
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
+	
+	GLvlMasterView::views.push_front(this);
+	it=GLvlMasterView::views.begin();
+
+}
+
+GLvlPlaneView::~GLvlPlaneView()
+{
+	GLvlMasterView::views.erase(it);
 }
 
 bool GLvlPlaneView::loadCfg()
@@ -506,13 +516,8 @@ void GLvlPlaneView::showCursHere(bool toggle)
 	else glview->unregisterObj(cursor);
 }
 
-void GLvlView::onReached(vincent::VBild_value h,unsigned short objs){}
 void GLvlView::onMsg(QString msg,bool canskip){}
-void GLvlView::onTransformEnd(){};
 
-void GLvlPlaneView::showSegmentAt(unsigned int index){}
-void GLvlPlaneView::resizeCurrSegment(short topdelta,short bottomdelta){}
-void GLvlPlaneView::selectCurrSegment(){}
 
 void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 {

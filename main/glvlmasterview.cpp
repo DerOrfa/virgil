@@ -76,6 +76,9 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	SGLprintState("Lade %d %s",Regs.size(), (Regs.size()==1 ? " Schnitt":" Schnitte"));
 	for(int i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
+		
+	GLvlSegment::setup(glview,tex);
+	
 	onCamChanged();
 	setCaption("Übersicht");
 }
@@ -109,10 +112,6 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 	view->showInOthers(view->showInOthersBtn->isOn());
 	view->showOthersHere(view->showOthersHereBtn->isOn());
 
-	((GLvlView*)this)->connect(view,SIGNAL(onVoxel(unsigned int)),SLOT(showSegmentAt(unsigned int)));
-	((GLvlView*)this)->connect(view,SIGNAL(onResizeSegment(short,short)),SLOT(resizeCurrSegment(short,short)));
-	((GLvlView*)this)->connect(view,SIGNAL(selectSegment()),SLOT(selectCurrSegment()));
-	
 	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
 
@@ -174,39 +173,15 @@ void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 void  GLvlMasterView::loadWShedDlg()
 {
 	wshed = boost::shared_ptr<GLvlSegmentDialog>(new GLvlSegmentDialog(MasterImg));
+	for(list<GLvlPlaneView *>::iterator i=views.begin();i!=views.end();i++)
+	{
+		wshed->connect(*i,SIGNAL(onVoxel(unsigned int)),SLOT(findMinima(unsigned int)));
+		wshed->connect(*i,SIGNAL(onResizeSegment(short,short)),SLOT(resizeCurrMinima(short,short)));
+		wshed->connect(*i,SIGNAL(selectSegment()),SLOT(addCurrMinima()));
+	}
 	wshed->show();
 }
 	
-void GLvlMasterView::onTransformEnd()
-{
-	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima::setup(SGLVektor(tex->Info.X.getElsize('X'),tex->Info.Y.getElsize('Y'),tex->Info.Z.getElsize('Z')),*v_transform,MasterImg);
-	qApp->processEvents();
-	GLvlSegment::setup(glview,tex);
-	
-	map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator i=objs.end();
-	for(unsigned int index = 0;
-		index<GLvlMinima::plist->size;
-		index=i->second->front()->end
-	)
-	{
-		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
-		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlSegment> >(id,shared_ptr<GLvlSegment>(new GLvlSegment(index))));
-	}
-	glview->sendRedraw();
-	
-	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
-}
-
-void GLvlMasterView::onReached(vincent::VBild_value h,unsigned short objs)
-{
-	if(h<255)
-	{
-		tex->setupPal(h+1,255);
-		glview->sendRedraw();
-	}
-	onMsg("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden",true);
-}
 
 void GLvlMasterView::onMsg(QString msg,bool canskip)
 {
@@ -217,58 +192,6 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 	qApp->processEvents();
 }
 
-
-void GLvlMasterView::showSegmentAt(unsigned int index)
-{
-	if(	index!= std::numeric_limits<unsigned int>::max() && 
-		v_transform && 
-		v_transform->last_erg && 
-		index<v_transform->last_erg->size()
-	)
-	{
-		vincent::lab_value id=v_transform->last_erg->at(index);
-		if(id==vincent::WSHED_WSHED)return;
-		map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator it=objs.find(id);
-		if(it!=objs.end())
-		{
-			if(aktMinima!=it->second)
-			{
-				if(aktMinima)
-					aktMinima->undisplay();
-				if(it->second->display());
-					aktMinima=it->second;
-			}
-		}
-		else {SGLprintWarning("Ungültiges Objekt %d",id);}
-	}
-}
-
-void GLvlMasterView::selectCurrSegment()
-{
-	if(!aktMinima)return;
-	aktSegment->push_back(aktMinima->front());
-	aktSegment->redisplay();
-	glview->sendRedraw();
-}
-
-void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
-{
-	if(!aktMinima)return;
-	aktMinima->front()->chCap(topdelta,bottomdelta);
-	redrawAktSegment();
-}
-
-
-/*!
-    \fn GLvlMasterView::showAktSegment()
- */
-void GLvlMasterView::redrawAktSegment()
-{
-	aktMinima->redisplay();
-	glview->sendRedrawOther();
-	glview->sendRedraw();
-}
-
 // void GLvlMasterView::MemCreateNotify::operator()(const MemConsumer &newob) const
 // {
 // 	cout << "Ob " << &newob << " erzeugt " << MemConsumer::list.size() << " Consumer registriert" << endl;
@@ -277,3 +200,6 @@ void GLvlMasterView::redrawAktSegment()
 // {
 // 	cout << "Ob " << &newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
 // }
+
+VImage GLvlMasterView::MasterImg=NULL;
+list<GLvlPlaneView *> GLvlMasterView::views;

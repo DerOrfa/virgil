@@ -44,6 +44,9 @@ public:
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
+	inline VUByte GLvlMinima::bottomBorder()const{return (*org)[(*plist)[end-1]];};
+	inline VUByte GLvlMinima::topBorder()const{return (*org)[(*plist)[end-1]];};
+
 	static boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
 	static boost::shared_ptr< vincent::Bild_vimage<VUByte> > org;
 	VUByte bottomCap,topCap;
@@ -51,7 +54,6 @@ public:
 	unsigned int start,end;
 	static boost::shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinima(unsigned int pos);
-	static void setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org);
 	bool incl_wshed;
 	inline const unsigned int size(){return end-start;}
     void chCap(short topdelta,short bottomdelta);

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>563</width>
-            <height>461</height>
+            <width>329</width>
+            <height>367</height>
         </rect>
     </property>
     <property name="caption">
@@ -41,7 +41,29 @@
                 <widget class="QListView">
                     <column>
                         <property name="text">
-                            <string>Column 1</string>
+                            <string>Objekt</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Volumen</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>"Bounding Box"</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -54,12 +76,36 @@
                     <property name="text">
                         <string>Item</string>
                     </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
                     <property name="pixmap">
                         <pixmap></pixmap>
                     </property>
                     <item>
                         <property name="text">
                             <string>Subitem</string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
                         </property>
                         <property name="pixmap">
                             <pixmap></pixmap>
@@ -70,12 +116,36 @@
                     <property name="text">
                         <string>New Item</string>
                     </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap></pixmap>
+                    </property>
                     <property name="pixmap">
                         <pixmap></pixmap>
                     </property>
                     <item>
                         <property name="text">
                             <string>Subitem</string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
                         </property>
                         <property name="pixmap">
                             <pixmap></pixmap>
@@ -98,80 +168,43 @@
             <property name="title">
                 <string>aktuelles Minima</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QGroupBox">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>groupBox4</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
-                    <property name="title">
-                        <string>Koordinaten</string>
+                    <property name="text">
+                        <string>Koordinaten:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel5</cstring>
-                            </property>
-                            <property name="text">
-                                <string>X:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel6</cstring>
-                            </property>
-                            <property name="text">
-                                <string>0</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel7</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Y:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel8</cstring>
-                            </property>
-                            <property name="text">
-                                <string>0</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel9</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Z:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel10</cstring>
-                            </property>
-                            <property name="text">
-                                <string>0</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>pushButton1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>übertragen</string>
-                            </property>
-                        </widget>
-                    </hbox>
                 </widget>
-                <widget class="QGroupBox">
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>coord_text</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="3">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Volumen:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="5">
+                    <property name="name">
+                        <cstring>volume_tex</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                    </property>
+                </widget>
+                <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="7">
                     <property name="name">
                         <cstring>groupBox3</cstring>
                     </property>
@@ -198,41 +231,67 @@
                                 <string>unten</string>
                             </property>
                         </widget>
-                        <widget class="QSlider" row="1" column="1">
+                        <widget class="QSpinBox" row="0" column="4">
+                            <property name="name">
+                                <cstring>cap_spinBox_top</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="4">
+                            <property name="name">
+                                <cstring>cap_spinBox_bottom</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="1" column="2">
                             <property name="name">
                                 <cstring>cap_slider_bottom</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
                             </property>
-                            <property name="tickmarks">
-                                <enum>Both</enum>
-                            </property>
                         </widget>
-                        <widget class="QSlider" row="0" column="1">
+                        <widget class="QSlider" row="0" column="2">
                             <property name="name">
                                 <cstring>cap_slider_top</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
                             </property>
-                            <property name="tickmarks">
-                                <enum>Both</enum>
+                        </widget>
+                        <widget class="QLabel" row="1" column="3">
+                            <property name="name">
+                                <cstring>bottom_cap_max_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>255</string>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="0" column="2">
+                        <widget class="QLabel" row="0" column="1">
                             <property name="name">
-                                <cstring>cap_spinBox_top</cstring>
+                                <cstring>top_cap_min_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>0</string>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="1" column="2">
+                        <widget class="QLabel" row="1" column="1">
                             <property name="name">
-                                <cstring>cap_spinBox_bottom</cstring>
+                                <cstring>bottom_cap_min_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>0</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="3">
+                            <property name="name">
+                                <cstring>top_cap_max_text</cstring>
+                            </property>
+                            <property name="text">
+                                <string>255</string>
                             </property>
                         </widget>
                     </grid>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
     </vbox>
 </widget>

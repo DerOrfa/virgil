@@ -43,34 +43,21 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(false)
 	else{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
 }
 
-boost::shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
-boost::shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
-
-boost::shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
-
-void GLvlMinima::setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org)
-{
-	GLvlMinima::img=img;
-	GLvlMinima::plist=transform.getVoxels(*img);
-	org= boost::shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(_org));
-}
-
 void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 {
 	bool update;
-	const VUByte bottomBorder = (*org)[(*plist)[start]],topBorder = (*org)[(*plist)[end-1]];
 	if(Top_delta==numeric_limits<short>::max())//Maximize TopCap
 	{
-		if(this->topCap!=topBorder)
+		if(this->topCap!=topBorder())
 		{
-			this->topCap=topBorder;
+			this->topCap=topBorder();
 			incl_wshed=true;
 			update=true;
 		}
 	}
 	else if(Top_delta>0)//incr TopCap
 	{
-		if(this->topCap >=topBorder)
+		if(this->topCap >=topBorder())
 		{
 			if(!incl_wshed){
 				incl_wshed=true;
@@ -92,8 +79,8 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 	
 	if(Bottom_delta==numeric_limits<short>::min())//Minimize BottomCap
 	{
-		if(this->bottomCap!=bottomBorder)
-		{this->bottomCap=bottomBorder;update=true;}
+		if(this->bottomCap!=bottomBorder())
+		{this->bottomCap=bottomBorder();update=true;}
 	}
 	if(Bottom_delta>0)
 	{
@@ -102,7 +89,7 @@ void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
 	}
 	else if(Bottom_delta<0)
 	{
-		if(this->bottomCap > bottomBorder)
+		if(this->bottomCap > bottomBorder())
 		{this->bottomCap--;update =true;}
 	}
 	
@@ -188,18 +175,15 @@ void GLvlMinima::generate()
 	glEnable(GL_NORMALIZE);
 }
 
-GLuint GLvlMinima::caps=0;
-
-SGLVektor GLvlMinima::scale;
-
-
 void GLvlMinima::setup(
 	SGLVektor scale,
 	const vincent::transform &transform,
 	VImage &src
 )
 {	
-	GLvlMinima::setup(transform,transform.last_erg,src);
+	GLvlMinima::img=transform.last_erg;
+	GLvlMinima::plist=transform.getVoxels(*img);
+	org= boost::shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(src));
 
 	const GLshort vertexes[8][3] = {{0,1,1}, {1,1,1}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,0,0}, {0,0,0}};
 	const GLfloat normales[8][3] = {{-0.57735,0.57735,0.57735}, {0.57735,0.57735,0.57735}, {0.57735,0.57735,-0.57735}, {-0.57735,0.57735,-0.57735}, {-0.57735,-0.57735,0.57735}, {0.57735,-0.57735,0.57735}, {0.57735,-0.57735,-0.57735}, {-0.57735,-0.57735,-0.57735}};
@@ -363,3 +347,9 @@ void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)c
 	textur.zsize.setElsize(img->zsize.getElsize('Z'));
 }
 
+
+GLuint GLvlMinima::caps=0;
+SGLVektor GLvlMinima::scale;
+boost::shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
+boost::shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
+boost::shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;

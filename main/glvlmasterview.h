@@ -45,19 +45,14 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 public:
 	GLvlMasterView(std::list<VImage> src);
 	~GLvlMasterView();
-	VImage MasterImg;
+	static VImage MasterImg;
+	static list<GLvlPlaneView *> views;
 	void newPlane();
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
     void loadWShedDlg();
-	void onReached(vincent::VBild_value h,unsigned short objs);
 	void onMsg(QString msg,bool canskip);
-	void onTransformEnd();
-	void showSegmentAt(unsigned index);
-	void resizeCurrSegment(short topdelta,short bottomdelta);
-	void selectCurrSegment();
-    void redrawAktSegment();
 	boost::shared_ptr<GLvlSegmentDialog> wshed;
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{

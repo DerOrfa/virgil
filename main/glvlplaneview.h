@@ -73,12 +73,7 @@ public slots:
 	void	onCamChanged();
 	void	selectView(int view);
 	void	selectViewMode(int view);
-    virtual void onReached(vincent::VBild_value h,unsigned short objs);
 	virtual void onMsg(QString msg,bool canskip);
-	virtual void onTransformEnd();
-	virtual void showSegmentAt(unsigned int index)=0;
-	virtual void resizeCurrSegment(short topdelta,short bottomdelta)=0;
-	virtual void selectCurrSegment()=0;
 };
 
 class GLvlPlaneView: public GLvlView
@@ -91,6 +86,7 @@ public:
 		EWndRegistry *myReg,
 		boost::shared_ptr< shared_pin_list > Pins
 		);
+	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();
 	void showInOthers(bool toggle);
@@ -101,7 +97,7 @@ public:
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
 	boost::shared_ptr<GLvlPlaneCursor> cursor;
-
+	list<GLvlPlaneView *>::iterator it;
 private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
 	boost::shared_ptr< shared_pin_list > Pins;

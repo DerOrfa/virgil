@@ -30,8 +30,6 @@ protected:
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	static boost::shared_ptr<GLvlVolumeTex> targetTex;
-	static SGLqtSpace *target3D;
 	static boost::shared_ptr<GLvlVolumeTex> mTexDummy;
 	boost::shared_ptr<GLvlVolumeTex> myTex;
 public:
@@ -44,6 +42,9 @@ public:
 	void undisplay();
 	void getDim(dim &X,dim &Y, dim &Z);
 	void getOffset(unsigned short offset[3],GLvlSegment::iterator i);
+
+	static boost::shared_ptr<GLvlVolumeTex> targetTex;
+	static SGLqtSpace *target3D;
 };
 
 #endif

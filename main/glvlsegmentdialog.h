@@ -26,6 +26,8 @@ class GLvlSegmentDialog : public SegmentDialog
 {
   Q_OBJECT
 
+	boost::shared_ptr<vincent::transform> v_transform;
+	void setMinCapData(VUByte minValue,VUByte Value,VUByte maxValue);
 public:
 	class MinimaItem:public QListViewItem, public boost::shared_ptr<GLvlMinima>
 	{
@@ -41,20 +43,26 @@ public:
 	~GLvlSegmentDialog();
 	/*$PUBLIC_FUNCTIONS$*/
 	void registerSegment(boost::shared_ptr<GLvlSegment> seg);
-	void selectMinima(boost::shared_ptr<GLvlMinima> min);
+	void selectMinima(boost::shared_ptr<GLvlSegment> min);
+
 	VImage Img;
 
 	map<vincent::lab_value,boost::shared_ptr<GLvlSegment> > objs;
 	boost::shared_ptr<GLvlSegment> aktMinima;
 	boost::shared_ptr<GLvlSegment> aktSegment;
+	
 
 public slots:
-  /*$PUBLIC_SLOTS$*/
-  virtual void          onSelectItem(QListViewItem*);
-  virtual void          startTransform();
-  virtual void          bottomCapChanged(int);
-  virtual void          topCapChanged(int);
-  virtual void          onWatershedReady(bool);
+	/*$PUBLIC_SLOTS$*/
+	virtual void          onSelectItem(QListViewItem*);
+	virtual void          startTransform();
+	virtual void          bottomCapChanged(int);
+	virtual void          topCapChanged(int);
+	virtual void          onWatershedReady(bool=false);
+	virtual void findMinima(unsigned int index);
+	virtual void addCurrMinima();
+	virtual void resizeCurrMinima(short topdelta,short bottomdelta);
+	virtual void onReached(vincent::VBild_value,unsigned short );
 
 protected:
   /*$PROTECTED_FUNCTIONS$*/
