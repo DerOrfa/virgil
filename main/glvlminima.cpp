@@ -422,11 +422,11 @@ void GLvlMinima::show(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)
 void GLvlMinima::unshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)
 {	
 	users.erase(&seg);
-	if(users.size())space.unshowObj(self);
+	if(!users.size())space.unshowObj(self);
 }
 
 void GLvlMinima::update_users()
 {
-	for(set<GLvlSegment*>::iterator it;it!=users.end();it++)
+	for(set<GLvlSegment*>::iterator it=users.begin();it!=users.end();it++)
 		(*it)->redisplay();
 }

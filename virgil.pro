@@ -3,7 +3,7 @@
 # Subdir relative project main directory: .
 # Target is a subdirs project 
 
-CONFIG += debug \
+CONFIG += release \
           warn_on \
           qt \
           opengl \
