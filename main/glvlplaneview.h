@@ -21,16 +21,16 @@
 #ifndef GLVLPLANEVIEW_H
 #define GLVLPLANEVIEW_H
 
-#include <sglqtspace.h>
+#include <libsgl/sglqtspace.h>
 #include "glvlplanecam.h"
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
-#include <primitives/sglquader.h>
+#include <libsgl/primitives/sglquader.h>
 #include "../wshed/vincent_transform.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
 
-#include <EWndRegistry.h>
+#include <eclasses/EWndRegistry.h>
 
 #include <qlabel.h> 
 

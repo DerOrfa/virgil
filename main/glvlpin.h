@@ -20,10 +20,10 @@
 #ifndef GLVLPIN_H
 #define GLVLPIN_H
 
-#include <sglmetaobj.h>
-#include <sglmetaobj.h>
-#include <primitives/sglquadricobj.h>
-#include <helper/sglcamera.h>
+#include <libsgl/sglmetaobj.h>
+#include <libsgl/sglmetaobj.h>
+#include <libsgl/primitives/sglquadricobj.h>
+#include <libsgl/helper/sglcamera.h>
 
 #include <qobject.h>
 

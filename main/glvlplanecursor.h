@@ -20,8 +20,8 @@
 #ifndef GLVLPLANECURSOR_H
 #define GLVLPLANECURSOR_H
 
-#include <sglmetaobj.h>
-#include <primitives/sglquader.h>
+#include <libsgl/sglmetaobj.h>
+#include <libsgl/primitives/sglquader.h>
 #include <qobject.h>
 
 

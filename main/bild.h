@@ -23,7 +23,7 @@
 #include <vista/VImage.h>
 #include <assert.h>
 #include <limits.h>
-#include <sglmisc.h>
+#include <libsgl/sglmisc.h>
 #include <math.h>
 #include <typeinfo>
 #include <boost/shared_ptr.hpp>
@@ -38,7 +38,10 @@ public:
 	inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
 	inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
 	inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
-	inline unsigned short mm2idx(const double tex_koord){return (unsigned short)rint(tex_koord/Elsize);}
+	inline unsigned short mm2idx(const double tex_koord){
+		const double ret=rint(tex_koord/Elsize);
+		return ret<0 ? std::numeric_limits<unsigned short>::max():(unsigned short)ret;
+	}
 	inline unsigned short getCnt(char dir){
 		if(cnt==0)
 		{SGLprintError("Der Datensatz hat keine Dimension in %c-Richtung. Darstellung ist nicht möglich.",dir);abort();}

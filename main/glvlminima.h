@@ -12,12 +12,12 @@
 #ifndef SGLOBJGLVLMINIMA_H
 #define SGLOBJGLVLMINIMA_H
 
-#include <primitives/sglflobj.h>
+#include <libsgl/primitives/sglflobj.h>
 #include "../wshed/vincent_transform.h"
 #include "../wshed/vincent_punkt.h"
 #include <GL/glu.h>
 
-#include <sglqtspace.h>
+#include <libsgl/sglqtspace.h>
 
 #define MAX_MINIMA_SIZE 500000
 
@@ -83,6 +83,5 @@ public:
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 };
 
-#include "glvlvolumetex.h"
-#include "glvlminimalist.h"
+//#include "glvlvolumetex.h"
 #endif

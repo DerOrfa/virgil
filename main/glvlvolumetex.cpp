@@ -73,7 +73,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	#undef zsize
 }
 
-bool GLvlVolumeTex::loadMinimaMask(GLvlMinimaList &src)
+bool GLvlVolumeTex::loadSegment(GLvlSegment &src)
 {
 	if(ID!=0)freeTexture();
 	assert(TexType==GL_TEXTURE_3D);//Textype muss 3D sein
@@ -102,7 +102,7 @@ bool GLvlVolumeTex::loadMinimaMask(GLvlMinimaList &src)
 	Bild_mem<GLubyte> pixels(size[0],size[1],size[2],0);
 	
 	//Pufferbild schreibem
-	for(GLvlMinimaList::iterator i=src.begin();i!=src.end();i++)
+	for(GLvlSegment::iterator i=src.begin();i!=src.end();i++)
 	{
 		unsigned short offset[3]={1,1,1};
 		src.getOffset(offset,i);

@@ -12,11 +12,11 @@
 #ifndef GLVLVOLUMETEX_H
 #define GLVLVOLUMETEX_H
 
-#include <util/sgltextur.h>
+#include <libsgl/util/sgltextur.h>
 #include <vista/VImage.h>
 #include <bild.h>
 
-#include "glvlminimalist.h"
+#include "glvlsegment.h"
 
 /**
 @author Enrico Reimer,,,
@@ -25,7 +25,7 @@ class GLvlVolumeTex : public SGLBaseTex
 {
 public:
 	GLvlVolumeTex();
-	bool loadMinimaMask(GLvlMinimaList &src);
+	bool loadSegment(GLvlSegment &src);
 	bool Load3DImage(VImage src);
 	template<class T> bool Load3DImage(Bild<T> &img);
 	class dimData:public dim{

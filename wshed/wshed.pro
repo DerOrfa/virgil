@@ -3,8 +3,6 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./wshed
 # Das Target ist eine Bibliothek:  
 
-INCLUDEPATH = /opt/prog/eclasses/eclasses2/ \
-              ../../libsgl/ 
 CONFIG += debug \
           warn_on \
           thread \

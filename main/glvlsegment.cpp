@@ -17,51 +17,92 @@ GLvlSegment::GLvlSegment(shared_ptr<GLvlMinima> img)
 	push_back(img);
 }
 
-
-void Segment::display()
+GLvlSegment::GLvlSegment(unsigned int index)
 {
-/*	assert(targetTex->multitex);
+	push_back(shared_ptr<GLvlMinima>(new GLvlMinima(index)));
+}
+
+void GLvlSegment::redisplay()
+{
 	EVektor<unsigned short> pos;
 	pos.fromArray(3,minEdge.koord);
-	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	
-	GLvlMinimaList t(this);
-	p->loadMinimaMask(t);
-	p->envColor[0]=0;
-	p->envColor[1]=1;
-	p->envColor[2]=0;
-	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=false;
-	targetTex->multitex->multitex=p;
-	targetTex->changed();*/
-}
-void Segment::undisplay()
-{
-	targetTex->multitex->multitex=boost::shared_ptr<SGLBaseTex>();
+	myTex->loadSegment(*this);
+	myTex->calcMatr(SGLVektor(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z')).linearprod(pos));
+	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
 	targetTex->changed();
 }
-void Segment::showDummy()
+
+void GLvlSegment::display()
 {
-	boost::shared_ptr<SGLBaseTex> temp;
-	if(targetTex->multitex)temp=targetTex->multitex->multitex;
-	targetTex->multitex=mTexDummy;
-	targetTex->multitex->multitex=temp;
+/*	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		target3D->showObj(*i);*/
+	
+	EVektor<unsigned short> pos;
+	pos.fromArray(3,minEdge.koord);
+	myTex=boost::shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex());
+	myTex->renderMode=SGL_MTEX_MODE_COLORMASK;
+	
+	myTex->loadSegment(*this);
+	myTex->envColor[0]=0;
+	myTex->envColor[1]=1;
+	myTex->envColor[2]=0;
+	myTex->calcMatr(SGLVektor(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z')).linearprod(pos));
+	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
+	myTex->weich=false;
+	targetTex->addMTexEnd(myTex,true);
+}
+void GLvlSegment::undisplay()
+{
+	if(myTex)targetTex->delMTex(myTex,true);
+	myTex=boost::shared_ptr<GLvlVolumeTex>();
+/*	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		target3D->unshowObj(*i);*/
 }
 
-void Segment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
+void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
 {
-	target3D=_target3D;
+//	target3D=_target3D;
 	targetTex=_targetTex;
-	
-	mTexDummy =boost::shared_ptr<GLvlVolumeTex> (new GLvlVolumeTex());
-	mTexDummy->renderMode=SGL_MTEX_MODE_COLORMASK;
-	
-	Segment emptySegment;
-	mTexDummy->loadMinimaMask(emptyLst);
 }
 
-boost::shared_ptr<GLvlVolumeTex> Segment::targetTex;
-SGLqtSpace *Segment::target3D;
-boost::shared_ptr<GLvlVolumeTex> Segment::mTexDummy;
+void GLvlSegment::getOffset(unsigned short offset[3],GLvlSegment::iterator i)
+{
+        assert((*i)->minEdge.x-minEdge.x >= 0);
+        assert((*i)->minEdge.y-minEdge.y >= 0);
+        assert((*i)->minEdge.z-minEdge.z >= 0);
+        
+        offset[0]+= ((*i)->minEdge.x-minEdge.x);
+        offset[1]+= ((*i)->minEdge.y-minEdge.y);
+        offset[2]+= ((*i)->minEdge.z-minEdge.z);
+}
+
+void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
+{
+        X.setElsize(GLvlMinima::img->xsize.getElsize('X'));
+        Y.setElsize(GLvlMinima::img->ysize.getElsize('Y'));
+        Z.setElsize(GLvlMinima::img->zsize.getElsize('Z'));
+        
+        minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
+        maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
+
+        for(GLvlSegment::iterator i=begin();i!=end();i++)
+        {
+                minEdge.x = minEdge.x <? (*i)->minEdge.x;
+                minEdge.y = minEdge.y <? (*i)->minEdge.y;
+                minEdge.z = minEdge.z <? (*i)->minEdge.z;
+        
+                maxEdge.x = maxEdge.x >? (*i)->maxEdge.x;
+                maxEdge.y = maxEdge.y >? (*i)->maxEdge.y;
+                maxEdge.z = maxEdge.z >? (*i)->maxEdge.z;
+        }
+        X.setCnt(maxEdge.x-minEdge.x+1);
+        Y.setCnt(maxEdge.y-minEdge.y+1);
+        Z.setCnt(maxEdge.z-minEdge.z+1);
+}
+
+
+
+boost::shared_ptr<GLvlVolumeTex> GLvlSegment::targetTex;
+SGLqtSpace *GLvlSegment::target3D;
+boost::shared_ptr<GLvlVolumeTex> GLvlSegment::mTexDummy;

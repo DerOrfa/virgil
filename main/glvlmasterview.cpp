@@ -22,7 +22,7 @@
 #include <qaction.h> 
 #include <qtabwidget.h>
 #include "glvlplanecam.h"
-#include <EWorkOnCfgDlg.h>
+#include <eclasses/EWorkOnCfgDlg.h>
 
 #include <vista/VImage.h>
 #include <qstatusbar.h> 
@@ -198,18 +198,17 @@ void GLvlMasterView::onTransformEnd()
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
 	GLvlMinima::setup(SGLVektor(tex->Info.X.getElsize('X'),tex->Info.Y.getElsize('Y'),tex->Info.Z.getElsize('Z')),*v_transform,MasterImg);
 	qApp->processEvents();
-	Segment::setup(glview,tex);
+	GLvlSegment::setup(glview,tex);
 	
-	map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator i=objs.end();
+	map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator i=objs.end();
 	for(unsigned int index = 0;
 		index<GLvlMinima::plist->size;
-		index=i->second->end
+		index=i->second->front()->end
 	)
 	{
 		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
-		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima> >(id,shared_ptr<GLvlMinima>(new GLvlMinima(index))));
+		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlSegment> >(id,shared_ptr<GLvlSegment>(new GLvlSegment(index))));
 	}
-	loadSegmentListTex(selMinima);
 	glview->sendRedraw();
 	
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
@@ -241,23 +240,17 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 	{
 		vincent::lab_value id=v_transform->last_erg->at(index);
 		if(id==vincent::WSHED_WSHED)return;
-		map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator it=objs.find(id);
-		GLfloat color[3]={0,1,0};
+		map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator it=objs.find(id);
 		if(it!=objs.end())
 		{
 			if(aktMinima!=it->second)
 			{
 				if(aktMinima)
-				{
-					glview->unshowObj(aktMinima);
 					aktMinima->undisplay();
-				}
-				if(it->second->size() <= MAX_MINIMA_SIZE)
+				if(it->second->front()->size() <= MAX_MINIMA_SIZE)
 				{
-					EVektor<unsigned short> pos;
-					pos.fromArray(3,it->second->minEdge.koord);
-					loadSegmentTex(it->second,pos);
-					glview->showObj(aktMinima=it->second);	
+					it->second->display();
+					aktMinima=it->second;
 				}
 			}
 		}
@@ -268,15 +261,15 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 void GLvlMasterView::selectCurrSegment()
 {
 	if(!aktMinima)return;
-	selMinima.push_back(aktMinima.get());
-	loadSegmentListTex(selMinima);
+	aktSegment->push_back(aktMinima->front());
+	aktSegment->redisplay();
 	glview->sendRedraw();
 }
 
 void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
 {
 	if(!aktMinima)return;
-	aktMinima->chCap(topdelta,bottomdelta);
+	aktMinima->front()->chCap(topdelta,bottomdelta);
 	redrawAktSegment();
 }
 
@@ -286,49 +279,16 @@ void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
  */
 void GLvlMasterView::redrawAktSegment()
 {
-	if(!aktMinima)return;
-	tex->multitex=boost::shared_ptr<SGLBaseTex>();
-		
-	EVektor<unsigned short> pos;
-	pos.fromArray(3,aktMinima->minEdge.koord);
-
-	loadSegmentTex(aktMinima,pos);
-	aktMinima->compileNextTime();
+	aktMinima->redisplay();
 	glview->sendRedrawOther();
 	glview->sendRedraw();
 }
 
-
-/*!
-    \fn GLvlMasterView::loadSegmentTex(GLvlMinima &img,EVektor<unsigned short> pos)
- */
-bool GLvlMasterView::loadSegmentTex(shared_ptr<GLvlMinima> img,EVektor<unsigned short> pos)
+void GLvlMasterView::MemCreateNotify::operator()(boost::shared_ptr<MemConsumer> newob) const
 {
-	img->display();
-	return true;
+	cout << "Ob " << newob << " erzeugt " << MemConsumer::list.size() << " Consumer registriert" << endl;
 }
-
-
-/*!
-    \fn GLvlMasterView::loadSegmentListTex(GLvlMinimaList &img,EVektor<unsigned short> pos)
- */
-void GLvlMasterView::loadSegmentListTex(GLvlMinimaList &lst)
+void GLvlMasterView::MemDeleteNotify::operator()(MemConsumer *newob) const
 {
-	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-	
-	p->loadMinimaMask(lst);
-	p->envColor[0]=0;
-	p->envColor[1]=1;
-	p->envColor[2]=1;
-	EVektor<unsigned short> pos;
-	pos.fromArray(3,lst.minEdge.koord);
-	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=false;
-	boost::shared_ptr<SGLBaseTex> temp;
-	if(tex->multitex)temp=tex->multitex->multitex;
-	tex->multitex=p;
-	tex->multitex->multitex=temp;
-	tex->changed();
+	cout << "Ob " << newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
 }

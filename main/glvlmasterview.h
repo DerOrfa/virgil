@@ -21,7 +21,7 @@
 #define GLVLMASTERVIEW_H
 
 #include "glvlplaneview.h"
-#include "sglqtmultispacemgr.h"
+#include <libsgl/sglqtmultispacemgr.h>
 #include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
@@ -57,15 +57,25 @@ public:
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
     void redrawAktSegment();
-    bool loadSegmentTex(shared_ptr<GLvlMinima> img,EVektor<unsigned short> pos);
-    void loadSegmentListTex(GLvlMinimaList &img);
+	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
+	{
+		public:
+		void operator()(boost::shared_ptr<MemConsumer> newob) const;
+	}TexCreate;
+	class MemDeleteNotify:public MemConsumer::NotifyDeleteSlot<MemDeleteNotify>
+	{
+		public:
+		void operator()(MemConsumer *newob) const;
+	}TexDelete;
+//    bool loadSegmentTex(shared_ptr<GLvlMinima> img,EVektor<unsigned short> pos);
+//    void loadSegmentListTex(GLvlMinimaList &img);
 
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
-	map<vincent::lab_value,shared_ptr<GLvlMinima> > objs;
-	shared_ptr<GLvlMinima> aktMinima;
-	GLvlMinimaList selMinima;
+	map<vincent::lab_value,shared_ptr<GLvlSegment> > objs;
+	shared_ptr<GLvlSegment> aktMinima;
+	shared_ptr<GLvlSegment> aktSegment;
 };
 
 #endif

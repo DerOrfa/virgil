@@ -10,7 +10,7 @@
 //
 //
 #include "glvlminima.h"
-#include <sglvektor.h>
+#include <libsgl/sglvektor.h>
 #include "glvlvolumetex.h"
 
 GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
