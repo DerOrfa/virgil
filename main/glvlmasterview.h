@@ -21,12 +21,13 @@
 #define GLVLMASTERVIEW_H
 
 #include "glvlplaneview.h"
+#include "glvlsegmentdialog.h"
 #include <libsgl/sglqtmultispacemgr.h>
 #include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
 #include "glvlminima.h"
-#include <boost/signal.hpp>
+#include <libsgl/sglsignal.h>
 
 using namespace efc;
 using namespace boost;
@@ -49,7 +50,7 @@ public:
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
-    void loadIntoWShed();
+    void loadWShedDlg();
 	void onReached(vincent::VBild_value h,unsigned short objs);
 	void onMsg(QString msg,bool canskip);
 	void onTransformEnd();
@@ -57,6 +58,7 @@ public:
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
     void redrawAktSegment();
+	boost::shared_ptr<GLvlSegmentDialog> wshed;
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{
 		public:
@@ -71,9 +73,6 @@ public:
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
-	map<vincent::lab_value,shared_ptr<GLvlSegment> > objs;
-	shared_ptr<GLvlSegment> aktMinima;
-	shared_ptr<GLvlSegment> aktSegment;
 };
 
 #endif

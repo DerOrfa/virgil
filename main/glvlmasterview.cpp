@@ -38,7 +38,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 	toolTabs->removePage(toolTabs->page(3));
-	followSegments->hide();
+	followSegments->setDisabled(true);
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
@@ -171,26 +171,10 @@ void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 /*!
     \fn GLvlMasterView::loadIntoWShed()
  */
-void  GLvlMasterView::loadIntoWShed()
+void  GLvlMasterView::loadWShedDlg()
 {
-
-	switch(VPixelRepn(MasterImg))
-	{
-		case VUByteRepn:	
-		{
-//			glview->SetQuality(0);
-			v_transform = shared_ptr<vincent::transform>(new vincent::transform(MasterImg));
-			((GLvlView*)this)->connect(&*v_transform,SIGNAL(reached(vincent::VBild_value ,unsigned short)),SLOT(onReached(vincent::VBild_value,unsigned short )));
-			((GLvlView*)this)->connect(&*v_transform,SIGNAL(msg(QString,bool)),SLOT(onMsg(QString,bool)));
-			((GLvlView*)this)->connect(&*v_transform,SIGNAL(end()),SLOT(onTransformEnd()));
-			qApp->processEvents();//Nebenläufigkeit faken
-			v_transform->init();
-			qApp->processEvents();
-			v_transform->operator()();
-			qApp->processEvents();
-			onTransformEnd();
-		}break;
-	}
+	wshed = boost::shared_ptr<GLvlSegmentDialog>(new GLvlSegmentDialog(MasterImg));
+	wshed->show();
 }
 	
 void GLvlMasterView::onTransformEnd()

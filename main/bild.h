@@ -27,6 +27,7 @@
 #include <math.h>
 #include <typeinfo>
 #include <boost/shared_ptr.hpp>
+#include <limits>
 
 class dim
 {

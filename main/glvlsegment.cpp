@@ -10,16 +10,19 @@
 //
 //
 #include "glvlsegment.h"
+#include <libsgl/sglqtspace.h>
+#include "glvlvolumetex.h"
+#include "glvlminima.h"
 
 GLvlSegment::GLvlSegment(){};
-GLvlSegment::GLvlSegment(shared_ptr<GLvlMinima> img)
+GLvlSegment::GLvlSegment(boost::shared_ptr<GLvlMinima> img)
 {
 	push_back(img);
 }
 
 GLvlSegment::GLvlSegment(unsigned int index)
 {
-	push_back(shared_ptr<GLvlMinima>(new GLvlMinima(index)));
+	push_back(boost::shared_ptr<GLvlMinima>(new GLvlMinima(index)));
 }
 
 void GLvlSegment::redisplay()

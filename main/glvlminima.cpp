@@ -43,16 +43,16 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(false)
 	else{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
 }
 
-shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
-shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
+boost::shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
+boost::shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
 
-shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
+boost::shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
 
 void GLvlMinima::setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org)
 {
 	GLvlMinima::img=img;
 	GLvlMinima::plist=transform.getVoxels(*img);
-	org= shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(_org));
+	org= boost::shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(_org));
 }
 
 void GLvlMinima::chCap(short Top_delta,short Bottom_delta)
@@ -317,7 +317,7 @@ SGLVektor GLvlMinima::getCenter(){
     /// @todo implement me
 }
 
-shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
+boost::shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
 {
 	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,0);
 	for(unsigned int i=GLvlMinima::start;i<GLvlMinima::end;i++)
@@ -338,7 +338,7 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
 	ret->xsize.setElsize(img->xsize.getElsize('X'));
 	ret->ysize.setElsize(img->ysize.getElsize('Y'));
 	ret->zsize.setElsize(img->zsize.getElsize('Z'));
-	return shared_ptr<Bild_mem<VBit> >(ret);
+	return boost::shared_ptr<Bild_mem<VBit> >(ret);
 }
 
 void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const

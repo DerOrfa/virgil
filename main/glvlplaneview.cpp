@@ -56,9 +56,9 @@ Pins(Pins)
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
 //	toolTabs->removePage(toolTabs->page(0));
-	menuBar()->removeItemAt (0);
-	menuBar()->removeItemAt (0);
-	genSegmentsBtn->hide();
+/*	menuBar()->removeItemAt (0);
+	menuBar()->removeItemAt (0);*/
+	fileSegmentierungAction->setDisabled(true);
 	fileExitAction->setMenuText("Sicht schließen");
 	myReg->Suicide=true;
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
@@ -423,7 +423,7 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 				QString::number(int(len.Len()));
 			statusBar()->message("Entfernung zum letzen Pin: "+lenStr+"mm");
 		}
-		if(followSegments->isEnabled() && followSegments->isChecked())
+		if(followSegments->isEnabled() && followSegments->isOn())
 			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
 		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
 		//besser prüfen, ob sich das Voxel geändert hat
@@ -543,3 +543,4 @@ void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 		e->accept();
 	}
 }
+

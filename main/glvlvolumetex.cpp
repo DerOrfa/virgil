@@ -12,6 +12,7 @@
 #include "glvlvolumetex.h"
 #include <GL/glu.h>
 #include <assert.h>
+#include "glvlminima.h"
 
 template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 {

@@ -44,7 +44,7 @@ class GLvlView : public GLvlViewBase
 public:
 	GLvlView(
 		SGLqtSpace* mw, 
-		shared_ptr<GLvlVolumeTex> tex,
+		boost::shared_ptr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg
 	);
 	virtual bool loadCfg();
@@ -52,7 +52,7 @@ public:
 	SGLqtSpace * glview;
 	void showOthersHere(bool toggle);
 	void showObjList();
-	shared_ptr<GLvlVolumeTex> tex;
+	boost::shared_ptr<GLvlVolumeTex> tex;
 protected:
 	EWndRegistry *myReg;
 	void setupSpace(SGLqtSpace *space);
@@ -87,9 +87,9 @@ class GLvlPlaneView: public GLvlView
 public:
 	GLvlPlaneView(
 		SGLqtSpace* mw, 
-		shared_ptr<GLvlVolumeTex> tex,
+		boost::shared_ptr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg,
-		shared_ptr< shared_pin_list > Pins
+		boost::shared_ptr< shared_pin_list > Pins
 		);
 	virtual bool loadCfg();
 	virtual bool saveCfg();
@@ -100,15 +100,14 @@ public:
     void showSegmentAt(unsigned int index);
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
-	shared_ptr<GLvlPlaneCursor> cursor;
+	boost::shared_ptr<GLvlPlaneCursor> cursor;
 
 private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
-	shared_ptr< shared_pin_list > Pins;
+	boost::shared_ptr< shared_pin_list > Pins;
 
 public slots:
 	void	lostView();
-
 private slots:
     void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:

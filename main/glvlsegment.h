@@ -12,19 +12,24 @@
 #ifndef GLVLSEGMENT_H
 #define GLVLSEGMENT_H
 
-#include <libsgl/sglqtspace.h>
-#include "glvlminima.h"
+#include <boost/shared_ptr.hpp>
+#include <list>
+#include "bild.h"
 
 class GLvlVolumeTex;
-
+class SGLqtSpace;
+class GLvlMinima;
 /**
 @author Enrico Reimer,,,
 */
 
-class GLvlSegment: public list< shared_ptr<GLvlMinima> >
+class GLvlSegment: public std::list< boost::shared_ptr<GLvlMinima> >
 {
 protected:
-	GLvlMinima::EdgeData minEdge,maxEdge;
+	union EdgeData{
+		struct {unsigned short x,y,z;};
+		unsigned short koord[3];
+	}minEdge,maxEdge;
 	static boost::shared_ptr<GLvlVolumeTex> targetTex;
 	static SGLqtSpace *target3D;
 	static boost::shared_ptr<GLvlVolumeTex> mTexDummy;
@@ -32,7 +37,7 @@ protected:
 public:
 	GLvlSegment(unsigned int index);
 	GLvlSegment();
-	GLvlSegment(shared_ptr<GLvlMinima> img);
+	GLvlSegment(boost::shared_ptr<GLvlMinima> img);
 	static void setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex);
 	bool display();
 	void redisplay();
@@ -41,5 +46,4 @@ public:
 	void getOffset(unsigned short offset[3],GLvlSegment::iterator i);
 };
 
-#include "glvlvolumetex.h"
 #endif

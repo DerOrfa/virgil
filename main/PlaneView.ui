@@ -483,46 +483,6 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Segmente</string>
-                </attribute>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>followSegments</cstring>
-                        </property>
-                        <property name="text">
-                            <string>verfolgen</string>
-                        </property>
-                        <property name="accel">
-                            <string>Space</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>genSegmentsBtn</cstring>
-                        </property>
-                        <property name="text">
-                            <string>erzeugen</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>infoSegments</cstring>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>TabPage</cstring>
-                </property>
-                <attribute name="title">
                     <string>&amp;Cursor</string>
                 </attribute>
                 <hbox>
@@ -711,10 +671,15 @@
         <action name="fileKonfigurationAction"/>
         <action name="start_benchmark"/>
         <separator/>
+        <action name="fileSegmentierungAction"/>
+        <separator/>
         <action name="fileExitAction"/>
     </item>
     <item text="Views" name="unnamed">
         <action name="viewsNeue_SichtAction"/>
+    </item>
+    <item text="Schalter" name="Schalter">
+        <action name="followSegments"/>
     </item>
 </menubar>
 <toolbars>
@@ -772,14 +737,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>Action</cstring>
-        </property>
-        <property name="text">
-            <string>Unnamed</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>start_benchmark</cstring>
         </property>
         <property name="text">
@@ -790,6 +747,37 @@
         </property>
         <property name="accel">
             <string>Ctrl+B</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSegmentierungAction</cstring>
+        </property>
+        <property name="text">
+            <string>Segmentierung</string>
+        </property>
+        <property name="menuText">
+            <string>Segmentierung</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>followSegments</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="on">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Minima folgen Maus</string>
+        </property>
+        <property name="menuText">
+            <string>Minima folgen Maus</string>
+        </property>
+        <property name="accel">
+            <string>Space</string>
         </property>
     </action>
 </actions>
@@ -819,10 +807,10 @@
         <slot>doBenchmark()</slot>
     </connection>
     <connection>
-        <sender>showCursThereBtn</sender>
-        <signal>toggled(bool)</signal>
+        <sender>viewSelector</sender>
+        <signal>activated(int)</signal>
         <receiver>GLvlViewBase</receiver>
-        <slot>showCursThere(bool)</slot>
+        <slot>selectView(int)</slot>
     </connection>
     <connection>
         <sender>showCursHereBtn</sender>
@@ -831,16 +819,22 @@
         <slot>showCursHere(bool)</slot>
     </connection>
     <connection>
-        <sender>showOthersHereBtn</sender>
+        <sender>showCursThereBtn</sender>
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
-        <slot>showOthersHere(bool)</slot>
+        <slot>showCursThere(bool)</slot>
     </connection>
     <connection>
         <sender>showInOthersBtn</sender>
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>showInOthers(bool)</slot>
+    </connection>
+    <connection>
+        <sender>canRollBtn</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>canRoll(bool)</slot>
     </connection>
     <connection>
         <sender>scaleMode</sender>
@@ -885,18 +879,6 @@
         <slot>setCoordCam()</slot>
     </connection>
     <connection>
-        <sender>viewSelector</sender>
-        <signal>activated(int)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>selectView(int)</slot>
-    </connection>
-    <connection>
-        <sender>canRollBtn</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>canRoll(bool)</slot>
-    </connection>
-    <connection>
         <sender>canGierBtn</sender>
         <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
@@ -909,10 +891,16 @@
         <slot>canKipp(bool)</slot>
     </connection>
     <connection>
-        <sender>genSegmentsBtn</sender>
-        <signal>clicked()</signal>
+        <sender>showOthersHereBtn</sender>
+        <signal>toggled(bool)</signal>
         <receiver>GLvlViewBase</receiver>
-        <slot>loadIntoWShed()</slot>
+        <slot>showOthersHere(bool)</slot>
+    </connection>
+    <connection>
+        <sender>fileSegmentierungAction</sender>
+        <signal>activated()</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>loadWShedDlg()</slot>
     </connection>
 </connections>
 <slots>
@@ -931,7 +919,7 @@
     <slot>showCursHere(bool toggle)</slot>
     <slot>showCursThere(bool toggle)</slot>
     <slot>doBenchmark()</slot>
-    <slot>loadIntoWShed()</slot>
+    <slot>loadWShedDlg()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

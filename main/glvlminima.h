@@ -44,12 +44,12 @@ public:
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	static shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
-	static shared_ptr< vincent::Bild_vimage<VUByte> > org;
+	static boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
+	static boost::shared_ptr< vincent::Bild_vimage<VUByte> > org;
 	VUByte bottomCap,topCap;
 	
 	unsigned int start,end;
-	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
+	static boost::shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinima(unsigned int pos);
 	static void setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org);
 	bool incl_wshed;
@@ -79,7 +79,7 @@ public:
 		VImage &src
 	);
     SGLVektor getCenter();
-    shared_ptr<Bild_mem<VBit> > genTex();
+    boost::shared_ptr<Bild_mem<VBit> > genTex();
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 };
 
