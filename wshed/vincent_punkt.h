@@ -90,9 +90,9 @@ public:
 			p[west]=iPunkt(pos-1,img);/*westlicher Nachb*/
 		
 		if(posy+1<Bild<T>::ysize) /*nich in letzter Zeile*/
-			p[sued]=iPunkt(pos+Bild<T>::xsize,img);/* südlicher Nachb */
+			p[nord]=iPunkt(pos+Bild<T>::xsize,img);/* südlicher Nachb */
 		if(posy) /*nich in letzter Zeile*/
-			p[nord]=iPunkt(pos-Bild<T>::xsize,img);/* nördlicher Nachb */
+			p[sued]=iPunkt(pos-Bild<T>::xsize,img);/* nördlicher Nachb */
 	
 		if(posz+1<Bild<T>::zsize) /*nich in letzter Ebene*/
 			p[ueber]=iPunkt(pos+Bild<T>::ysize*Bild<T>::xsize,img);/*oberer Nachb*/
