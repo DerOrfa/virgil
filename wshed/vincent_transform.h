@@ -23,6 +23,10 @@
 
 namespace vincent
 {
+typedef VUByte VBild_value;
+typedef VLong lab_value;
+typedef Bild_vimage<VBild_value> VBild;
+
 class transform : public QObject
 {
 	Bild_vimage<VUByte> im;
@@ -30,7 +34,7 @@ public:
 	PunktList<VUByte> D;
 	transform(VImage src);
 	void test();
-	Bild_mem<unsigned short> operator()();
+	Bild_vimage<lab_value> operator()();
 
 };
 

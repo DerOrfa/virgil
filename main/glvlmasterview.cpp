@@ -26,6 +26,7 @@
 
 #include <vista/VImage.h>
 #include "../wshed/vincent_transform.h"
+#include <qfiledialog.h> 
 
 using namespace boost;
 using namespace eclasses;
@@ -163,7 +164,13 @@ void  GLvlMasterView::loadIntoWShed()
 		case VUByteRepn:	
 		{
 			vincent::transform t(MasterImg);
-			t();
+			VAttrList out_list = VCreateAttrList();
+//			QFileDialog::getSaveFileName().latin1()
+			FILE *out_file=fopen("/tmp/out.v","w");
+			VAppendAttr(out_list,"image",NULL,VImageRepn,MasterImg);
+			VImage im=t().im();
+			VAppendAttr(out_list,"WShed_new_direct",NULL,VImageRepn,im);
+			VWriteFile (out_file, out_list);
 			printf("Erzeugt\n");
 		}break;
 	}

@@ -5,7 +5,7 @@
 
 DEFINES = GL_GLEXT_PROTOTYPES \
           BOOST_HAS_PTHREADS 
-CONFIG += debug \
+CONFIG += release \
           warn_on \
           qt \
           opengl \

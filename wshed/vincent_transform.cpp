@@ -12,70 +12,74 @@
 #include "vincent_transform.h"
 #include "vincent_punkt.h"
 #include "vincent_bild.h"
+#include <assert.h>
 
-#define WSHED_INIT	numeric_limits<unsigned short>::max()
-#define WSHED_MASK	numeric_limits<unsigned short>::max()-1
-#define WSHED_WSHED	0
 
 namespace vincent
 {
 
-typedef Bild_vimage<VUByte> VBild;
-typedef Bild_mem<unsigned short> MBild;
+const lab_value WSHED_INIT=-1;
+const lab_value WSHED_MASK=-2;
+const lab_value WSHED_WSHED=0;
 
-unsigned short Bild<VUByte>::xsize=numeric_limits<VUByte>::max();
-unsigned short Bild<VUByte>::ysize=numeric_limits<VUByte>::max();
-unsigned short Bild<VUByte>::zsize=numeric_limits<VUByte>::max();
+unsigned short Bild<VBild_value>::xsize=numeric_limits<VBild_value>::max();
+unsigned short Bild<VBild_value>::ysize=numeric_limits<VBild_value>::max();
+unsigned short Bild<VBild_value>::zsize=numeric_limits<VBild_value>::max();
 
-unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short>::max();
-unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short>::max();
-unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short>::max();
+unsigned short Bild<lab_value>::xsize=numeric_limits<lab_value>::max();
+unsigned short Bild<lab_value>::ysize=numeric_limits<lab_value>::max();
+unsigned short Bild<lab_value>::zsize=numeric_limits<lab_value>::max();
 
+unsigned short Bild<unsigned short >::xsize=numeric_limits<unsigned short >::max();
+unsigned short Bild<unsigned short >::ysize=numeric_limits<unsigned short >::max();
+unsigned short Bild<unsigned short >::zsize=numeric_limits<unsigned short >::max();
 
 transform::transform(VImage src) : QObject(),im(src),D(im)
 {
 	printf("WShed-Graph mit %g Millionen Knoten initialisiert, %g MB belegt\n",
-	im.size()/1000000.,(im.size()/1048576.)*sizeof(iPunkt<VUByte>));
+	im.size()/1000000.,(im.size()/1048576.)*sizeof(iPunkt<VBild_value>));
 	printf("Sortiere\n");
-	sort_q<VUByte> comp;
+	sort_q<VBild_value> comp;
 	std::sort(D.m, D.m + im.size(),comp);
 	printf("fertsch\n");
 }
 
 void transform::test()	{
-	iPunkt<VUByte> r=D[5000];
-	iPunkt<VUByte> l[6];
+	iPunkt<VBild_value> r=D[5000];
+	iPunkt<VBild_value> l[6];
 	unsigned short len=r.getNachb(l,im);
 	for(int i=0;i<len;i++)
 		printf("%d-%d-%d:%d\n",l[i].x(),l[i].y(),l[i].z(),im[l[i]]);
 }
 
-Bild_mem<unsigned short> transform::operator()()
+Bild_vimage<lab_value> transform::operator()()
 {
-	MBild dist(VBild::xsize,VBild::ysize,VBild::zsize,0);
-	MBild lab(VBild::xsize,VBild::ysize,VBild::zsize,WSHED_INIT);
+	Bild_mem<unsigned short> dist(VBild::xsize,VBild::ysize,VBild::zsize,0);
+	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VLongRepn));
+	lab.reset(WSHED_INIT);
 	
 	printf("Rechne\n");
-	PunktFifo<VUByte> fifoA;
-	unsigned short curlab=0;
+	PunktFifo<VBild_value> fifoA;
+	lab_value curlab=0;
 	unsigned short curdistA;
 
 // 	Start Flooding
 	unsigned int aktP=0;
-	VUByte h_min=D[0].wert;
-	VUByte h_max=D[im.size()-1].wert;
+	VBild_value h_min=D[0].wert;
+	VBild_value h_max=D[im.size()-1].wert;
 	
 	printf("%d-%d\n",h_min,h_max);
 
-	for(VUByte h=h_min;h<=h_max;h++)
+	for(VBild_value h=h_min;h<=h_max;h++)
 	{
 		if(D[aktP].wert!=h)
 			printf("leeres h=%d\n",h);
+		else printf("%d\n",h);
 		//Alle Punkte mit h markieren
 		for(unsigned int p=aktP;p<im.size() && D[p].wert==h;p++)
 		{
 			lab[D[p]]=WSHED_MASK;
-			iPunkt<VUByte> nachb[6];
+			iPunkt<VBild_value> nachb[6];
 			unsigned short nLen=D[p].getNachb(nachb,im);
 			for(unsigned short i=0;i<nLen;i++)
 //			wenn p einen nachbar q hat, der zu mindestens einem erkannten Basin gehört (zu einem unbekannten kann er nich gehören)
@@ -93,18 +97,19 @@ Bild_mem<unsigned short> transform::operator()()
 		curdistA=1;
 		fifoA.push_null();
 		//Basins volllaufen lassen
-		for(iPunkt<VUByte> p=fifoA.pop();fifoA.size();p=fifoA.pop())
+		for(iPunkt<VBild_value> p=fifoA.pop();fifoA.size();p=fifoA.pop())
 		{
 			//wenn keine Wasserscheiden mehr da, lassen wir das Wasser IN DER EBENE weiterlaufen 
 			//(der Wasserspiegel wird hier NICHT erhöht)
 			if(p.invalid())//Marker
 			{
 				fifoA.push_null();
+				assert(curdistA<numeric_limits<unsigned short>::max());
 				curdistA++;
 				continue;
 			}
 			
-			iPunkt<VUByte> nachb[6];
+			iPunkt<VBild_value> nachb[6];
 			unsigned short nLen=p.getNachb(nachb,im);
 			for(unsigned short i=0;i<nLen;i++)
 			{
@@ -117,11 +122,13 @@ Bild_mem<unsigned short> transform::operator()()
 					}
 					else if(lab[p]==WSHED_MASK)lab[p]=WSHED_WSHED;
 				}
-				else if(lab[nachb[i]]==WSHED_MASK && dist[nachb[i]]==0) //q hat selbe höhe wie p, ist aber nicht teil der aktuellen wasserkante => Plateau
-				{
-					dist[nachb[i]]=curdistA+1;//Punkte innerhalb eines Plateaus sind weiter weg vom Wasser
-					fifoA.push(nachb[i]);
-				}
+				else 
+					if(lab[nachb[i]]==WSHED_MASK ) //q hat selbe höhe wie p, ist aber nicht teil der aktuellen wasserkante => Plateau
+						if(dist[nachb[i]]==0)
+						{
+							dist[nachb[i]]=curdistA+1;//Punkte innerhalb eines Plateaus sind weiter weg vom Wasser
+							fifoA.push(nachb[i]);
+						}
 			}
 		}
 		//neue lokale Minima erkennen
@@ -130,22 +137,30 @@ Bild_mem<unsigned short> transform::operator()()
 			dist[D[aktP]]=0;
 			if(lab[D[aktP]]==WSHED_MASK)//Alle Punkte, die jetzt noch keinem min zugeordnet werden konnten, sind lokales Min
 			{
+				assert(curlab<numeric_limits<lab_value>::max());
 				lab[D[aktP]]=++curlab;
 				fifoA.push(D[aktP]);
 				while(fifoA.size())
 				{
-					iPunkt<VUByte> q=fifoA.pop();
-					iPunkt<VUByte> nachb[6];
+					iPunkt<VBild_value> q=fifoA.pop();
+					iPunkt<VBild_value> nachb[6];
 					unsigned short nLen=q.getNachb(nachb,im);
+//					printf("Nachbarn für %d-%d-%d:%d\n",q.x(),q.y(),q.z(),q.wert);
 					for(unsigned short i=0;i<nLen;i++)
+					{
+						
 						if(lab[nachb[i]]==WSHED_MASK) //inspect neighbours of q
 						{
 							fifoA.push(nachb[i]);
 							lab[nachb[i]]=curlab;
+//							printf("M:%d-%d-%d:%d\n",nachb[i].x(),nachb[i].y(),nachb[i].z(),nachb[i].wert);
 						}
+//						else printf("-:%d-%d-%d:%d\n",nachb[i].x(),nachb[i].y(),nachb[i].z(),nachb[i].wert);
+					}
 				}
 			}
 		}
+		printf("%d Minima\n",curlab);
 	}
 	return lab;
 }

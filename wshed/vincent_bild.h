@@ -22,6 +22,7 @@
 
 #include <vista/VImage.h>
 #include "vincent_punkt.h"
+#include <assert.h>
 
 namespace vincent
 {
@@ -64,13 +65,21 @@ template <class T> class Bild_vimage : public Bild<T>
 	VPointer data;
 	int lastBand;
 	public:
+	inline void reset(T value)
+	{
+		for(int i=size()-1;i>=0;i--)at(i)=value;
+	}
 	Bild_vimage(VImage _img):
 		Bild<T>(VImageNRows(_img),VImageNColumns(_img),VImageNBands(_img)),img(_img),
-		lastBand(-1){}
+		lastBand(numeric_limits<int>::min()){}
 
-	inline T &operator[](kPunkt<T> &p){return at(p.xy(),p.posz);}
-	inline T &operator[](iPunkt<T> &p){return at(p.xy(),p.z());}
-	inline T &at(unsigned int xy,unsigned short z)
+	template <class PT> inline T &operator[](kPunkt<PT> &p){return at(p.xy(),p.posz);}
+	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.xy(),p.z());}
+	inline T &at(unsigned int pos)
+	{
+		return at(pos,-1);
+	}
+	inline T &at(unsigned int xy,int z)
 	{
 		int pixMax;
 		if(lastBand!=z)
@@ -78,9 +87,12 @@ template <class T> class Bild_vimage : public Bild<T>
 			VSelectBand("Vol2Tex",img,z,&pixMax,&data);
 			lastBand=z;
 		}
-//		assert(pixMax==xsize*ysize); @todo was zum Teufel is pixMax
+		assert((z==-1 && pixMax==xsize*ysize*zsize) || (pixMax==xsize*ysize)); //@todo wenn z nicht richtich is, wird pixMax falsch
+//besser z==-1 => data zeigt auf komplettes bild
 		return ((T*)data)[xy];
 	}
+	VImage im()
+	{return img;}
 };
 }
 #endif
