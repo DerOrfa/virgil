@@ -14,6 +14,66 @@
 #include <assert.h>
 
 //@todo das ding is vieel zu groß :-(
+template<class T> bool GLvlVolumeTex::loadBitmask(Bild<T> &src)
+{
+	GLint size[3];
+	#define xsize	size[0]
+	#define ysize	size[1]
+	#define zsize	size[2]
+	xsize=Info.X.cnt+2;
+	ysize=Info.Y.cnt+2;
+	zsize=Info.Z.cnt+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	
+	GLenum gl_type;
+	if(sizeof(T)==sizeof(GLubyte))gl_type=GL_UNSIGNED_BYTE;
+	else if(sizeof(T)==sizeof(GLushort))gl_type=GL_UNSIGNED_SHORT;
+	else if(sizeof(T)==sizeof(GLuint))gl_type=GL_UNSIGNED_INT;
+	else return false;
+
+	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
+	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	if(!xsize)return false;
+	
+	T *pixels_=(T*)calloc(xsize*ysize*zsize,sizeof(T));
+	register T *pixels=pixels_;
+
+	pixels+=xsize*ysize;//die erste Ebene
+	for(int z=0;z<Info.Z.cnt;z++)
+	{
+		pixels+=xsize;//erste Zeile leer lassen
+		for(int y=0;y<Info.Y.cnt;y++)
+		{
+			pixels++;//ersten pixel leer lassen
+			if(xsize-Info.X.cnt-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			pixels=src.copy_line(y,z,pixels);
+			pixels+=(xsize-Info.X.cnt-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			//@todo müsste das nich "0" gesetzt werden (hinterer Rand wurde ja überschrieben)
+		}
+		pixels+=xsize*(ysize-Info.Y.cnt-1);//die restlichen y-Zeilen
+	}
+	
+	glTexImage3DEXT(TexType,0,GL_ALPHA4,xsize,ysize,zsize,0,GL_ALPHA,gl_type,pixels_);
+	free(pixels_);
+	GLenum gluerr;
+	if(gluerr = glGetError())
+	{
+		SGLprintError("%s beim Laden der Textur [GLerror]",gluErrorString(gluerr));
+		return GL_FALSE;
+	}
+	else
+	{
+		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+		SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),getTexByteSize()/float(1024*1024),xsize,ysize,zsize);
+		loaded=false;
+	}
+	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
+	return true;
+	#undef xsize
+	#undef ysize
+	#undef zsize
+}
+
+
 template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 {
 	GLuint gluerr;
@@ -235,28 +295,31 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 	
 	glGenTextures(1, &ID);
 	glBindTexture(TexType, ID);
-	EVektor<GLfloat> PosColor,NegColor;
 	
-	switch(this->renderMode)
-	{
-	case SGL_MTEX_MODE_TINT:
-		PosColor.resize(3);
-		NegColor.resize(3);
-		PosColor[2]=PosColor[1]=.1;
-		NegColor[2]=NegColor[0]=.2;
-		break;
-	case SGL_MTEX_MODE_OVERLAY:
-		PosColor.resize(4);
-		NegColor.resize(4);
-		PosColor[0]=.25;
-		NegColor[1]=.25;
-		PosColor[3]=NegColor[3]=.25;
-		break;
-	}
-	valid=loadPaletted(img);
+	
+	if(this->renderMode==SGL_MTEX_MODE_MASK)valid=loadBitmask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
+	else valid=loadPaletted(img);
 	
 	if(!valid)//Fallback wenn Palette nich tut
 	{
+		EVektor<GLfloat> PosColor,NegColor;
+		switch(this->renderMode)
+		{
+		case SGL_MTEX_MODE_TINT:
+			PosColor.resize(3);
+			NegColor.resize(3);
+			PosColor[2]=PosColor[1]=.1;
+			NegColor[2]=NegColor[0]=.2;
+			break;
+		case SGL_MTEX_MODE_OVERLAY:
+			PosColor.resize(4);
+			NegColor.resize(4);
+			PosColor[0]=.25;
+			NegColor[1]=.25;
+			PosColor[3]=NegColor[3]=.25;
+			break;
+		}
+
 		if(typeid(T)==typeid(GLubyte))
 			valid=loadCommon<T,GLubyte>(GL_UNSIGNED_BYTE,img,PosColor,NegColor);
 		else if(typeid(T)==typeid(GLbyte))
@@ -354,14 +417,14 @@ void GLvlVolumeTex::calcMatr()
 void GLvlVolumeTex::loadTint(VImage i)
 {
 	SGLprintState("lade Aktivierungsmap");
-	GLvlVolumeTex *p=new GLvlVolumeTex();//Nich löschen das Teil !
+	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_TINT;
 	p->Load3DImage(i);
 //	p->envColor[0]=p->envColor[3]=1;
 	p->calcMatr();
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=false;
-	multitex.reset(p);
+	p->weich=true;
+	multitex=p;
 }
 
 
@@ -391,4 +454,17 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 		return 0;
 	}
 	return size;
+}
+
+void GLvlVolumeTex::loadBitMask(Bild<VBit> &img)
+{
+	SGLprintState("lade Bitmaske");
+	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+	p->renderMode=SGL_MTEX_MODE_MASK;
+	p->Load3DImage(img);
+//	p->envColor[0]=p->envColor[3]=1;
+	p->calcMatr();
+	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+	p->weich=false;
+	multitex=p;
 }

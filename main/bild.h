@@ -55,6 +55,9 @@ public:
 	inline T &at(const unsigned short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
 	}
+	inline T *copy_line(const unsigned short y,const unsigned short z,void *dst){
+		return ((T*)memcpy(dst,&at(0,y,z),xsize*sizeof(T)))+xsize;
+	}
 	
 	inline virtual T &at(const unsigned int index)=0;
 };
