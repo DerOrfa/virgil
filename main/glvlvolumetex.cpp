@@ -289,28 +289,22 @@ void GLvlVolumeTex::loadImageInfo(VImage &src)
 	);
 }
 
-//@todo noch nich getestet
-unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)
+unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert Voxelindexe aus Texturraumkoordinaten
 {
-	const unsigned short xindex=dim.X.outerTexKoord2Index(koord.SGLV_X);
-	const unsigned short yindex=dim.Y.outerTexKoord2Index(koord.SGLV_Y);
-	const unsigned short zindex=dim.Z.outerTexKoord2Index(koord.SGLV_Z);
+	const unsigned short xindex=dim.X.TexKoord2Index(koord.SGLV_X);
+	const unsigned short yindex=dim.Y.TexKoord2Index(koord.SGLV_Y);
+	const unsigned short zindex=dim.Z.TexKoord2Index(koord.SGLV_Z);
 	
 	return xindex+
-		yindex*dim.X.holeSize()+ //jede Zeile enth dim.X.holeSize() x'e
-		zindex*dim.X.holeSize()*dim.Y.holeSize();
+		yindex*dim.X.cnt+ //jede Zeile enth dim.X.holeSize() x'e
+		zindex*dim.X.cnt*dim.Y.cnt;
 }
 
-SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)
+SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Texturraumkoordinaten aus Voxelindexen
 {
 	const double x=dim.X.Index2TexKoord(idx%dim.X.cnt);
 	const double y=dim.Y.Index2TexKoord((idx/dim.X.cnt)%dim.Y.cnt);
 	const double z=dim.Z.Index2TexKoord(idx/(dim.X.cnt*dim.Y.cnt));
-/*
-X:pos%size_x
-Y:(pos/size_x)%size_y
-pos/size_xy
-*/
 	return SGLVektor(x,y,z);
 }
 
@@ -327,8 +321,8 @@ void GLvlVolumeTex::calcMatr()
 	mm2tex_Matrix[1][1]=1/dim.Y.outer_mm_size;
 	mm2tex_Matrix[2][2]=1/dim.Z.outer_mm_size;
 	
-	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*(dim.X.startgap_mm+dim.X.Elsize/2);//@todo warum muss das um nen halben Pixel verschoben werden
-	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*(dim.Y.startgap_mm+dim.Y.Elsize/2);
+	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*(dim.X.startgap_mm+dim.X.Elsize/2);//@todo warum muss das um nen halben Pixel verschoben werden 
+	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*(dim.Y.startgap_mm+dim.Y.Elsize/2);//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*(dim.Z.startgap_mm+dim.Z.Elsize/2);
 }
 

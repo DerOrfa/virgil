@@ -102,7 +102,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>../sample/cgtbsmMK3T.v</programargs>
+      <programargs>../sglqt/brain.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>

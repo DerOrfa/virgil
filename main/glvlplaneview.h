@@ -75,6 +75,8 @@ public slots:
     virtual void onReached(vincent::VBild_value h,unsigned short objs);
 	virtual void onMsg(QString msg,bool canskip);
 	virtual void onTransformEnd();
+	virtual void showSegmentAt(unsigned int index)=0;
+
 };
 
 class GLvlPlaneView: public GLvlView
@@ -93,6 +95,7 @@ public:
 	void init();
 	void showCursThere(bool toggle);
 	void showCursHere(bool toggle);
+    void showSegmentAt(unsigned int index);
 	shared_ptr<GLvlPlaneCursor> cursor;
 
 private:
@@ -106,6 +109,8 @@ private slots:
     void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
+signals:
+    void onVoxel(unsigned int index);
 };
 
 #endif

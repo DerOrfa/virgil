@@ -416,6 +416,9 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 				QString::number(int(len.Len()));
 			statusBar()->message("Entfernung zum letzen Pin: "+lenStr+"mm");
 		}
+		onVoxel(tex->texKoord2texIndex(cursor->OldPos));
+		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
+		//besser prüfen, ob sich das Voxel geändert hat
 	}
 }
 
@@ -487,3 +490,8 @@ void GLvlPlaneView::showCursHere(bool toggle)
 void GLvlView::onReached(vincent::VBild_value h,unsigned short objs){}
 void GLvlView::onMsg(QString msg,bool canskip){}
 void GLvlView::onTransformEnd(){};
+
+void GLvlPlaneView::showSegmentAt(unsigned int index)
+{
+    /// @todo implement me
+}

@@ -44,9 +44,14 @@ template <class T> class Bild_mem:Bild<T>
 {
 	T *data;
 	public:
-	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z)
+	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		printf("Erzeuge Datenpuffer %d*%d*%d:%g MB\n",this->xsize,this->ysize,this->zsize,(this->size()/1048576.)*sizeof(T));
+		xsize=x;ysize=y;zsize=z;
+		if(data)free(data);
+		init(initVal);
+	}
+	void init(T initVal)
+	{
 		if(initVal==0)data=(T*)calloc(this->size(),sizeof(T));
 		else 
 		{
@@ -54,6 +59,7 @@ template <class T> class Bild_mem:Bild<T>
 			for(int i=this->size()-1;i>=0;i--)data[i]=initVal;
 		}
 	}
+	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z){init(initVal);}
 	~Bild_mem(){free(data);}
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return data[p.pos];}
 };

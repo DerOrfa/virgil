@@ -30,7 +30,7 @@ public:
 		inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
 		inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
 		inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
-		inline unsigned short mm2idx(const double tex_koord){return tex_koord/Elsize;}
+		inline unsigned short mm2idx(const double tex_koord){return rint(tex_koord/Elsize);}
 		
 		unsigned short startgap_cnt,endgap_cnt;
 		double startgap_mm,endgap_mm;
@@ -44,9 +44,9 @@ public:
 			outer_mm_size=idx2mm(start+cnt+end);
 		}
 		inline unsigned short holeSize(){return startgap_cnt +cnt+endgap_cnt;}
-		inline unsigned short outerTexKoord2Index(const double Koord)
+		inline unsigned short TexKoord2Index(const double Koord)
 		{
-			return mm2idx(Koord)-startgap_cnt;
+			return mm2idx(Koord);
 		}
 		inline double Index2TexKoord(const unsigned short idx)
 		{

@@ -22,10 +22,8 @@
 @author Enrico Reimer,,,
 */
 class GLvlMinima: public SGLFlObj{
-	vincent::PunktList<vincent::lab_value> *pList;
 	static shared_ptr<GLvlVolumeTex> tex;
 	static GLuint caps;
-	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	static shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
 	inline static void QuadBegin(GLuint id)
 	{
@@ -39,6 +37,7 @@ class GLvlMinima: public SGLFlObj{
 	}
 	static const GLshort GLvlMinima::diff[6][5][3];
 public:
+	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	unsigned int start,end;
 	static bool incl_wshed;
 	GLvlMinima(unsigned int pos);

@@ -154,14 +154,13 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 		}
 		reached(h,curlab-numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
-	msg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(curlab-numeric_limits<lab_value >::min()) + " Objekte gefunden",false);
-	return boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
+	return last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 }
 
 void transform::run()
 {
 	init();
-	last_erg =operator ( )();
+	this->operator()();
 	end();
 }
 

@@ -47,17 +47,19 @@ public:
 	void onReached(vincent::VBild_value h,unsigned short objs);
 	void onMsg(QString msg,bool canskip);
 	void onTransformEnd();
-
-
+	void showSegmentAt(unsigned index);
+	
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
+	map<vincent::lab_value,shared_ptr<GLvlMinima> > objs;
 private:
 	SGLqtSpace * mw;
 	ERegistry *masterReg;
 	shared_ptr<SGLCube> rahmen;
 	shared_ptr<shared_pin_list> Pins;
 	shared_ptr<vincent::transform> v_transform;
+
 };
 
 #endif

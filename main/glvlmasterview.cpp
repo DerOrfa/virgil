@@ -26,7 +26,6 @@
 
 #include <vista/VImage.h>
 #include <qstatusbar.h> 
-#include "../wshed/vincent_punkt.h"
 #include <qapplication.h> 
 
 using namespace boost;
@@ -108,6 +107,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 	view->showInOthers(view->showInOthersBtn->isOn());
 	view->showOthersHere(view->showOthersHereBtn->isOn());
 
+	((GLvlView*)this)->connect(view,SIGNAL(onVoxel(unsigned int)),SLOT(showSegmentAt(unsigned int)));
 	view->onCamChanged();
 }
 
@@ -173,8 +173,12 @@ void  GLvlMasterView::loadIntoWShed()
 			((GLvlView*)this)->connect(&*v_transform,SIGNAL(reached(vincent::VBild_value ,unsigned short)),SLOT(onReached(vincent::VBild_value,unsigned short )));
 			((GLvlView*)this)->connect(&*v_transform,SIGNAL(msg(QString,bool)),SLOT(onMsg(QString,bool)));
 			((GLvlView*)this)->connect(&*v_transform,SIGNAL(end()),SLOT(onTransformEnd()));
+			qApp->processEvents();//Nebenläufigkeit faken
+			v_transform->init();
 			qApp->processEvents();
-			v_transform->run();
+			v_transform->operator()();
+			qApp->processEvents();
+			onTransformEnd();
 		}break;
 	}
 }
@@ -183,13 +187,17 @@ void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
 	GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,v_transform->last_erg);
-	tex->setupPal(1,255);
+	qApp->processEvents();
+	
+	map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator i=objs.end();
+	for(unsigned int index = 0;index<GLvlMinima::plist->size;index=i->second->end)
+	{
+		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
+		shared_ptr<GLvlMinima> m=shared_ptr<GLvlMinima>(new GLvlMinima(index));
+		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima> >(id,m));
+	}
 	glview->sendRedraw();
-	shared_ptr<GLvlMinima> m1=shared_ptr<GLvlMinima>(new GLvlMinima(0));
-	shared_ptr<GLvlMinima> m2=shared_ptr<GLvlMinima>(new GLvlMinima(m1->end));
-	glview->registerObj(m1);
-	glview->registerObj(m2);
-	glview->sendRedraw();
+	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
 void GLvlMasterView::onReached(vincent::VBild_value h,unsigned short objs)
@@ -204,12 +212,15 @@ void GLvlMasterView::onReached(vincent::VBild_value h,unsigned short objs)
 
 void GLvlMasterView::onMsg(QString msg,bool canskip)
 {
-	if(canskip)
-	{
-		if(!qApp->tryLock())return;
-	}
+	if(canskip){if(!qApp->tryLock())return;}
 	else qApp->lock();
 	statusBar()->message(msg);
 	qApp->unlock();
 	qApp->processEvents();
+}
+
+
+void GLvlMasterView::showSegmentAt(unsigned int index)
+{
+    /// @todo implement me
 }

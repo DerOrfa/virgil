@@ -20,7 +20,7 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
 		vincent::iPunkt<vincent::lab_value> p=(*plist)[start];
 		vincent::lab_value ID=p.wert;
 		do p=(*plist)[++end]; 
-		while(p.wert==ID);
+		while(end<plist->size && p.wert==ID);
 	}
 	else
 	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");}
