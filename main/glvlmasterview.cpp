@@ -176,8 +176,11 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onReached(vincent::lab_value h,unsigned short objs)
 {
 	statusBar()->message("Stufe " + EString(h) + " erreicht, " + EString(objs) + " Objekte gefunden");
-	tex->setupPal(h,255);
-	glview->sendRedraw();
+	if(h<255)
+	{
+		tex->setupPal(h+1,255);
+		glview->sendRedraw();
+	}
 }
 
 

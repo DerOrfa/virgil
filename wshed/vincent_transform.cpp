@@ -162,7 +162,6 @@ Bild_vimage<lab_value> transform::operator()()
 			}
 		}
 		reached(h,curlab-numeric_limits<lab_value >::min());
-		printf("%d\n",curlab);
 	}while((h++)<h_max);
 	return lab;
 }

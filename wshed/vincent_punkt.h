@@ -37,19 +37,6 @@ template<class T> class PunktList;
 template <class T> class Bild_vimage;
 template <class T> class Bild;
 
-template<class T> class kPunkt{
-public:
-	unsigned short posx,posy,posz;
-	T wert;
-	kPunkt(
-		unsigned short _x=numeric_limits<unsigned short>::max(),
-		unsigned short _y=numeric_limits<unsigned short>::max(),
-		unsigned short _z=numeric_limits<unsigned short>::max()
-	):posx(_x),posy(_y),posz(_z){}
-	inline unsigned int xy() {return posx+posy*Bild<T>::xsize;};
-	inline unsigned int pos(){return posx+posy*Bild<T>::xsize+posz*Bild<T>::xsize*Bild<T>::ysize;};
-};
-
 template<class T> class iPunkt{
 public:
 	T wert;
@@ -65,10 +52,6 @@ public:
 		wert=img.at(pos);
 	}
 	
-	static kPunkt<T> pos2koord(const unsigned int pos){
-		iPunkt<T> p(pos);
-		return kPunkt<T>(p.x(),p.y(),p.z());
-	}
 	unsigned short getNachb(iPunkt<T> p[],Bild_vimage<T> &img)
 	{
 		unsigned short posx=x();

@@ -55,7 +55,6 @@ template <class T> class Bild_mem:Bild<T>
 		}
 	}
 	~Bild_mem(){free(data);}
-	template <class PT> inline T &operator[](kPunkt<PT> &p){return data[p.pos()];}
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return data[p.pos];}
 };
 
@@ -78,7 +77,6 @@ template <class T> class Bild_vimage : public Bild<T>
 		assert(pixMax==(int)size()); //@todo wenn z nicht richtich is, wird pixMax falsch
 	}
 
-	template <class PT> inline T &operator[](kPunkt<PT> &p){return at(p.pos());}
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}
 	inline T &at(unsigned int pos){return ((T*)data)[pos];}
 	VImage im(){return img;}
