@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>420</width>
-            <height>432</height>
+            <width>432</width>
+            <height>504</height>
         </rect>
     </property>
     <property name="caption">
@@ -28,6 +28,17 @@
             </property>
             <property name="toggleButton">
                 <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>wshed_status_inf</cstring>
+            </property>
+            <property name="text">
+                <string>nu drück</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
             </property>
         </widget>
         <widget class="QGroupBox">

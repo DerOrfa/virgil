@@ -359,6 +359,7 @@ SGLVektor GLvlMinima::getCenter(){
 
 void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const
 {
+	if(volume() > MAX_MINIMA_SIZE)return;
 	for(unsigned int i=start;i<end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinima::plist)[i];

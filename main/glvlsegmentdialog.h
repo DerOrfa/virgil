@@ -73,9 +73,6 @@ public slots:
     void newSegment();
     void toggleWShed(bool);
 
-protected:
-  /*$PROTECTED_FUNCTIONS$*/
-
 protected slots:
   /*$PROTECTED_SLOTS$*/
 

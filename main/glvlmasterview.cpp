@@ -71,7 +71,7 @@ rahmen(new SGLCube())
 	glview->StdLight->Abnahme.Quadratisch=0;
 	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
 
-	glview->setGridsSize((tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*1.1);
+	glview->setGridsSize((tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*.6);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 
@@ -185,7 +185,7 @@ void  GLvlMasterView::loadWShedDlg()
 {
 	if(!wshed)
 	{
-		wshed = boost::shared_ptr<GLvlSegmentDialog>(new GLvlSegmentDialog(this,MasterImg));
+		wshed = new GLvlSegmentDialog(this,MasterImg);
 		for(list<GLvlPlaneView *>::iterator i=views.begin();i!=views.end();i++)
 		{
 			wshed->connect(*i,SIGNAL(onVoxel(unsigned int)),SLOT(findMinima(unsigned int)));

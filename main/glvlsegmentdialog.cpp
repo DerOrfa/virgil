@@ -22,9 +22,15 @@
 #include <qcheckbox.h> 
 
 GLvlSegmentDialog::GLvlSegmentDialog(QWidget* parent,VImage &_Img): 
-SegmentDialog(NULL,NULL,FALSE, 0 ),Img(_Img),aktSegment(NULL){}
+SegmentDialog(parent,NULL,FALSE, Qt::WDestructiveClose),Img(_Img),aktSegment(NULL)
+{
+}
 
-GLvlSegmentDialog::~GLvlSegmentDialog(){}
+GLvlSegmentDialog::~GLvlSegmentDialog()
+{
+	assert(GLvlView::wshed==this);
+	GLvlView::wshed=NULL;
+}
 
 /*$SPECIALIZATION$*/
 void GLvlSegmentDialog::onSelectItem(QListViewItem* it)
@@ -178,8 +184,7 @@ void GLvlSegmentDialog::MinimaItem::showInf()
 
 void GLvlSegmentDialog::startTransform()
 {
-	QString oldText=startWShedBtn->text();
-//	startWShedBtn->setOn(true);
+	startWShedBtn->hide();
 	switch(VPixelRepn(Img))
 	{
 		case VUByteRepn:	
@@ -194,15 +199,13 @@ void GLvlSegmentDialog::startTransform()
 			v_transform->operator()();
 			qApp->processEvents();
 			onWatershedReady(true);
-			startWShedBtn->setOn(false);
 		}break;
 	}
-	startWShedBtn->setText(oldText);
 }
 
 void GLvlSegmentDialog::onMsg(QString text,bool)
 {
-	startWShedBtn->setText(text);
+	wshed_status_inf->setText(text);
 	qApp->processEvents();//Nebenläufigkeit faken
 }
 

@@ -375,7 +375,9 @@ SGLVektor GLvlView::default_hinten[3]={SGLVektor(200,0,0),SGLVektor(0,0,0),SGLVe
 SGLVektor GLvlView::default_rechts[3]={SGLVektor(0,200,0),SGLVektor(0,0,0),SGLVektor(0,0,-1)};
 SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
 
-boost::shared_ptr<GLvlSegmentDialog> GLvlView::wshed;
+GLvlSegmentDialog* GLvlView::wshed=NULL;
+GLvlPinsDlg* GLvlView::pinsDlg=NULL;
+
 
 /*!
     \fn GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
@@ -523,5 +525,4 @@ void GLvlView::showPinsDlg(bool toggle)
 	else if(GLvlView::pinsDlg) pinsDlg->hide();
 }
 
-GLvlPinsDlg* GLvlView::pinsDlg=NULL;
 

@@ -55,7 +55,7 @@ public:
 	void showOthersHere(bool toggle);
 	void showObjList();
 	boost::shared_ptr<GLvlVolumeTex> tex;
-	static boost::shared_ptr<GLvlSegmentDialog> wshed;
+	static GLvlSegmentDialog* wshed;
 	static GLvlPinsDlg* pinsDlg;
 	void	selectView(const SGLVektor dir[3]);
 

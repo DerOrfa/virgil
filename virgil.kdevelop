@@ -10,20 +10,8 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>KDevBookmarks</part>
-      <part>KDevClearCase</part>
       <part>KDevcopyto</part>
-      <part>KDevCTags</part>
       <part>KDevCTags2</part>
-      <part>CvsService</part>
-      <part>KDevDoxygen</part>
-      <part>KDevFileGroups</part>
-      <part>KDevFileView</part>
-      <part>KDevdistpart</part>
-      <part>KDevPerforce</part>
-      <part>KDevQuickOpen</part>
-      <part>KDevsubversion</part>
-      <part>KDevVisualBoyAdvance</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -104,7 +92,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>~/cgtbsmMK3T_gaus.v</programargs>
+      <programargs>~/cgtbsmMK3T_gauss.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -114,7 +102,7 @@
       </envvars>
     </run>
     <general>
-      <activedir>main</activedir>
+      <activedir></activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>
