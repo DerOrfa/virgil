@@ -53,14 +53,13 @@ public:
 		zsize.cnt=z;
 		xsize.Elsize=ysize.Elsize=zsize.Elsize=0;
 	}
-	inline T &at(const unsigned short x,const unsigned short y,const unsigned short z){
+	inline virtual T &at(const unsigned int index)=0;
+	inline T &at(const short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
 	}
 	inline T *copy_line(const unsigned short y,const unsigned short z,void *dst){
 		return ((T*)memcpy(dst,&at(0,y,z),xsize*sizeof(T)))+xsize;
 	}
-	
-	inline virtual T &at(const unsigned int index)=0;
 };
 
 template <class T> class Bild_mem:public Bild<T>
@@ -70,7 +69,6 @@ protected:
 public:
 	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		
 		this->xsize.cnt=x;
 		this->ysize.cnt=y;
 		this->zsize.cnt=z;

@@ -23,14 +23,14 @@
 /**
 @author Enrico Reimer,,,
 */
-class GLvlMinimaBase: public SGLFlObj
+class GLvlMinimaBase
 {
 public:
+	struct {unsigned short x,y,z;}minEdge,maxEdge;
 	static shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
 	unsigned int start,end;
 	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinimaBase(unsigned int pos);
-    SGLVektor getCenter();
 	static void setup(boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img);
 	static bool incl_wshed;
 	inline const unsigned int size(){return end-start;}

@@ -35,6 +35,12 @@ using namespace boost;
 */
 
 class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
+	SGLqtSpace * mw;
+	ERegistry *masterReg;
+	shared_ptr<SGLCube> rahmen;
+	shared_ptr<shared_pin_list> Pins;
+	shared_ptr<vincent::transform> v_transform;
+	boost::signal<void ()> updatePlanes;
 public:
 	GLvlMasterView(std::list<VImage> src);
 	~GLvlMasterView();
@@ -54,13 +60,6 @@ protected:
 	void closeEvent(QCloseEvent *e);
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> > objs;
 	shared_obj aktMinima;
-private:
-	SGLqtSpace * mw;
-	ERegistry *masterReg;
-	shared_ptr<SGLCube> rahmen;
-	shared_ptr<shared_pin_list> Pins;
-	shared_ptr<vincent::transform> v_transform;
-	boost::signal<void ()> updatePlanes;
 };
 
 #endif

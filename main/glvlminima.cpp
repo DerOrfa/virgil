@@ -14,19 +14,33 @@
 
 GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 {
+	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
+	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
 	if(img)
 	{
 		end=start;
 		vincent::iPunkt<vincent::lab_value> p=(*plist)[start];
 		vincent::lab_value ID=p.wert;
-		do p=(*plist)[++end]; 
+//		key=GLvlMinimaBase::(*img)[p];
+		do 
+		{
+			const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
+			const unsigned short y=p.x(GLvlMinimaBase::img->ysize);
+			const unsigned short z=p.x(GLvlMinimaBase::img->zsize);
+			minEdge.x = minEdge.x <? x;
+			minEdge.y = minEdge.y <? y;
+			minEdge.z = minEdge.z <? z;
+	
+			maxEdge.x = maxEdge.x >? x;
+			maxEdge.y = maxEdge.y >? y;
+			maxEdge.z = maxEdge.z >? z;
+			
+			p=(*plist)[++end]; 
+		}
 		while(end<plist->size && p.wert==ID);
 	}
 	else
 	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
-}
-SGLVektor GLvlMinimaBase::getCenter(){
-    /// @todo implement me
 }
 
 shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinimaBase::img;

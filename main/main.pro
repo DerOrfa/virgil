@@ -14,7 +14,6 @@ HEADERS += glvlcutplane.h \
            glvlvolumetex.h \
            glvlminima.h \
            glvlminima3d.h \
-           glvlminimatex.h \
            bild.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
@@ -25,8 +24,7 @@ SOURCES += main.cpp \
            glvlplaneview.cpp \
            glvlvolumetex.cpp \
            glvlminima.cpp \
-           glvlminima3d.cpp \
-           glvlminimatex.cpp 
+           glvlminima3d.cpp 
 TARGETDEPS += ../wshed/libwshed.a
 LIBS += ../wshed/libwshed.a \
 -lqt_glue \

@@ -169,19 +169,7 @@ void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 void  GLvlMasterView::loadIntoWShed()
 {
 
-	Bild_mem<VBit> test(50,50,50,255);
-	
-	for(unsigned short i=0;i<20;i++)
-		static_cast<Bild<VBit>& >(test).at(0,i,0)=0;
-		
-	test.xsize.Elsize=1;
-	test.ysize.Elsize=1;
-	test.zsize.Elsize=1;
-		
-	tex->loadBitMask(test);
-	updatePlanes();	
-	
-/*	switch(VPixelRepn(MasterImg))
+	switch(VPixelRepn(MasterImg))
 	{
 		case VUByteRepn:	
 		{
@@ -197,7 +185,7 @@ void  GLvlMasterView::loadIntoWShed()
 			qApp->processEvents();
 			onTransformEnd();
 		}break;
-	}*/
+	}
 }
 	
 void GLvlMasterView::onTransformEnd()
@@ -207,11 +195,13 @@ void GLvlMasterView::onTransformEnd()
 	qApp->processEvents();
 	
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();
-	for(unsigned int index = 0;index<GLvlMinima3D::plist->size;index=i->second->end)
+	for(unsigned int index = 0;
+		index<GLvlMinimaBase::plist->size;
+		index=i->second->end
+	)
 	{
 		vincent::lab_value id=GLvlMinima3D::plist->operator[](index).wert;
-		shared_ptr<GLvlMinima3D> m=shared_ptr<GLvlMinima3D>(new GLvlMinima3D(index));
-		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,m));
+		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,shared_ptr<GLvlMinima3D>(new GLvlMinima3D(index))));
 	}
 	glview->sendRedraw();
 	
@@ -254,6 +244,13 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 				if(it->second->size() <= MAX_MINIMA_SIZE)
 				{
 					aktMinima=it->second;
+					shared_ptr<Bild_mem<VBit> > b=it->second->genTex();
+					b->xsize.Elsize=1;
+					b->ysize.Elsize=1;
+					b->zsize.Elsize=1;
+		
+					tex->loadBitMask(*b);
+					updatePlanes();
 					glview->showObj(aktMinima);
 				}
 			}

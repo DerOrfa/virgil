@@ -114,7 +114,7 @@
       </envvars>
     </run>
     <general>
-      <activedir></activedir>
+      <activedir>main</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

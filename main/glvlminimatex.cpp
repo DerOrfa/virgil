@@ -11,23 +11,24 @@
 //
 #include "glvlminimatex.h"
 
-GLvlMinimaTex::GLvlMinimaTex(unsigned int pos) : GLvlMinimaBase(pos)
-{
-	begin.x=begin.y=begin.z=numeric_limits<unsigned short>::max();
-	end.x=end.y=end.z=numeric_limits<unsigned short>::min();
-
-	key=GLvlMinimaBase::plist.at(start);
-	for(unsigned int i=start;i<end;i++)
-	{
-		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
-		const unsigned short x=p.x(img->xsize);
-		const unsigned short y=p.x(img->ysize);
-		const unsigned short z=p.x(img->zsize);
-		if(x<begin.x)begin.x=x;
-	}
-}
-
 void GLvlMinimaTex::setup(boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img)
 {
 	GLvlMinimaBase::setup(img);
+}
+
+/*!
+    \fn GLvlMinimaTex::genTex()
+ */
+shared_ptr<Bild_mem<VBit> > GLvlMinimaTex::genTex()
+{
+	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,false);
+	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::maxEdge;i++)
+	{
+		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinimaBase::plist)[i];
+		const unsigned short x=p.x(GLvlMinimaBase::img->xsize)-minEdge.x;
+		const unsigned short y=p.x(GLvlMinimaBase::img->ysize)-minEdge.y;
+		const unsigned short z=p.x(GLvlMinimaBase::img->zsize)-minEdge.z;
+		((Bild<VBit> *)ret)->at(x,y,z)=true;
+	}
+	return shared_ptr<Bild_mem<VBit> >(ret);
 }

@@ -17,12 +17,11 @@
 /**
 @author Enrico Reimer,,,
 */
-class GLvlMinimaTex : public GLvlMinimaBase,public SGLBaseTex
+class GLvlMinimaTex : public GLvlMinimaBase
 {
 public:
 	GLvlMinimaTex(unsigned int pos);
     static void setup(boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img);
-	struct {unsigned short x,y,z;}begin,end;
 	vincent::lab_value key;
 };
 

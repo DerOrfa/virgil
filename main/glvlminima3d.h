@@ -6,7 +6,7 @@
 /**
 @author Enrico Reimer,,,
 */
-class GLvlMinima3D: public GLvlMinimaBase{
+class GLvlMinima3D: public GLvlMinimaBase, public SGLFlObj{
 	static GLuint caps;
 	static SGLVektor scale;
 	inline static void QuadBegin(GLuint id)
@@ -26,6 +26,8 @@ public:
 		SGLVektor norm,
 		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
 	);
+    SGLVektor getCenter();
+    shared_ptr<Bild_mem<VBit> > genTex();
 };
 
 #endif
