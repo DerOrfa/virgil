@@ -52,7 +52,7 @@ public:
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
-	map<vincent::lab_value,shared_ptr<GLvlMinima> > objs;
+	map<vincent::lab_value,shared_ptr<GLvlMinima3D> > objs;
 	shared_obj aktMinima;
 private:
 	SGLqtSpace * mw;

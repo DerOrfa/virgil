@@ -36,21 +36,6 @@ template<> unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned sh
 
 transform::transform(VImage src) : im(src),D(im){}
 
-void transform::test()	{
-	VAttrList out_list = VCreateAttrList();
-//	FILE *out_file=fopen("/tmp/out.v","w");
-	VAppendAttr(out_list,"image",NULL,VImageRepn,im.im());
-	boost::shared_ptr<  Bild_vimage<lab_value>  > im1=operator()();
-	boost::shared_ptr< PunktList<lab_value> > voxels =getVoxels(*im1);
-	printf("Voxelliste Erzeugt\n");
-/*	vincent::Bild_vimage<VUByte> im2(VCreateImage(vincent::VBild::zsize,vincent::VBild::ysize,vincent::VBild::xsize,VUByteRepn));
-	for(unsigned int i=0;i<im.size();i++)
-		im2.at(i)=(im1.at(i)-numeric_limits<VShort >::min()) %256;
-	VAppendAttr(out_list,"WShed_new_direct",NULL,VImageRepn,im2.im());
-	VWriteFile (out_file, out_list);
-	fclose(out_file);*/
-}
-
 boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 {
 	Bild_mem<unsigned short> dist(VBild::xsize,VBild::ysize,VBild::zsize,0);

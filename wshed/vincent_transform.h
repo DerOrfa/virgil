@@ -42,7 +42,6 @@ public:
 	boost::shared_ptr< Bild_vimage<lab_value> > last_erg;
 	
 	transform(VImage src);
-	void test();
 	void run();
 	boost::shared_ptr< Bild_vimage<lab_value> > operator()();
 	static boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im);

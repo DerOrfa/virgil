@@ -12,7 +12,7 @@
 #include "glvlminima.h"
 #include <sglvektor.h>
 
-GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
+GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 {
 	if(img)
 	{
@@ -26,69 +26,38 @@ GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
 	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");}
 }
 
-/*!
-    \fn GLvlMinima::generate()
- */
-void GLvlMinima::generate()
-{
-	vincent::lab_value ID=(*plist)[start].wert;
-	cout << tex->texIndex2texKoord((*plist)[start].pos) << endl;//@todo wiso is X hier und .x() unten um 20 verschieden ?
-	glColor3f(1,1,1);
-	glScalef(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize);
-	glDisable(GL_NORMALIZE);
-	 short old_pos[]={0,0,0};
-	glPushMatrix();
-	glTranslatef(-.5,-.5,-.5);
-	for(unsigned int i=start;i<end;i++)
-	{
-		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
-		vincent::iPunkt<vincent::lab_value> nachb[6];
-		unsigned short mask=0x0;
-		p.getNachbStruct(nachb,*img);
-		for(unsigned short i=0;i<6;i++)
-		{
-			if(	nachb[i].invalid() || 
-				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
-			)
-			mask|=1<<i;
-		}
-		if(!mask)continue;
-		glTranslatef(p.x()-old_pos[0],p.y()-old_pos[1],p.z()-old_pos[2]);
-		glCallList(caps+mask);
-		old_pos[0]=p.x();
-		old_pos[1]=p.y();
-		old_pos[2]=p.z();
-	}
-	glPopMatrix();
-	glEnable(GL_NORMALIZE);
-}
+SGLVektor GLvlMinimaBase::getCenter(){}
 
-
-/*!
-    \fn GLvlMinima::getCenter()
- */
-SGLVektor GLvlMinima::getCenter()
-{
-    /// @todo implement me
-}
-
-GLuint GLvlMinima::caps=0;
-
-shared_ptr<GLvlVolumeTex> GLvlMinima::tex;
-shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
-shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
-bool GLvlMinima::incl_wshed=false;
+shared_ptr<GLvlVolumeTex> GLvlMinimaBase::tex;
+shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinimaBase::img;
+shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinimaBase::plist;
+bool GLvlMinimaBase::incl_wshed=false;
 
 /*!
     \fn GLvlMinima::setup_norm(SGLVektor norm)
  */
-
-void GLvlMinima::setup(
+void GLvlMinimaBase::setup(
 	SGLVektor norm,
 	boost::shared_ptr<GLvlVolumeTex> tex,
 	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
 )
 {	
+	GLvlMinimaBase::tex=tex;
+	GLvlMinimaBase::img=img;
+	GLvlMinimaBase::plist=vincent::transform::getVoxels(*img);
+}
+
+
+GLuint GLvlMinima3D::caps=0;
+
+GLvlMinima3D::GLvlMinima3D(unsigned int pos):GLvlMinimaBase(pos){}
+
+void GLvlMinima3D::setup(
+		SGLVektor norm,
+		boost::shared_ptr<GLvlVolumeTex> tex,
+		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
+	)
+{
 	const GLshort vertexes[8][3] = {{0,1,1}, {1,1,1}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,0,0}, {0,0,0}};
 	const GLfloat normales[8][3] = {{-0.57735,0.57735,0.57735}, {0.57735,0.57735,0.57735}, {0.57735,0.57735,-0.57735}, {-0.57735,0.57735,-0.57735}, {-0.57735,-0.57735,0.57735}, {0.57735,-0.57735,0.57735}, {0.57735,-0.57735,-0.57735}, {-0.57735,-0.57735,-0.57735}};
 	enum bit_dir{bnord=1<<vincent::nord,bsued=1<<vincent::sued,bost=1<<vincent::ost,bwest=1<<vincent::west,bueber=1<<vincent::ueber,bunter=1<<vincent::unter};
@@ -189,19 +158,51 @@ void GLvlMinima::setup(
 	for(GLubyte id=1;id<64;id++)
 	{
 		GLubyte token=0;
-		QuadBegin(caps+id);
+		assert(glIsList(id));
+		glNewList(id,GL_COMPILE);
 		do{
 			const GLuint mode= indexes[id][token++] == strip ? GL_QUAD_STRIP: GL_QUADS; 
 			const GLubyte cnt=indexes[id][token++];
 			glDrawElements(mode,cnt,GL_UNSIGNED_SHORT,&indexes[id][token]);
 			token+=cnt;
 		}while(indexes[id][token]);
-		QuadEnd();
+		glEndList();
+		SGLcheckGLError;
 	}
-
-
-	GLvlMinima::tex=tex;
-	GLvlMinima::img=img;
-	GLvlMinima::plist=vincent::transform::getVoxels(*img);
+	GLvlMinimaBase::setup(norm,tex,img);
 }
 
+ 
+void GLvlMinima3D::generate()
+{
+	vincent::lab_value ID=(*plist)[start].wert;
+	SGLprintInfo("Minima 0x%x wird generiert\n",ID);//@todo wiso is X hier und .x() unten um 20 verschieden ?
+	glColor3f(1,1,1);
+	glScalef(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize);
+	glDisable(GL_NORMALIZE);
+	 short old_pos[]={0,0,0};
+	glPushMatrix();
+	glTranslatef(-.5,-.5,-.5);
+	for(unsigned int i=start;i<end;i++)
+	{
+		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
+		vincent::iPunkt<vincent::lab_value> nachb[6];
+		unsigned short mask=0x0;
+		p.getNachbStruct(nachb,*img);
+		for(unsigned short i=0;i<6;i++)
+		{
+			if(	nachb[i].invalid() || 
+				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
+			)
+			mask|=1<<i;
+		}
+		if(!mask)continue;
+		glTranslatef(p.x()-old_pos[0],p.y()-old_pos[1],p.z()-old_pos[2]);
+		glCallList(caps+mask);
+		old_pos[0]=p.x();
+		old_pos[1]=p.y();
+		old_pos[2]=p.z();
+	}
+	glPopMatrix();
+	glEnable(GL_NORMALIZE);
+}

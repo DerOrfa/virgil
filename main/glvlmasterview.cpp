@@ -186,18 +186,18 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,v_transform->last_erg);
+	GLvlMinima3D::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,v_transform->last_erg);
 	qApp->processEvents();
 	
-	map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator i=objs.end();
-	for(unsigned int index = 0;index<GLvlMinima::plist->size;index=i->second->end)
+	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();
+	for(unsigned int index = 0;index<GLvlMinima3D::plist->size;index=i->second->end)
 	{
-		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
-		shared_ptr<GLvlMinima> m=shared_ptr<GLvlMinima>(new GLvlMinima(index));
-		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima> >(id,m));
+		vincent::lab_value id=GLvlMinima3D::plist->operator[](index).wert;
+		shared_ptr<GLvlMinima3D> m=shared_ptr<GLvlMinima3D>(new GLvlMinima3D(index));
+		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,m));
 	}
 	glview->sendRedraw();
-	
+
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
@@ -223,10 +223,11 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 
 void GLvlMasterView::showSegmentAt(unsigned int index)
 {
-	if(objs.size() && v_transform->last_erg)
+	if(v_transform && v_transform->last_erg && index<v_transform->last_erg->size())
 	{
-		map<vincent::lab_value,shared_ptr<GLvlMinima> >::iterator it=objs.find(v_transform->last_erg->at(index));
-		
+		vincent::lab_value id=v_transform->last_erg->at(index);
+		if(id==vincent::WSHED_WSHED)return;
+		map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator it=objs.find(id);
 		if(it!=objs.end())
 		{
 			if(aktMinima!=it->second)
@@ -239,5 +240,6 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 				}
 			}
 		}
+		else {SGLprintWarning("Ungültiges Objekt %d",id);}
 	}
 }
