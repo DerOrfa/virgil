@@ -44,7 +44,6 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	tex->Load3DImage(*src.begin());//Master-Textur
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
-//	test->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
 
 	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
@@ -168,7 +167,11 @@ void  GLvlMasterView::loadIntoWShed()
 	Bild_mem<VBit> test(50,50,50,255);
 	
 	for(unsigned short i=0;i<20;i++)
-		static_cast<Bild<VBit>& >(test).at(0,i,0)=i*10;
+		static_cast<Bild<VBit>& >(test).at(0,i,0)=0;
+		
+	test.xsize.Elsize=1;
+	test.ysize.Elsize=1;
+	test.zsize.Elsize=1;
 		
 	tex->loadBitMask(test);
 	
@@ -251,4 +254,13 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 		}
 		else {SGLprintWarning("Ungültiges Objekt %d",id);}
 	}
+}
+
+
+/*!
+    \fn GLvlMasterView::updatePlanes()
+ */
+void GLvlMasterView::updatePlanes()
+{
+	
 }

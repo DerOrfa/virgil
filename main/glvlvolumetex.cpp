@@ -280,9 +280,9 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 
 GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 {
-	weich=true;
+	weich=false;
 	repeat=MipMap=false;
-	identity=true;
+//	identity=true;
 	TexType=GL_TEXTURE_3D;
 }
 
@@ -298,7 +298,7 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 	glBindTexture(TexType, ID);
 	
 	
-	if(this->renderMode==SGL_MTEX_MODE_MASK)valid=loadBitmask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
+	if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadBitmask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
 	else valid=loadPaletted(img);
 	
 	if(!valid)//Fallback wenn Palette nich tut
@@ -429,7 +429,6 @@ void GLvlVolumeTex::loadTint(VImage i)
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_TINT;
 	p->Load3DImage(i);
-//	p->envColor[0]=p->envColor[3]=1;
 	p->calcMatr();
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=true;
@@ -469,9 +468,9 @@ void GLvlVolumeTex::loadBitMask(Bild<VBit> &img)
 {
 	SGLprintState("lade Bitmaske");
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-	p->renderMode=SGL_MTEX_MODE_MASK;
+	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	p->Load3DImage(img);
-//	p->envColor[0]=p->envColor[3]=1;
+	p->envColor[0]=p->envColor[1]=p->envColor[2]=1;
 	p->calcMatr();
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=false;
