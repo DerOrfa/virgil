@@ -171,7 +171,7 @@ void  GLvlMasterView::loadIntoWShed()
 			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
 			tex->setupPal(1,255);
 			glview->sendRedraw();
-			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(3000001)));
+			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(2000000)));
 		}break;
 	}
 }
