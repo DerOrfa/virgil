@@ -72,7 +72,6 @@ Pins(Pins)
 	statusBar()->addWidget(&AimYStatus,0,true);
 	statusBar()->addWidget(&AimZStatus,0,true);
 	
-		
 	AimXStatus.setText("0");
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
@@ -308,21 +307,22 @@ void	GLvlView::selectViewMode(int mode)
  */
 bool GLvlView::loadCfg()
 {
+	myCam=glview->Camera;
 	ERegistry CamReg("Camera",myReg);
-	glview->Camera->Pos.SGLV_X=CamReg.getdVal("Pos.x",0);
-	glview->Camera->Pos.SGLV_Y=CamReg.getdVal("Pos.y",0);
-	glview->Camera->Pos.SGLV_Z=CamReg.getdVal("Pos.z",200);
+	myCam->Pos.SGLV_X=CamReg.getdVal("Pos.x",0);
+	myCam->Pos.SGLV_Y=CamReg.getdVal("Pos.y",0);
+	myCam->Pos.SGLV_Z=CamReg.getdVal("Pos.z",200);
 	
-	glview->Camera->LookAt.SGLV_X=CamReg.getdVal("Aim.x",0);
-	glview->Camera->LookAt.SGLV_Y=CamReg.getdVal("Aim.y",0);
-	glview->Camera->LookAt.SGLV_Z=CamReg.getdVal("Aim.z",0);
+	myCam->LookAt.SGLV_X=CamReg.getdVal("Aim.x",0);
+	myCam->LookAt.SGLV_Y=CamReg.getdVal("Aim.y",0);
+	myCam->LookAt.SGLV_Z=CamReg.getdVal("Aim.z",0);
 
-	glview->Camera->UpVect.SGLV_X=CamReg.getdVal("Up.x",0);
-	glview->Camera->UpVect.SGLV_Y=CamReg.getdVal("Up.y",1);
-	glview->Camera->UpVect.SGLV_Z=CamReg.getdVal("Up.z",0);
+	myCam->UpVect.SGLV_X=CamReg.getdVal("Up.x",0);
+	myCam->UpVect.SGLV_Y=CamReg.getdVal("Up.y",1);
+	myCam->UpVect.SGLV_Z=CamReg.getdVal("Up.z",0);
 	
-	glview->Camera->ViewMatr.outDated=true;
-	glview->Camera->Compile();
+	myCam->ViewMatr.outDated=true;
+	myCam->Compile();
 	
 	int mode;
 	QString sMode=myReg->getsVal("ResizeMode",scaleMode->text(glview->resizeMode));
@@ -338,17 +338,22 @@ bool GLvlView::loadCfg()
 bool GLvlView::saveCfg()
 {
 	ERegistry CamReg("Camera",myReg);
-	CamReg.setdVal("Pos.x",glview->Camera->Pos.SGLV_X);
-	CamReg.setdVal("Pos.y",glview->Camera->Pos.SGLV_Y);
-	CamReg.setdVal("Pos.z",glview->Camera->Pos.SGLV_Z);
+	if(!myCam)
+	{
+		SGLprintWarning("Kopie der Kamera fahlt, versuche aktuelle Kamera zu ermitteln");
+		myCam=glview->Camera;
+	}
+	CamReg.setdVal("Pos.x",myCam->Pos.SGLV_X);
+	CamReg.setdVal("Pos.y",myCam->Pos.SGLV_Y);
+	CamReg.setdVal("Pos.z",myCam->Pos.SGLV_Z);
 
-	CamReg.setdVal("Aim.x",glview->Camera->LookAt.SGLV_X);
-	CamReg.setdVal("Aim.y",glview->Camera->LookAt.SGLV_Y);
-	CamReg.setdVal("Aim.z",glview->Camera->LookAt.SGLV_Z);
+	CamReg.setdVal("Aim.x",myCam->LookAt.SGLV_X);
+	CamReg.setdVal("Aim.y",myCam->LookAt.SGLV_Y);
+	CamReg.setdVal("Aim.z",myCam->LookAt.SGLV_Z);
 
-	CamReg.setdVal("Up.x",glview->Camera->UpVect.SGLV_X);
-	CamReg.setdVal("Up.y",glview->Camera->UpVect.SGLV_Y);
-	CamReg.setdVal("Up.z",glview->Camera->UpVect.SGLV_Z);
+	CamReg.setdVal("Up.x",myCam->UpVect.SGLV_X);
+	CamReg.setdVal("Up.y",myCam->UpVect.SGLV_Y);
+	CamReg.setdVal("Up.z",myCam->UpVect.SGLV_Z);
 	
 	myReg->setsVal("ResizeMode",scaleMode->currentText());
 }
@@ -491,7 +496,4 @@ void GLvlView::onReached(vincent::VBild_value h,unsigned short objs){}
 void GLvlView::onMsg(QString msg,bool canskip){}
 void GLvlView::onTransformEnd(){};
 
-void GLvlPlaneView::showSegmentAt(unsigned int index)
-{
-    /// @todo implement me
-}
+void GLvlPlaneView::showSegmentAt(unsigned int index){}

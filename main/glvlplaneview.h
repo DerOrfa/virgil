@@ -57,6 +57,7 @@ protected:
 	EWndRegistry *myReg;
 	void setupSpace(SGLqtSpace *space);
 	void closeEvent(QCloseEvent *e);
+	boost::shared_ptr<SGLBaseCam> myCam;
 private:
 	bool selfChange;
 	static SGLVektor default_oben[3],default_unten[3],default_vorn[3],default_hinten[3],default_rechts[3],default_links[3];

@@ -186,7 +186,7 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima3D::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,v_transform->last_erg);
+	GLvlMinima3D::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),v_transform->last_erg);
 	qApp->processEvents();
 	
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();
@@ -197,7 +197,7 @@ void GLvlMasterView::onTransformEnd()
 		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,m));
 	}
 	glview->sendRedraw();
-
+	
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
@@ -228,6 +228,7 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 		vincent::lab_value id=v_transform->last_erg->at(index);
 		if(id==vincent::WSHED_WSHED)return;
 		map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator it=objs.find(id);
+		
 		if(it!=objs.end())
 		{
 			if(aktMinima!=it->second)

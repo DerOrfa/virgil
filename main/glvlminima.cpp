@@ -25,44 +25,80 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 	else
 	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");}
 }
+SGLVektor GLvlMinimaBase::getCenter(){
+    /// @todo implement me
+}
 
-SGLVektor GLvlMinimaBase::getCenter(){}
+GLvlMinima3D::GLvlMinima3D(unsigned int pos):GLvlMinimaBase(pos){}
 
-shared_ptr<GLvlVolumeTex> GLvlMinimaBase::tex;
+/*!
+    \fn GLvlMinima3D::generate()
+ */
+void GLvlMinima3D::generate()
+{
+	vincent::lab_value ID=(*plist)[start].wert;
+//	cout << tex->texIndex2texKoord((*plist)[start].pos) << endl;
+/// @todo wiso is X hier und .x() unten um 20 verschieden ?
+	
+	SGLprintInfo("Minima 0x%x wird generiert\n",ID);//@todo wiso is X hier und .x() unten um 20 verschieden ?
+	
+	glColor3f(1,1,1);
+	glScalef(scale.SGLV_X,scale.SGLV_Y,scale.SGLV_Z);
+	glDisable(GL_NORMALIZE);
+	 short old_pos[]={0,0,0};
+	glPushMatrix();
+	glTranslatef(-.5,-.5,-.5);
+	for(unsigned int i=start;i<end;i++)
+	{
+		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
+		vincent::iPunkt<vincent::lab_value> nachb[6];
+		unsigned short mask=0x0;
+		p.getNachbStruct(nachb,*img);
+		for(unsigned short i=0;i<6;i++)
+		{
+			if(	nachb[i].invalid() || 
+				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
+			)
+			mask|=1<<i;
+		}
+		if(mask)
+		{
+			glTranslatef(p.x()-old_pos[0],p.y()-old_pos[1],p.z()-old_pos[2]);
+			old_pos[0]=p.x();old_pos[1]=p.y();old_pos[2]=p.z();
+			glCallList(caps+mask);
+		}
+	}
+	glPopMatrix();
+	glEnable(GL_NORMALIZE);
+}
+
 shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinimaBase::img;
 shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinimaBase::plist;
 bool GLvlMinimaBase::incl_wshed=false;
 
-/*!
-    \fn GLvlMinima::setup_norm(SGLVektor norm)
- */
-void GLvlMinimaBase::setup(
-	SGLVektor norm,
-	boost::shared_ptr<GLvlVolumeTex> tex,
-	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
-)
-{	
-	GLvlMinimaBase::tex=tex;
+void GLvlMinimaBase::setup(	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img)
+{
 	GLvlMinimaBase::img=img;
 	GLvlMinimaBase::plist=vincent::transform::getVoxels(*img);
 }
 
-
 GLuint GLvlMinima3D::caps=0;
 
-GLvlMinima3D::GLvlMinima3D(unsigned int pos):GLvlMinimaBase(pos){}
+SGLVektor GLvlMinima3D::scale;
+
 
 void GLvlMinima3D::setup(
-		SGLVektor norm,
-		boost::shared_ptr<GLvlVolumeTex> tex,
-		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
-	)
-{
+	SGLVektor scale,
+	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
+)
+{	
+	GLvlMinimaBase::setup(img);
+
 	const GLshort vertexes[8][3] = {{0,1,1}, {1,1,1}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,0,0}, {0,0,0}};
 	const GLfloat normales[8][3] = {{-0.57735,0.57735,0.57735}, {0.57735,0.57735,0.57735}, {0.57735,0.57735,-0.57735}, {-0.57735,0.57735,-0.57735}, {-0.57735,-0.57735,0.57735}, {0.57735,-0.57735,0.57735}, {0.57735,-0.57735,-0.57735}, {-0.57735,-0.57735,-0.57735}};
 	enum bit_dir{bnord=1<<vincent::nord,bsued=1<<vincent::sued,bost=1<<vincent::ost,bwest=1<<vincent::west,bueber=1<<vincent::ueber,bunter=1<<vincent::unter};
 	
-	glEnableClientState(GL_VERTEX_ARRAY);//@todo können die nachher wieder aus ?  warscheinlich - sind eh clientseitig
+	glEnableClientState(GL_VERTEX_ARRAY);/// @todo können die nachher wieder aus ?  warscheinlich - sind eh clientseitig
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glVertexPointer(3, GL_SHORT, 0, vertexes);
 	glNormalPointer(GL_FLOAT, 0,normales);
@@ -154,55 +190,19 @@ void GLvlMinima3D::setup(
 		//Unter
 	};
 	
-	//Streifen
 	for(GLubyte id=1;id<64;id++)
 	{
 		GLubyte token=0;
-		assert(glIsList(id));
-		glNewList(id,GL_COMPILE);
+		QuadBegin(caps+id);
 		do{
 			const GLuint mode= indexes[id][token++] == strip ? GL_QUAD_STRIP: GL_QUADS; 
 			const GLubyte cnt=indexes[id][token++];
 			glDrawElements(mode,cnt,GL_UNSIGNED_SHORT,&indexes[id][token]);
 			token+=cnt;
 		}while(indexes[id][token]);
-		glEndList();
-		SGLcheckGLError;
+		QuadEnd();
 	}
-	GLvlMinimaBase::setup(norm,tex,img);
+
+	GLvlMinima3D::scale=scale;
 }
 
- 
-void GLvlMinima3D::generate()
-{
-	vincent::lab_value ID=(*plist)[start].wert;
-	SGLprintInfo("Minima 0x%x wird generiert\n",ID);//@todo wiso is X hier und .x() unten um 20 verschieden ?
-	glColor3f(1,1,1);
-	glScalef(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize);
-	glDisable(GL_NORMALIZE);
-	 short old_pos[]={0,0,0};
-	glPushMatrix();
-	glTranslatef(-.5,-.5,-.5);
-	for(unsigned int i=start;i<end;i++)
-	{
-		const vincent::iPunkt<vincent::lab_value> p=(*plist)[i];
-		vincent::iPunkt<vincent::lab_value> nachb[6];
-		unsigned short mask=0x0;
-		p.getNachbStruct(nachb,*img);
-		for(unsigned short i=0;i<6;i++)
-		{
-			if(	nachb[i].invalid() || 
-				!(p.wert==nachb[i].wert || (nachb[i].wert==vincent::WSHED_WSHED && incl_wshed))
-			)
-			mask|=1<<i;
-		}
-		if(!mask)continue;
-		glTranslatef(p.x()-old_pos[0],p.y()-old_pos[1],p.z()-old_pos[2]);
-		glCallList(caps+mask);
-		old_pos[0]=p.x();
-		old_pos[1]=p.y();
-		old_pos[2]=p.z();
-	}
-	glPopMatrix();
-	glEnable(GL_NORMALIZE);
-}

@@ -10,22 +10,22 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>KDevcopyto</part>
-      <part>Dateibaum (KDevelop)</part>
-      <part>Dateigruppen-Komponente (KDevelop)</part>
+      <part>KDevBookmarks</part>
+      <part>KDevCTags</part>
       <part>KDevCTags2</part>
-      <part>Unterstützung für Perforce (KDevelop)</part>
-      <part>Schnellöffner-Komponente (KDevelop)</part>
-      <part>Unterstützung für Subversion (KDevelop)</part>
-      <part>Unterstützung für CTags (KDevelop)</part>
-      <part>Unterstützung für CVSService (KDevelop)</part>
-      <part>Lesezeichen-Unterstützung (KDevelop)</part>
-      <part>Unterstützung für Paketerstellung (KDevelop)</part>
-      <part>VisualBoy Advance (KDevelop)</part>
+      <part>KDevClearCase</part>
+      <part>KDevcopyto</part>
+      <part>KDevDoxygen</part>
+      <part>KDevFileGroups</part>
+      <part>KDevFileView</part>
+      <part>KDevdistpart</part>
+      <part>KDevPerforce</part>
+      <part>KDevQuickOpen</part>
+      <part>KDevsubversion</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -83,12 +83,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
-      <programargs></programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <dbgshell/>
+      <programargs/>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -102,7 +102,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>-v 3 ../sglqt/brain.v</programargs>
+      <programargs>~/cgtbsmMK3T.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -112,13 +112,13 @@
       </envvars>
     </run>
     <general>
-      <activedir>wshed</activedir>
+      <activedir>main</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
       <prio>0</prio>
       <envvars/>
     </make>

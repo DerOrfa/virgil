@@ -48,7 +48,6 @@ myPlane(new GLvlCutPlane(tex))
 
 void GLvlPlaneCam::generate()
 {
-	glColor3fv(farbe); 
 	if(showCross)
 	{
 		SGLVektor Vert[2],Horiz[2];
@@ -62,19 +61,23 @@ void GLvlPlaneCam::generate()
 	recalcEcken();
 	myPlane->resetTexKoord();
 
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_LINES);
+		glColor3f(255,0,0); 
 		Ecken[0]->DrawPureVertex();
 		Ecken[1]->DrawPureVertex();
+		
+		glColor3f(0,255,0); 
+		Ecken[1]->DrawPureVertex();
+		Ecken[2]->DrawPureVertex();
+		
+		glColor3f(0,0,0); 
 		Ecken[2]->DrawPureVertex();
 		Ecken[3]->DrawPureVertex();
+	
+		glColor3f(0,0,255); 
+		Ecken[3]->DrawPureVertex();
+		Ecken[0]->DrawPureVertex();
 	glEnd();
-// 	glBegin(GL_LINES);
-// 		Pos.DrawPureVertex();Ecken[0]->DrawPureVertex();
-// 		Pos.DrawPureVertex();Ecken[1]->DrawPureVertex();
-// 		Pos.DrawPureVertex();Ecken[2]->DrawPureVertex();
-// 		Pos.DrawPureVertex();Ecken[3]->DrawPureVertex();
-// 	glEnd();
-
 }
 
 /*!

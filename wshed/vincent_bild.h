@@ -46,7 +46,9 @@ template <class T> class Bild_mem:Bild<T>
 	public:
 	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		xsize=x;ysize=y;zsize=z;
+		Bild<T>::xsize=x;
+		Bild<T>::ysize=y;
+		Bild<T>::zsize=z;
 		if(data)free(data);
 		init(initVal);
 	}
