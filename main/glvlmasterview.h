@@ -25,7 +25,7 @@
 #include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
-#include "glvlminima3d.h"
+#include "glvlminima.h"
 #include <boost/signal.hpp>
 
 using namespace efc;
@@ -57,15 +57,15 @@ public:
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
     void redrawAktSegment();
-    bool loadSegmentTex(shared_ptr<GLvlMinima3D> img,EVektor<unsigned short> pos);
-    void loadSegmentListTex(GLvlMinima3DList &img);
+    bool loadSegmentTex(shared_ptr<GLvlMinima> img,EVektor<unsigned short> pos);
+    void loadSegmentListTex(GLvlMinimaList &img);
 
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
-	map<vincent::lab_value,shared_ptr<GLvlMinima3D> > objs;
-	shared_ptr<GLvlMinima3D> aktMinima;
-	GLvlMinima3DList selMinima;
+	map<vincent::lab_value,shared_ptr<GLvlMinima> > objs;
+	shared_ptr<GLvlMinima> aktMinima;
+	GLvlMinimaList selMinima;
 };
 
 #endif

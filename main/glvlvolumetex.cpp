@@ -73,7 +73,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	#undef zsize
 }
 
-bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3DList &src)
+bool GLvlVolumeTex::loadMinimaMask(GLvlMinimaList &src)
 {
 	if(ID!=0)freeTexture();
 	assert(TexType==GL_TEXTURE_3D);//Textype muss 3D sein
@@ -102,7 +102,7 @@ bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3DList &src)
 	Bild_mem<GLubyte> pixels(size[0],size[1],size[2],0);
 	
 	//Pufferbild schreibem
-	for(GLvlMinima3DList::iterator i=src.begin();i!=src.end();i++)
+	for(GLvlMinimaList::iterator i=src.begin();i!=src.end();i++)
 	{
 		unsigned short offset[3]={1,1,1};
 		src.getOffset(offset,i);
@@ -543,12 +543,12 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 // 	multitex=p;
 // }
 // 
-// void GLvlVolumeTex::loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,GLfloat color[3])
+// void GLvlVolumeTex::loadColorMask(GLvlMinima &img,EVektor<unsigned short> pos,GLfloat color[3])
 // {
 // 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 // 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 // 	
-// 	GLvlMinima3DList t(img);
+// 	GLvlMinimaList t(img);
 // 	p->loadMinimaMask(t);
 // 	memcpy(p->envColor,color,3*sizeof(GLfloat));
 // 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));

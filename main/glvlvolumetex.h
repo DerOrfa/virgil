@@ -16,7 +16,7 @@
 #include <vista/VImage.h>
 #include <bild.h>
 
-#include "glvlminima3d.h"
+#include "glvlminimalist.h"
 
 /**
 @author Enrico Reimer,,,
@@ -25,7 +25,7 @@ class GLvlVolumeTex : public SGLBaseTex
 {
 public:
 	GLvlVolumeTex();
-	bool loadMinimaMask(GLvlMinima3DList &src);
+	bool loadMinimaMask(GLvlMinimaList &src);
 	bool Load3DImage(VImage src);
 	template<class T> bool Load3DImage(Bild<T> &img);
 	class dimData:public dim{
@@ -79,7 +79,7 @@ public:
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 /*    void loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
-	void loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,GLfloat color[3]);*/
+	void loadColorMask(GLvlMinima &img,EVektor<unsigned short> pos,GLfloat color[3]);*/
 	static SGLVektor masteroffset;
 private:
 	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);

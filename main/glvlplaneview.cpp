@@ -129,6 +129,7 @@ GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0)//Das MasterWnd darf erst durc
 void GLvlView::setupSpace(SGLqtSpace *space)
 {
 	glview = space;
+	glview->registerDynamicTex(*tex);
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
 	assert(glViewContainer->layout());//eigentlich sollte SGLqtSpace sicherstellen, daß sein Parent ein layout hat ..
 	glViewContainer->layout()->setMargin(1);

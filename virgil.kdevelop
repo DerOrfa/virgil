@@ -92,7 +92,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>testdata.v</programargs>
+      <programargs>~/cgtbsmMK3T.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -102,7 +102,7 @@
       </envvars>
     </run>
     <general>
-      <activedir></activedir>
+      <activedir>main</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

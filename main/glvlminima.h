@@ -17,13 +17,28 @@
 #include "../wshed/vincent_punkt.h"
 #include <GL/glu.h>
 
+#include <sglqtspace.h>
+
 #define MAX_MINIMA_SIZE 500000
 
 /**
 @author Enrico Reimer,,,
 */
-class GLvlMinimaBase
+
+class GLvlMinima:public SGLFlObj
 {
+	static GLuint caps;
+	static SGLVektor scale;
+	inline static void QuadBegin(GLuint id)
+	{
+		assert(glIsList(id));
+		glNewList(id,GL_COMPILE);
+	}
+	inline static void QuadEnd()
+	{
+		glEndList();
+		SGLcheckGLError;
+	}
 public:
 	union EdgeData{
 		struct {unsigned short x,y,z;};
@@ -35,7 +50,7 @@ public:
 	
 	unsigned int start,end;
 	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
-	GLvlMinimaBase(unsigned int pos);
+	GLvlMinima(unsigned int pos);
 	static void setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org);
 	static bool incl_wshed;
 	inline const unsigned int size(){return end-start;}
@@ -45,9 +60,9 @@ public:
 	dim getZDim()const;
 	template <class T> inline static void writeEdgeData(const vincent::iPunkt<T> &p, EdgeData &min,EdgeData &max)
 	{
-		const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
-		const unsigned short y=p.y(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
-		const unsigned short z=p.z(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
+		const unsigned short x=p.x(GLvlMinima::img->xsize);
+		const unsigned short y=p.y(GLvlMinima::img->xsize,GLvlMinima::img->ysize);
+		const unsigned short z=p.z(GLvlMinima::img->xsize,GLvlMinima::img->ysize);
 			
 		min.x = min.x <? x;
 		min.y = min.y <? y;
@@ -57,6 +72,17 @@ public:
 		max.y = max.y >? y;
 		max.z = max.z >? z;
 	}
+	void generate();
+	static void setup(
+		SGLVektor norm,
+		const vincent::transform &transform,
+		VImage &src
+	);
+    SGLVektor getCenter();
+    shared_ptr<Bild_mem<VBit> > genTex();
+	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 };
 
+#include "glvlvolumetex.h"
+#include "glvlminimalist.h"
 #endif
