@@ -41,7 +41,6 @@ class GLvlMinima:public SGLFlObj
 		SGLcheckGLError;
 	}
 public:
-	SGLSignal<void()> redisplay;
 	union EdgeData{
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
@@ -59,6 +58,12 @@ public:
 	GLvlMinima(unsigned int pos);
 	bool incl_wshed;
 	inline unsigned int volume()const{return end-start;}
+	inline double volume_mm()const{
+		return volume()*
+		GLvlMinima::img->xsize.getElsize('X')*
+		GLvlMinima::img->ysize.getElsize('Y')*
+		GLvlMinima::img->zsize.getElsize('Z');
+	}
     bool chCapRel(signed char topdelta,signed char bottomdelta);
     bool chCapAbs(VUByte top,VUByte bottom);
     bool chCapAbsTop(VUByte top);
@@ -87,11 +92,10 @@ public:
 		VImage &src
 	);
     SGLVektor getCenter();
-    boost::shared_ptr<Bild_mem<VBit> > genTex();
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 	void getPktKoord(const unsigned int indexRel,unsigned short &x,unsigned short &y,unsigned short &z)const;
 	vincent::lab_value getID()const;
+	GLvlMinima(const GLvlMinima&);
 };
 
-//#include "glvlvolumetex.h"
 #endif

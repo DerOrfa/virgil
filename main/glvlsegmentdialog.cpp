@@ -35,9 +35,9 @@ void GLvlSegmentDialog::onSelectItem(QListViewItem* it)
 	{
 		if(aktSegment!=seg)
 		{
-			if(aktSegment)aktSegment->undisplay();
+			if(aktSegment)aktSegment->undisplay(true);
 			aktSegment=seg;
-			aktSegment->display();
+			aktSegment->display(true);
 		}
 	}
 	else if(min)
@@ -45,9 +45,9 @@ void GLvlSegmentDialog::onSelectItem(QListViewItem* it)
 		SegmentItem* seg=dynamic_cast<SegmentItem*>(min->parent());
 		if(seg && aktSegment!=seg)
 		{
-			aktSegment->undisplay();
+			aktSegment->undisplay(true);
 			aktSegment=seg;
-			aktSegment->display();
+			aktSegment->display(true);
 		}
 		findMinima((*min)->getID());
 	}
@@ -74,7 +74,7 @@ void GLvlSegmentDialog::onWatershedReady(bool)
 
 void GLvlSegmentDialog::registerSegment(boost::shared_ptr<GLvlSegment> seg)
 {
-	if(aktSegment)aktSegment->undisplay();
+	if(aktSegment)aktSegment->undisplay(true);
 	aktSegment=new SegmentItem(segList,seg->front());
 	segList->setSelected(aktSegment,true);
 }
@@ -94,11 +94,13 @@ TARGET ## _cap_max_text->setText(EString(MAX));	\
 	incl_wshed->setChecked(m.incl_wshed);
 	cap_text->setText(EString(m.bottomCap)+"-"+EString(m.topCap));
 			
-	volume_tex->setText(QString::number(m.volume()));
+	volume_tex->setText(QString::number(m.volume_mm()) +"mm³ ("+ QString::number(m.volume()) + " Voxel)");
 	unsigned short x,y,z;m.getPktKoord(0,x,y,z);
 	coord_text->setText(EString(x)+" "+EString(y)+" "+EString(z));
 
 	boundig_box_text->setText(EString(m.minEdge.x)+" "+EString(m.minEdge.y)+" "+EString(m.minEdge.z)+" - " + EString(m.maxEdge.x)+" "+EString(m.maxEdge.y)+" "+EString(m.maxEdge.z));
+	
+	qApp->processEvents();
 #undef SET_CAP_DATA
 }
 
@@ -108,9 +110,9 @@ void GLvlSegmentDialog::selectMinima(boost::shared_ptr<GLvlSegment> min)
 	if(aktMinima!=min)
 	{
 		if(aktMinima)
-			aktMinima->undisplay();//Sorgt dafür, daß ein gerade reg. Segment nicht "undisplayed" wird
-			//@todo, aber was is, wenn wir mal wieder drüber kommen
-		if(min->display())
+			aktMinima->undisplay(!isMinimaInSegm(aktMinima));
+			
+		if(min->display(!isMinimaInSegm(min)))
 		{
 			aktMinima=min;
 			displayMinimaData(*min->front());
@@ -130,7 +132,7 @@ QListViewItem(parent,"Segment"+QString::number(min->getID())),GLvlSegment(min)
 {
 	new GLvlSegmentDialog::MinimaItem(this,min);
 	isMinima=false;
-	display();
+	display(true);
 	showInf();
 }
 
@@ -138,7 +140,7 @@ void GLvlSegmentDialog::SegmentItem::addMinima(boost::shared_ptr<GLvlMinima> min
 {
 	push_back(min);
 	new GLvlSegmentDialog::MinimaItem(this,min);
-	redisplay();
+	redisplay(true);
 	showInf();
 }
 
@@ -152,12 +154,12 @@ void GLvlSegmentDialog::SegmentItem::showInf()
 	EString(maxEdge.y)+" "+
 	EString(maxEdge.z));
 	
-	unsigned int v=0;
+	double mm=0;
 	
 	for(GLvlSegment::iterator i=begin();i!=end();i++)
-		v+=(*i)->volume();
+		mm+=(*i)->volume_mm();
 
-	setText(1,QString::number(v));
+	setText(1,QString::number(mm));
 }
 
 void GLvlSegmentDialog::MinimaItem::showInf()
@@ -171,7 +173,7 @@ void GLvlSegmentDialog::MinimaItem::showInf()
 	EString(m.maxEdge.y)+" "+
 	EString(m.maxEdge.z));
 	
-	setText(1,QString::number(m.volume()));
+	setText(1,QString::number(m.volume_mm()));
 }
 
 void GLvlSegmentDialog::startTransform()
@@ -228,6 +230,7 @@ void GLvlSegmentDialog::findMinima(vincent::lab_value id)
 void GLvlSegmentDialog::addCurrMinima()
 {
 	if(!aktMinima)return;
+	aktMinima->undisplay(false);
 	if(!aktSegment)registerSegment(aktMinima);
 	else aktSegment->addMinima(aktMinima->front());
 //	glview->sendRedraw();
@@ -238,7 +241,7 @@ void GLvlSegmentDialog::chCapRelCurrMinima(signed char topdelta,signed char bott
 	if(!aktMinima)return;
 	if(aktMinima->front()->chCapRel(topdelta,bottomdelta))
 	{
-		aktMinima->redisplay();
+		redisplayMinima(aktMinima);
 		displayMinimaData(*aktMinima->front());
 	}
 }
@@ -248,7 +251,7 @@ void GLvlSegmentDialog::setTopCapAbsCurrMinima(int top)
 	if(!aktMinima)return;
 	if(aktMinima->front()->chCapAbsTop(top))
 	{
-		aktMinima->redisplay();
+		redisplayMinima(aktMinima);
 		displayMinimaData(*aktMinima->front());
 	}
 }
@@ -258,7 +261,7 @@ void GLvlSegmentDialog::setBottomCapAbsCurrMinima(int bottom)
 	if(!aktMinima)return;
 	if(aktMinima->front()->chCapAbsBottom(bottom))
 	{
-		aktMinima->redisplay();
+		redisplayMinima(aktMinima);
 		displayMinimaData(*aktMinima->front());
 	}
 }
@@ -272,5 +275,51 @@ void GLvlSegmentDialog::onReached(vincent::VBild_value h ,unsigned short objs )
 void GLvlSegmentDialog::newSegment()
 {
 	if(aktSegment && segList->isSelected(aktSegment))segList->setSelected(aktSegment,false);
+	aktSegment->undisplay(true);
 	aktSegment=NULL;
+}
+
+
+/*!
+    \fn GLvlSegmentDialog::redisplayMinima(const boost::shared_ptr<GLvlSegment> &min)
+ */
+void GLvlSegmentDialog::redisplayMinima(boost::shared_ptr<GLvlSegment> &min)
+{
+	assert(min->isMinima);
+	min->redisplay(!isMinimaInSegm(min));
+	
+	for(QListViewItemIterator it(segList);it.current();it++)
+	{
+		MinimaItem* minItem=dynamic_cast<MinimaItem*>(it.current());
+		if(minItem && *minItem == min->front())
+		{
+			SegmentItem* seg=dynamic_cast<SegmentItem*>(minItem->parent());
+			if(seg)seg->redisplay(true);
+			else {SGLprintError("Konnte Segment des Minima 0x%x nicht ermitteln",minItem);}
+		}
+	}
+}
+
+bool GLvlSegmentDialog::isMinimaInSegm(const boost::shared_ptr<GLvlSegment> &min)
+{
+	assert(min->isMinima);
+	for(QListViewItemIterator it(segList);it.current();it++)
+	{
+		MinimaItem* minItem=dynamic_cast<MinimaItem*>(it.current());
+		if(minItem && *minItem == min->front())return true;
+	}
+	return false;
+}
+/*!
+    \fn GLvlSegmentDialog::toggleWShed(bool)
+ */
+void GLvlSegmentDialog::toggleWShed(bool toggle)
+{
+	if(!aktMinima)return;
+	if(aktMinima->front()->incl_wshed != toggle)
+	{
+		aktMinima->front()->incl_wshed=toggle;
+		redisplayMinima(aktMinima);
+		displayMinimaData(*aktMinima->front());
+	}
 }

@@ -3,7 +3,7 @@
 # Subdir relative project main directory: ./wshed
 # Target is a library:  
 
-CONFIG += release \
+CONFIG += debug \
           warn_on \
           thread \
           staticlib 

@@ -13,8 +13,12 @@
 #include <libsgl/sglvektor.h>
 #include "glvlvolumetex.h"
 
-GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(true)
+GLvlMinima::GLvlMinima(const GLvlMinima&)
+{
+	cout << "Kopiere Minima" << endl;
+}
 
+GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(true)
 {
 	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
 	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
@@ -53,7 +57,6 @@ bool GLvlMinima::chCapAbsTop(VUByte Top)
 		topCap= topBorder() <? Top;
 		if(topCap<=bottomCap)
 			bottomCap=topCap-1;
-		redisplay();
 		return true;
 	}
 	else return false;
@@ -66,7 +69,6 @@ bool GLvlMinima::chCapAbsBottom(VUByte Bottom)
 		bottomCap= bottomBorder() >? Bottom;
 		if(bottomCap>=topCap)
 			topCap=bottomCap+1;
-		redisplay();
 		return true;
 	}
 	else return false;
@@ -76,7 +78,6 @@ bool GLvlMinima::chCapAbs(VUByte Top,VUByte Bottom)
 	if(Bottom>=Top)Top=Bottom+1;
 	bool update=chCapAbsTop(Top);
 	if(chCapAbsBottom(Bottom))update=true;
-	if(update)redisplay();
 	return  update;
 }
 
@@ -349,30 +350,6 @@ SGLVektor GLvlMinima::getCenter(){
     /// @todo implement me
 }
 
-boost::shared_ptr<Bild_mem<VBit> > GLvlMinima::genTex()
-{
-	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,0);
-	for(unsigned int i=start;i<end;i++)
-	{
-		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinima::plist)[i];
-		if(bottomCap > (*org)[p])continue;
-		if(topCap < (*org)[p])break;
-		const unsigned short x=p.x(img->xsize)-minEdge.x;
-		const unsigned short y=p.y(img->xsize,img->ysize)-minEdge.y;
-		const unsigned short z=p.z(img->xsize,img->ysize)-minEdge.z;
-		((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
-		vincent::iPunkt<vincent::lab_value>  nachb[6];
-		unsigned short nachb_cnt=p.getNachb(nachb,*img);
-		for(unsigned short i=0;i<nachb_cnt;i++)
-			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
-				((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
-	}
-	ret->xsize.setElsize(img->xsize.getElsize('X'));
-	ret->ysize.setElsize(img->ysize.getElsize('Y'));
-	ret->zsize.setElsize(img->zsize.getElsize('Z'));
-	return boost::shared_ptr<Bild_mem<VBit> >(ret);
-}
-
 void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const
 {
 	for(unsigned int i=start;i<end;i++)
@@ -392,7 +369,7 @@ void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)c
 				const unsigned short x=nachb[i].x(img->xsize)-minEdge.x + offset[0];
 				const unsigned short y=nachb[i].y(img->xsize,img->ysize)-minEdge.y + offset[1];
 				const unsigned short z=nachb[i].z(img->xsize,img->ysize)-minEdge.z + offset[2];
-				textur.at(x,y,z)=numeric_limits<GLubyte>::max();
+				textur.at(x,y,z)=numeric_limits<GLubyte>::max()/2;
 			}
 	}
 	textur.xsize.setElsize(img->xsize.getElsize('X'));

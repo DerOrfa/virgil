@@ -37,11 +37,11 @@
             <property name="title">
                 <string>Segmentierung</string>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QListView" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QListView">
                     <column>
                         <property name="text">
                             <string>Objekt</string>
@@ -55,7 +55,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Volumen</string>
+                            <string>Volumen (in mm³)</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -82,7 +82,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="0">
+                <widget class="QPushButton">
                     <property name="name">
                         <cstring>new_seg_btn</cstring>
                     </property>
@@ -90,22 +90,14 @@
                         <string>neues Segment</string>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>apply_seg_btn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Segment anwenden</string>
-                    </property>
-                </widget>
-            </grid>
+            </vbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>Minima</string>
+                <string>Minimagruppe</string>
             </property>
             <grid>
                 <property name="name">
@@ -174,6 +166,9 @@
                             <property name="name">
                                 <cstring>top_cap_slider</cstring>
                             </property>
+                            <property name="cursor">
+                                <cursor>13</cursor>
+                            </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
                             </property>
@@ -198,6 +193,9 @@ WShed</string>
                         <widget class="QSlider" row="1" column="2">
                             <property name="name">
                                 <cstring>bottom_cap_slider</cstring>
+                            </property>
+                            <property name="cursor">
+                                <cursor>13</cursor>
                             </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
@@ -293,16 +291,22 @@ WShed</string>
         <slot>setBottomCapAbsCurrMinima(int)</slot>
     </connection>
     <connection>
-        <sender>new_seg_btn</sender>
-        <signal>clicked()</signal>
-        <receiver>SegmentDialog</receiver>
-        <slot>newSegment()</slot>
-    </connection>
-    <connection>
         <sender>segList</sender>
         <signal>selectionChanged(QListViewItem*)</signal>
         <receiver>SegmentDialog</receiver>
         <slot>onSelectItem(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>incl_wshed</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>toggleWShed(bool)</slot>
+    </connection>
+    <connection>
+        <sender>new_seg_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>newSegment()</slot>
     </connection>
 </connections>
 <slots>
@@ -311,6 +315,7 @@ WShed</string>
     <slot>startTransform()</slot>
     <slot>setTopCapAbsCurrMinima(int)</slot>
     <slot>setBottomCapAbsCurrMinima(int)</slot>
+    <slot>toggleWShed(bool)</slot>
     <slot>newSegment()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

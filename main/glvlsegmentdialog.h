@@ -48,6 +48,8 @@ public:
 	/*$PUBLIC_FUNCTIONS$*/
 	void registerSegment(boost::shared_ptr<GLvlSegment> seg);
 	void selectMinima(boost::shared_ptr<GLvlSegment> min);
+    void redisplayMinima(boost::shared_ptr<GLvlSegment> &min);
+	bool isMinimaInSegm(const boost::shared_ptr<GLvlSegment> &min);
 
 	VImage Img;
 
@@ -70,6 +72,7 @@ public slots:
     virtual void setBottomCapAbsCurrMinima(int);
 	virtual void onMsg(QString,bool);
     void newSegment();
+    void toggleWShed(bool);
 
 protected:
   /*$PROTECTED_FUNCTIONS$*/

@@ -15,28 +15,35 @@
 #include "glvlvolumetex.h"
 #include "glvlminima.h"
 
-GLvlSegment::GLvlSegment(boost::shared_ptr<GLvlMinima> img):isMinima(true),redisplay(*this)
+GLvlSegment::GLvlSegment(const GLvlSegment &)
+{
+	cout << "Kopiere Segment" << endl;
+}
+
+
+GLvlSegment::GLvlSegment(boost::shared_ptr<GLvlMinima> img):isMinima(true)
 {
 	push_back(img);
 }
 
-GLvlSegment::GLvlSegment(unsigned int index):isMinima(true),redisplay(*this)
+GLvlSegment::GLvlSegment(unsigned int index):isMinima(true)
 {
 	push_back(boost::shared_ptr<GLvlMinima>(new GLvlMinima(index)));
 }
 GLvlSegment::~GLvlSegment()
 {
-	undisplay();
+	undisplay(true);//@todo eigentlich nicht nett - es könnte ja sein, daß Teilevon ihm gerade von anderen Angez werden
 }
 
-bool GLvlSegment::display()
+bool GLvlSegment::display(bool incl3D)
 {
-	for(GLvlSegment::iterator i=begin();i!=end();i++)
-	{
-		(*i)->redisplay.connect(redisplay);
+	if(incl3D)for(GLvlSegment::iterator i=begin();i!=end();i++)
 		if((*i)->volume() <= MAX_MINIMA_SIZE)
-			target3D->showObj(*i);
-	}
+		{
+			if((*i)->myList)(*i)->compileNextTime();
+			else target3D->showObj(*i);
+		}
+	
 	EVektor<unsigned short> pos;
 	myTex=boost::shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex());
 	myTex->renderMode=SGL_MTEX_MODE_COLORMASK;
@@ -50,19 +57,16 @@ bool GLvlSegment::display()
 	myTex->calcMatr(offset.linearprod(pos));
 	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
 	myTex->weich=false;
-	if(isMinima)targetTex->addMTexEnd(myTex,true);
-	else targetTex->addMTexBegin(myTex,true);
+	/*if(isMinima)*/targetTex->addMTexEnd(myTex,true);
+//	else targetTex->addMTexBegin(myTex,true);
 	return true;
 }
-void GLvlSegment::undisplay()
+void GLvlSegment::undisplay(bool incl3D)
 {
 	if(myTex)targetTex->delMTex(myTex,true);
 	myTex=boost::shared_ptr<GLvlVolumeTex>();
-	for(GLvlSegment::iterator i=begin();i!=end();i++)
-	{
-//		(*i)->redisplay.connect(redisplay);
+	if(incl3D)for(GLvlSegment::iterator i=begin();i!=end();i++)
 		target3D->unshowObj(*i);
-	}
 }
 
 void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
@@ -111,21 +115,21 @@ void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
 boost::shared_ptr<GLvlVolumeTex> GLvlSegment::targetTex;
 SGLqtSpace *GLvlSegment::target3D;
 
-GLvlSegment::redisplaySlot::redisplaySlot( GLvlSegment &_myseg):myseg(_myseg)
-{}
-
-void GLvlSegment::redisplaySlot::operator()()
+void GLvlSegment::redisplay(bool incl3D)
 {
 	EVektor<unsigned short> pos;
 	
-	for(GLvlSegment::iterator i=myseg.begin();i!=myseg.end();i++)
+	if(myTex)for(GLvlSegment::iterator i=begin();i!=end();i++)
 		if((*i)->volume() <= MAX_MINIMA_SIZE)
-			(*i)->compileNextTime();
+		{
+			if((*i)->myList)(*i)->compileNextTime();
+			else target3D->showObj(*i);
+		}
 	
-	myseg.myTex->loadSegment(myseg);
-	SGLVektor offset(myseg.myTex->Info.X.getElsize('X'),myseg.myTex->Info.Y.getElsize('Y'),myseg.myTex->Info.Z.getElsize('Z'));
-	pos.fromArray(3,myseg.minEdge.koord);//Achtung minEdge.koord darf erst nach loadSegment verwendet werden
-	myseg.myTex->calcMatr(offset.linearprod(pos));
-	myseg.myTex->ResetTransformMatrix((const GLdouble*)myseg.myTex->mm2tex_Matrix);
+	myTex->loadSegment(*this);
+	SGLVektor offset(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z'));
+	pos.fromArray(3,minEdge.koord);//Achtung minEdge.koord darf erst nach loadSegment verwendet werden
+	myTex->calcMatr(offset.linearprod(pos));
+	myTex->ResetTransformMatrix((const GLdouble*)myTex->mm2tex_Matrix);
 	GLvlSegment::targetTex->changed();
 }
