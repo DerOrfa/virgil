@@ -27,10 +27,10 @@ public:
 	template<class T> bool Load3DImage(Bild<T> &img);
 	class dimData:public dim{
 	public:
-		double outer_mm_size;
+		float inner_mm_size;
 		
 		unsigned short startgap_cnt,endgap_cnt;
-		double startgap_mm,endgap_mm;
+		float startgap_mm,endgap_mm;
 		inline void calcGap(int start,int end)
 		{
 			startgap_cnt=start;
@@ -38,8 +38,10 @@ public:
 			
 			endgap_cnt=end;
 			endgap_mm=idx2mm(endgap_cnt);
-			outer_mm_size=idx2mm(start+cnt+end);
+			
+			inner_mm_size=idx2mm(cnt);
 		}
+		inline float outer_mm_size()const{return startgap_mm + inner_mm_size + endgap_mm;}
 		inline unsigned short holeSize(){return startgap_cnt +cnt+endgap_cnt;}
 		inline unsigned short TexKoord2Index(const double Koord)
 		{
@@ -72,6 +74,7 @@ public:
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
     void loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
+	static SGLVektor masteroffset;
 private:
 	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);
 	template<class T,class ST> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T> &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());

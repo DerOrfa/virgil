@@ -42,6 +42,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	
 	MasterImg=*src.begin();
 	tex->Load3DImage(*src.begin());//Master-Textur
+	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
 

@@ -414,16 +414,23 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 		SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
 		+SGLVektor(Info.X.Elsize/2,Info.Y.Elsize/2,Info.Z.Elsize/2)//@todo warum muss das um nen halben Pixel verschoben werden 
 		//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
-		-offset;
+		-offset-GLvlVolumeTex::masteroffset;
 	
-	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size;
-	mm2tex_Matrix[1][1]=1/Info.Y.outer_mm_size;
-	mm2tex_Matrix[2][2]=1/Info.Z.outer_mm_size;
+	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size();
+	mm2tex_Matrix[1][1]=1/Info.Y.outer_mm_size();
+	mm2tex_Matrix[2][2]=1/Info.Z.outer_mm_size();
 	
 	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*offset.SGLV_X;
 	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
 }
+
+// inline SGLVektor GLvlVolumeTex::offset()
+// {
+// 	SGLVektor ret(mm2tex_Matrix[3][0]/mm2tex_Matrix[0][0],mm2tex_Matrix[3][1]/mm2tex_Matrix[1][1],mm2tex_Matrix[3][2]/mm2tex_Matrix[2][2]);
+// 	return	SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
+// 		+SGLVektor(Info.X.Elsize/2,Info.Y.Elsize/2,Info.Z.Elsize/2)-ret;
+// }
 
 
 /*!
@@ -482,3 +489,5 @@ void GLvlVolumeTex::loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfl
 	p->weich=false;
 	multitex=p;
 }
+
+SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

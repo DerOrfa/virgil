@@ -1,23 +1,34 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="3" >
-  <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlvolumetex.cpp" >
-   <View0 Type="Source" />
+ <DocsAndViews NumberOfDocuments="6" >
+  <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlminima3d.cpp" >
+   <View0 line="50" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
-   <View0 Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlvolumetex.cpp" >
+   <View0 line="420" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlminima3d.cpp" >
-   <View0 line="178" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlplaneview.cpp" >
+   <View0 line="413" Type="Source" />
   </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlplanecursor.cpp" >
+   <View0 line="25" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlvolumetex.h" >
+   <View0 line="41" Type="Source" />
+  </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
+   <View0 line="44" Type="Source" />
+  </Doc5>
  </DocsAndViews>
  <pluginList>
   <kdevsubversion>
    <subversion recurseresolve="1" recurserelocate="1" recursemerge="1" recursecommit="1" base="" recursepropget="1" recurseswitch="1" recurseupdate="1" recursepropset="1" recursediff="1" recurserevert="1" forcemove="1" recursecheckout="1" forceremove="1" recurseadd="1" recurseproplist="1" forcemerge="1" />
   </kdevsubversion>
   <kdevdebugger>
-   <breakpointList/>
+   <breakpointList>
+    <breakpoint0 location="/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp:45" type="1" condition="" enabled="1" />
+   </breakpointList>
   </kdevdebugger>
   <kdevbookmarks>
    <bookmarks/>
