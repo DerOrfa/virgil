@@ -63,7 +63,8 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	else
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
-		SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),getTexByteSize()/float(1024*1024),xsize,ysize,zsize);
+		float MBSize=getTexByteSize()/float(1024*1024);
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
@@ -141,7 +142,8 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	else
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
-		SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),getTexByteSize()/float(1024*1024),xsize,ysize,zsize);
+		float MBSize=getTexByteSize()/float(1024*1024);
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
@@ -268,7 +270,8 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	else
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
-		SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),getTexByteSize()/float(1024*1024),xsize,ysize,zsize);
+		float MBSize=getTexByteSize()/float(1024*1024);
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.cnt*Info.Y.cnt*Info.Z.cnt*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.cnt-1,1,ysize-Info.Y.cnt-1,1,zsize-Info.Z.cnt-1);
@@ -477,9 +480,8 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	return size;
 }
 
-void GLvlVolumeTex::loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
+void GLvlVolumeTex::loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
 {
-	SGLprintState("lade Bitmaske");
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	p->Load3DImage(img);

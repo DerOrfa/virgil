@@ -40,7 +40,7 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 	shared_ptr<SGLCube> rahmen;
 	shared_ptr<shared_pin_list> Pins;
 	shared_ptr<vincent::transform> v_transform;
-	boost::signal<void ()> updatePlanes;
+	SGLSignal<void ()> updatePlanes;
 public:
 	GLvlMasterView(std::list<VImage> src);
 	~GLvlMasterView();

@@ -21,6 +21,7 @@
 #ifndef GLVLPLANEVIEW_H
 #define GLVLPLANEVIEW_H
 
+#include <sglqtspace.h>
 #include "glvlplanecam.h"
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
@@ -31,7 +32,6 @@
 
 #include <EWndRegistry.h>
 
-#include <sglqtspace.h>
 #include <qlabel.h> 
 
 using namespace efc;

@@ -41,7 +41,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
 	MasterImg=*src.begin();
-	tex->Load3DImage(*src.begin());//Master-Textur
+	tex->Load3DImage(MasterImg);//Master-Textur
 	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
@@ -51,7 +51,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 		tex->loadTint(*i);
 	
 	viewsNeue_SichtAction->setEnabled(tex->valid);
-	rahmen->setDiag(SGLVektor(0,0,0),tex->Info.size);
+	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
 	rahmen->DrahtGitter(true);
 	
 	//Lichtabnahme komplett aus
@@ -174,7 +174,7 @@ void  GLvlMasterView::loadIntoWShed()
 	{
 		case VUByteRepn:	
 		{
-			glview->SetQuality(0);
+//			glview->SetQuality(0);
 			v_transform = shared_ptr<vincent::transform>(new vincent::transform(MasterImg));
 			((GLvlView*)this)->connect(&*v_transform,SIGNAL(reached(vincent::VBild_value ,unsigned short)),SLOT(onReached(vincent::VBild_value,unsigned short )));
 			((GLvlView*)this)->connect(&*v_transform,SIGNAL(msg(QString,bool)),SLOT(onMsg(QString,bool)));
@@ -192,7 +192,7 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima3D::setup(SGLVektor(tex->Info.X.Elsize,tex->Info.Y.Elsize,tex->Info.Z.Elsize),v_transform->last_erg);
+	GLvlMinima3D::setup(SGLVektor(tex->Info.X.Elsize,tex->Info.Y.Elsize,tex->Info.Z.Elsize),*v_transform,MasterImg);
 	qApp->processEvents();
 	
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();
@@ -242,16 +242,22 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 			if(aktMinima!=it->second)
 			{
 				if(aktMinima)glview->unshowObj(aktMinima);
+				tex->multitex=boost::shared_ptr<SGLBaseTex>();
 				if(it->second->size() <= MAX_MINIMA_SIZE)
 				{
 					EVektor<unsigned short> pos;
 					pos.fromArray(3,it->second->minEdge.koord);
-					tex->loadBitMask(
+					tex->loadColorMask(
 						*(it->second->genTex()),
 						pos,it->second->color
 					);
+					for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
+					{
+						(*it)->registerDynamicTex(*tex->multitex);
+						updatePlanes.forward(tex->multitex->changed);
+					}
+					tex->multitex->changed();
 					glview->showObj(aktMinima=it->second);
-					updatePlanes();
 				}
 			}
 		}

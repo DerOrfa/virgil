@@ -25,6 +25,8 @@ void GLvlMinima3D::generate()
 	SGLprintInfo("Minima 0x%x wird generiert\n",ID);//@todo wiso is X hier und .x() unten um 20 verschieden ?
 	
 	glColor3f(1,1,1);
+	
+	glTranslatef(GLvlVolumeTex::masteroffset.SGLV_X,GLvlVolumeTex::masteroffset.SGLV_Y,GLvlVolumeTex::masteroffset.SGLV_Z);
 	glScalef(scale.SGLV_X,scale.SGLV_Y,scale.SGLV_Z);
 	glDisable(GL_NORMALIZE);
 	short old_pos[]={0,0,0};
@@ -62,10 +64,11 @@ SGLVektor GLvlMinima3D::scale;
 
 void GLvlMinima3D::setup(
 	SGLVektor scale,
-	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
+	const vincent::transform &transform,
+	VImage &src
 )
 {	
-	GLvlMinimaBase::setup(img);
+	GLvlMinimaBase::setup(transform,transform.last_erg,src);
 
 	const GLshort vertexes[8][3] = {{0,1,1}, {1,1,1}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,0,0}, {0,0,0}};
 	const GLfloat normales[8][3] = {{-0.57735,0.57735,0.57735}, {0.57735,0.57735,0.57735}, {0.57735,0.57735,-0.57735}, {-0.57735,0.57735,-0.57735}, {-0.57735,-0.57735,0.57735}, {0.57735,-0.57735,0.57735}, {0.57735,-0.57735,-0.57735}, {-0.57735,-0.57735,-0.57735}};
@@ -193,6 +196,11 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 		const unsigned short y=p.y(img->xsize,img->ysize)-minEdge.y;
 		const unsigned short z=p.z(img->xsize,img->ysize)-minEdge.z;
 		((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
+		vincent::iPunkt<vincent::lab_value>  nachb[6];
+		unsigned short nachb_cnt=p.getNachb(nachb,*img);
+		for(unsigned short i=0;i<nachb_cnt;i++)
+			if(nachb[i].wert==vincent::WSHED_WSHED && incl_wshed)
+				((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
 	}
 	ret->xsize.Elsize=img->xsize.Elsize;
 	ret->ysize.Elsize=img->ysize.Elsize;

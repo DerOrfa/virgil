@@ -25,6 +25,8 @@
 #include <limits.h>
 #include <sglmisc.h>
 #include <math.h>
+#include <typeinfo>
+#include <boost/shared_ptr.hpp>
 
 class dim
 {
@@ -89,14 +91,32 @@ public:
 	inline T &at(const unsigned int index){return data[index];}
 };
 
+
+
 template <class T> class Bild_vimage : public Bild<T>
 {
 	VImage img;//@todo was is, wenn die Umgebung das Img löscht
 	VPointer data;
 	int lastBand;
 	public:
-	inline void reset(T value)
-	{
+	static const std::type_info& getType(VImage _img){
+		switch(VPixelRepn(_img))
+		{
+			case VBitRepn:		return typeid(VBit);break;
+			case VFloatRepn:	return typeid(VFloat);break;
+			case VDoubleRepn:	return typeid(VDouble);break;
+			case VUByteRepn:	return typeid(VUByte);break;
+			case VSByteRepn:	return typeid(VSByte);break;
+			case VShortRepn:	return typeid(VShort);break;
+			case VLongRepn:		return typeid(VLong);break;
+			default:
+				SGLprintError("Datentyp nicht zulässig");abort();
+		}
+	}
+	static boost::shared_ptr<Bild_vimage<T> > genBild(VImage _img){
+		return boost::shared_ptr<Bild_vimage<T> >(new Bild_vimage<T>(_img));
+	} 
+	inline void reset(T value){
 		for(int i=this->size()-1;i>=0;i--)at(i)=value;
 	}
 	Bild_vimage(VImage _img):
@@ -105,7 +125,10 @@ template <class T> class Bild_vimage : public Bild<T>
 	{
 		int pixMax;
 		char *AttrStr;
-
+		if(typeid(T)!=getType(_img))
+		{
+			SGLprintWarning("Quelldaten für Bild_vimage - Konstruktor haben falschen Typ");
+		}
 		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
 			sscanf(AttrStr,"%f %f %f",&this->Columns.Elsize,&this->Rows.Elsize,&this->Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);

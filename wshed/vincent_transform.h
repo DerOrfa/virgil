@@ -36,15 +36,15 @@ extern const lab_value WSHED_WSHED;
 class transform : public QObject, public QThread
 {
 Q_OBJECT
-	Bild_vimage<VUByte> im;
 public:
+	Bild_vimage<VUByte> im;
 	PunktList<VUByte> D;
 	boost::shared_ptr< Bild_vimage<lab_value> > last_erg;
 	
 	transform(VImage src);
 	void run();
 	boost::shared_ptr< Bild_vimage<lab_value> > operator()();
-	static boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im);
+	boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im)const;
     void init();
 
 signals:

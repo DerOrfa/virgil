@@ -73,7 +73,7 @@ public:
     GLdouble mm2tex_Matrix[4][4];
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
-    void loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
+    void loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
 	static SGLVektor masteroffset;
 private:
 	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);

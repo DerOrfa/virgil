@@ -31,10 +31,13 @@ public:
 		unsigned short koord[3];
 	}minEdge,maxEdge;
 	static shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
+	static shared_ptr< vincent::Bild_vimage<VUByte> > org;
+	VUByte buttomCap,topCap;
+	
 	unsigned int start,end;
 	static shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinimaBase(unsigned int pos);
-	static void setup(boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img);
+	static void setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org);
 	static bool incl_wshed;
 	inline const unsigned int size(){return end-start;}
 	GLfloat color[3];

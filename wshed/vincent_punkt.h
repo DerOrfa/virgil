@@ -52,7 +52,7 @@ public:
 		wert=img.at(pos);
 	}
 	
-	unsigned short getNachb(iPunkt<T> p[],const Bild_vimage<T> &img)
+	unsigned short getNachb(iPunkt<T> p[],const Bild_vimage<T> &img)const
 	{
 		unsigned short posx=x(img.xsize);
 		unsigned short posy=y(img.xsize,img.ysize);
@@ -135,6 +135,17 @@ public:
 		m= (iPunkt<T>*)malloc(img.size()*sizeof(iPunkt<T>));
 		for(unsigned int i=0;i<img.size();i++)
 			if(img.at(i)!=exclude)m[size++]=iPunkt<T>(i,img);
+		m=(iPunkt<T>*)realloc(m,m_size());
+	}
+	template <class AT> PunktList(const PunktList<AT> &order,const Bild_vimage<T> &img,T exclude):size(0)
+	{
+		m= (iPunkt<T>*)malloc(order.size*sizeof(iPunkt<T>));
+		for(unsigned int i=0;i<order.size;i++)
+		{
+			const iPunkt<T> p=iPunkt<T>(order.m[i].pos,img);
+			if(p.wert!=exclude)
+				m[size++]=p;
+		}
 		m=(iPunkt<T>*)realloc(m,m_size());
 	}
 	~PunktList(){free(m);}

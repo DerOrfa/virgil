@@ -141,12 +141,13 @@ void transform::run()
 	end();
 }
 
-boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)
+boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)const
 {
-	boost::shared_ptr< PunktList<lab_value> > D(new PunktList<lab_value>(im,WSHED_WSHED));
+	boost::shared_ptr< PunktList<lab_value> > ret(new PunktList<lab_value>(D,im,WSHED_WSHED));
 	sort_q<lab_value> comp;
-	std::sort(D->m, D->m + D->size,comp);
-	return D;
+	
+	std::stable_sort(ret->m, ret->m + ret->size,comp);
+	return ret;
 }
 
 }

@@ -23,7 +23,7 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 		end=start;
 		vincent::iPunkt<vincent::lab_value> p=(*plist)[start];
 		vincent::lab_value ID=p.wert;
-//		key=GLvlMinimaBase::(*img)[p];
+		buttomCap = (*org)[p];
 		do 
 		{
 			const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
@@ -41,18 +41,23 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 			p=(*plist)[++end]; 
 		}
 		while(end<plist->size && p.wert==ID);
+			
+		topCap = (*org)[(*plist)[end-1]];
+		//getPixel verwendet stable_sort -> die Punkte eines Objektes sind noch der Größe nach geordnet
 	}
-	else
-	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
+	else{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
 }
 
 shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinimaBase::img;
+shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinimaBase::org;
+
 shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinimaBase::plist;
 bool GLvlMinimaBase::incl_wshed=false;
 
-void GLvlMinimaBase::setup(	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img)
+void GLvlMinimaBase::setup(const vincent::transform &transform,boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img,VImage _org)
 {
 	GLvlMinimaBase::img=img;
-	GLvlMinimaBase::plist=vincent::transform::getVoxels(*img);
+	GLvlMinimaBase::plist=transform.getVoxels(*img);
+	org= shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(_org));
 }
 

@@ -198,13 +198,13 @@ void GLvlView::onCamChanged()
 	selfChange=true;
 	assert(glview && glview->Camera);
 	assert(tex->TexType==GL_TEXTURE_3D);
-	SGLBaseCam *cam=glview->Camera.get();
+	SGLBaseCam &cam=*(glview->Camera);
 	
-	SGLVektor Pos=cam->Pos;
-	SGLVektor LookAt=cam->LookAt;
+	SGLVektor Pos=cam.Pos;
+	SGLVektor LookAt=cam.LookAt;
 	
-	SGLVektor senkr=(cam->Pos-cam->LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
-	float winkel=cam->UpVect.SGLV_X<0 ? cam->UpVect.VektWink(senkr):-cam->UpVect.VektWink(senkr);
+	SGLVektor senkr=(cam.Pos-cam.LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
+	float winkel=cam.UpVect.SGLV_X<0 ? cam.UpVect.VektWink(senkr):-cam.UpVect.VektWink(senkr);
 	rollDeg->setValue((int)winkel);
 
 	xCoordCam->setValue((int)Pos.SGLV_X);
@@ -215,29 +215,29 @@ void GLvlView::onCamChanged()
 	yCoordAim->setValue((int)LookAt.SGLV_Y);
 	zCoordAim->setValue((int)LookAt.SGLV_Z);
 	
-	if(	GLvlView::default_oben[0].VektWink(cam->Pos)<5 &&
-		GLvlView::default_oben[1].VektWink(cam->LookAt)<5 &&
-		GLvlView::default_oben[2].VektWink(cam->UpVect)<5)
+	if(	GLvlView::default_oben[0].VektWink(cam.Pos)<5 &&
+		GLvlView::default_oben[1].VektWink(cam.LookAt)<5 &&
+		GLvlView::default_oben[2].VektWink(cam.UpVect)<5)
 		viewSelector->setCurrentItem(0);
-	else if(	GLvlView::default_unten[0].VektWink(cam->Pos)<5 &&
-				GLvlView::default_unten[1].VektWink(cam->LookAt)<5 &&
-				GLvlView::default_unten[2].VektWink(cam->UpVect)<5)
+	else if(	GLvlView::default_unten[0].VektWink(cam.Pos)<5 &&
+				GLvlView::default_unten[1].VektWink(cam.LookAt)<5 &&
+				GLvlView::default_unten[2].VektWink(cam.UpVect)<5)
 				viewSelector->setCurrentItem(1);
-	else if(	GLvlView::default_rechts[0].VektWink(cam->Pos)<5 &&
-				GLvlView::default_rechts[1].VektWink(cam->LookAt)<5 &&
-				GLvlView::default_rechts[2].VektWink(cam->UpVect)<5)
+	else if(	GLvlView::default_rechts[0].VektWink(cam.Pos)<5 &&
+				GLvlView::default_rechts[1].VektWink(cam.LookAt)<5 &&
+				GLvlView::default_rechts[2].VektWink(cam.UpVect)<5)
 				viewSelector->setCurrentItem(2);
-	else if(	GLvlView::default_links[0].VektWink(cam->Pos)<5 &&
-				GLvlView::default_links[1].VektWink(cam->LookAt)<5 &&
-				GLvlView::default_links[2].VektWink(cam->UpVect)<5)
+	else if(	GLvlView::default_links[0].VektWink(cam.Pos)<5 &&
+				GLvlView::default_links[1].VektWink(cam.LookAt)<5 &&
+				GLvlView::default_links[2].VektWink(cam.UpVect)<5)
 				viewSelector->setCurrentItem(3);
-	else if(	GLvlView::default_vorn[0].VektWink(cam->Pos)<5 &&
-				GLvlView::default_vorn[1].VektWink(cam->LookAt)<5 &&
-				GLvlView::default_vorn[2].VektWink(cam->UpVect)<5)
+	else if(	GLvlView::default_vorn[0].VektWink(cam.Pos)<5 &&
+				GLvlView::default_vorn[1].VektWink(cam.LookAt)<5 &&
+				GLvlView::default_vorn[2].VektWink(cam.UpVect)<5)
 				viewSelector->setCurrentItem(4);
-	else if(	GLvlView::default_hinten[0].VektWink(cam->Pos)<5 &&
-				GLvlView::default_hinten[1].VektWink(cam->LookAt)<5 &&
-				GLvlView::default_hinten[2].VektWink(cam->UpVect)<5)
+	else if(	GLvlView::default_hinten[0].VektWink(cam.Pos)<5 &&
+				GLvlView::default_hinten[1].VektWink(cam.LookAt)<5 &&
+				GLvlView::default_hinten[2].VektWink(cam.UpVect)<5)
 				viewSelector->setCurrentItem(5);
 	selfChange=false;
 }

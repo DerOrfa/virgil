@@ -24,7 +24,8 @@ public:
 	void generate();
 	static void setup(
 		SGLVektor norm,
-		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
+		const vincent::transform &transform,
+		VImage &src
 	);
     SGLVektor getCenter();
     shared_ptr<Bild_mem<VBit> > genTex();
