@@ -38,7 +38,7 @@
 #include <qlineedit.h>
 
 using namespace boost;
-using namespace eclasses;
+using namespace efc;
 
 GLvlPlaneView::GLvlPlaneView(
 	SGLqtSpace* mw, 

@@ -127,7 +127,11 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 		}
 		reached(h,curlab-std::numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
-	return last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
+	last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
+	last_erg->xsize.Elsize=im.xsize.Elsize;
+	last_erg->ysize.Elsize=im.ysize.Elsize;
+	last_erg->zsize.Elsize=im.zsize.Elsize;
+	return last_erg;
 }
 
 void transform::run()

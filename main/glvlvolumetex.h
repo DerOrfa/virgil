@@ -66,16 +66,16 @@ public:
 	template<class T> void loadImageInfo(Bild<T> &src);
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
-    void calcMatr();
+    void calcMatr(SGLVektor offset=SGLVektor(0,0,0));
     void loadTint(VImage i);
     GLdouble mm2tex_Matrix[4][4];
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
-    void loadBitMask(Bild<VBit> &img);
+    void loadBitMask(Bild<VBit> &img,unsigned short xpos,unsigned short ypos,unsigned short zpos);
 private:
 	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);
 	template<class T,class ST> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T> &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
-	template<class T> bool GLvlVolumeTex::loadBitmask(Bild<T> &src);
+	template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src);
 };
 
 #endif

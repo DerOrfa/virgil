@@ -29,7 +29,7 @@
 #include <qapplication.h> 
 
 using namespace boost;
-using namespace eclasses;
+using namespace efc;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
 GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
@@ -243,15 +243,14 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 				if(aktMinima)glview->unshowObj(aktMinima);
 				if(it->second->size() <= MAX_MINIMA_SIZE)
 				{
-					aktMinima=it->second;
-					shared_ptr<Bild_mem<VBit> > b=it->second->genTex();
-					b->xsize.Elsize=1;
-					b->ysize.Elsize=1;
-					b->zsize.Elsize=1;
-		
-					tex->loadBitMask(*b);
+					tex->loadBitMask(
+						*(it->second->genTex()),
+						it->second->minEdge.x,
+						it->second->minEdge.y,
+						it->second->minEdge.z
+					);
+					glview->showObj(aktMinima=it->second);
 					updatePlanes();
-					glview->showObj(aktMinima);
 				}
 			}
 		}

@@ -10,20 +10,8 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>Unterstützung für ClearCase (KDevelop)</part>
       <part>KDevcopyto</part>
-      <part>Dateibaum (KDevelop)</part>
-      <part>Dateigruppen-Komponente (KDevelop)</part>
       <part>KDevCTags2</part>
-      <part>Unterstützung für Perforce (KDevelop)</part>
-      <part>Schnellöffner-Komponente (KDevelop)</part>
-      <part>Unterstützung für Subversion (KDevelop)</part>
-      <part>Unterstützung für CTags (KDevelop)</part>
-      <part>Unterstützung für CVSService (KDevelop)</part>
-      <part>Unterstützung für Doxygen (KDevelop)</part>
-      <part>Lesezeichen-Unterstützung (KDevelop)</part>
-      <part>Unterstützung für Paketerstellung (KDevelop)</part>
-      <part>VisualBoy Advance (KDevelop)</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -110,11 +98,11 @@
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="../libsgl/:../qt_glue/:wshed/" name="LD_LIBRARY_PATH" />
+        <envvar value="../libsgl/:../qt_glue/:wshed/:../../eclasses/eclasses2/" name="LD_LIBRARY_PATH" />
       </envvars>
     </run>
     <general>
-      <activedir>main</activedir>
+      <activedir></activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

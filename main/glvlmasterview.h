@@ -28,7 +28,7 @@
 #include "glvlminima3d.h"
 #include <boost/signal.hpp>
 
-using namespace eclasses;
+using namespace efc;
 using namespace boost;
 /**
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143

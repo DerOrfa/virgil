@@ -14,7 +14,7 @@
 #include <assert.h>
 
 //@todo das ding is vieel zu groﬂ :-(
-template<class T> bool GLvlVolumeTex::loadBitmask(Bild<T> &src)
+template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 {
 	GLint size[3];
 	#define xsize	size[0]
@@ -298,7 +298,7 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 	glBindTexture(TexType, ID);
 	
 	
-	if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadBitmask(img);//@todo wenn loadMask fehlschl‰gt (warum auch immer) muss das behandelt werden
+	if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadMask(img);//@todo wenn loadMask fehlschl‰gt (warum auch immer) muss das behandelt werden
 	else valid=loadPaletted(img);
 	
 	if(!valid)//Fallback wenn Palette nich tut
@@ -404,19 +404,25 @@ SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Tex
 /*!
     \fn GLvlVolumeTex::calcMatr()
  */
-void GLvlVolumeTex::calcMatr()
+void GLvlVolumeTex::calcMatr(SGLVektor offset)
 {
 	for(int i=0;i<15;i++)
 		((GLdouble*)mm2tex_Matrix)[i]=0;
 	((GLdouble*)mm2tex_Matrix)[15]=1;
 
+	offset =
+		SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
+		+SGLVektor(Info.X.Elsize/2,Info.Y.Elsize/2,Info.Z.Elsize/2)//@todo warum muss das um nen halben Pixel verschoben werden 
+		//eig m¸sste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
+		-offset;
+	
 	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size;
 	mm2tex_Matrix[1][1]=1/Info.Y.outer_mm_size;
 	mm2tex_Matrix[2][2]=1/Info.Z.outer_mm_size;
 	
-	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*(Info.X.startgap_mm+Info.X.Elsize/2);//@todo warum muss das um nen halben Pixel verschoben werden 
-	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*(Info.Y.startgap_mm+Info.Y.Elsize/2);//eig m¸sste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
-	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*(Info.Z.startgap_mm+Info.Z.Elsize/2);
+	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*offset.SGLV_X;
+	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
+	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
 }
 
 
@@ -464,14 +470,18 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	return size;
 }
 
-void GLvlVolumeTex::loadBitMask(Bild<VBit> &img)
+void GLvlVolumeTex::loadBitMask(Bild<VBit> &img,unsigned short xpos,unsigned short ypos,unsigned short zpos)
 {
 	SGLprintState("lade Bitmaske");
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	p->Load3DImage(img);
-	p->envColor[0]=p->envColor[1]=p->envColor[2]=1;
-	p->calcMatr();
+	p->envColor[1]=1;
+	p->calcMatr(SGLVektor(
+		p->Info.X.Elsize*xpos,
+		p->Info.Y.Elsize*ypos,
+		p->Info.Z.Elsize*zpos
+	));
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=false;
 	multitex=p;

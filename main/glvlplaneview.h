@@ -34,7 +34,7 @@
 #include <sglqtspace.h>
 #include <qlabel.h> 
 
-using namespace eclasses;
+using namespace efc;
 typedef list< boost::shared_ptr<GLvlPin> >	shared_pin_list;
 
 

@@ -108,10 +108,10 @@ public:
 	inline  unsigned short y(const unsigned short size_x,const unsigned short size_y)const{return iPunkt::pos2y(pos,size_x,size_y);}
 
 	inline static unsigned short pos2z(const unsigned int pos,const unsigned int size_xy){return pos/size_xy;}	
-	inline  unsigned short z(const unsigned int size_x,const unsigned int size_y)const{return iPunkt::pos2z(pos,size_x*size_y);}
+	inline  unsigned short z(const unsigned short size_x,const unsigned short size_y)const{return iPunkt::pos2z(pos,size_x*size_y);}
 	
 	inline static unsigned short pos2xy(const unsigned int pos,const unsigned int size_xy){return pos%size_xy;}
-	inline unsigned int xy(const unsigned int size_x,const unsigned int size_y)const{return iPunkt::pos2xy(pos,size_x*size_y);}
+	inline unsigned int xy(const unsigned short size_x,const unsigned short size_y)const{return iPunkt::pos2xy(pos,size_x*size_y);}
 };
 
 template<class T> class PunktList{

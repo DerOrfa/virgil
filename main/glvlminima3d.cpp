@@ -185,14 +185,17 @@ SGLVektor GLvlMinima3D::getCenter(){
 
 shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 {
-	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,false);
-	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::maxEdge;i++)
+	Bild_mem<VBit> *ret = new Bild_mem<VBit>(maxEdge.x-minEdge.x+1,maxEdge.y-minEdge.y+1,maxEdge.z-minEdge.z+1,0);
+	for(unsigned int i=GLvlMinimaBase::start;i<GLvlMinimaBase::end;i++)
 	{
 		const vincent::iPunkt<vincent::lab_value> p=(*GLvlMinimaBase::plist)[i];
-		const unsigned short x=p.x(GLvlMinimaBase::img->xsize)-minEdge.x;
-		const unsigned short y=p.x(GLvlMinimaBase::img->ysize)-minEdge.y;
-		const unsigned short z=p.x(GLvlMinimaBase::img->zsize)-minEdge.z;
-		((Bild<VBit> *)ret)->at(x,y,z)=true;
+		const unsigned short x=p.x(img->xsize)-minEdge.x;
+		const unsigned short y=p.y(img->xsize,img->ysize)-minEdge.y;
+		const unsigned short z=p.z(img->xsize,img->ysize)-minEdge.z;
+		((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
 	}
+	ret->xsize.Elsize=img->xsize.Elsize;
+	ret->ysize.Elsize=img->xsize.Elsize;
+	ret->zsize.Elsize=img->xsize.Elsize;
 	return shared_ptr<Bild_mem<VBit> >(ret);
 }

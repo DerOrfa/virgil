@@ -25,8 +25,9 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 		do 
 		{
 			const unsigned short x=p.x(GLvlMinimaBase::img->xsize);
-			const unsigned short y=p.x(GLvlMinimaBase::img->ysize);
-			const unsigned short z=p.x(GLvlMinimaBase::img->zsize);
+			const unsigned short y=p.y(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
+			const unsigned short z=p.z(GLvlMinimaBase::img->xsize,GLvlMinimaBase::img->ysize);
+			
 			minEdge.x = minEdge.x <? x;
 			minEdge.y = minEdge.y <? y;
 			minEdge.z = minEdge.z <? z;
