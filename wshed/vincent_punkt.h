@@ -149,7 +149,7 @@ template<class T> class PunktFifo:public deque< iPunkt<T> >{
 public:
 	void push_null(){push_back(iPunkt<T>());}
 	void push(iPunkt<T> p){push_back(p);}
-	iPunkt<T> pop(){iPunkt<T> ret=front();pop_front();return ret;}
+	iPunkt<T> pop(){iPunkt<T> ret=this->front();this->pop_front();return ret;}
 };
 
 template <class T> class sort_q:public binary_function< iPunkt<T>, iPunkt<T>, bool >{

@@ -22,17 +22,17 @@ const lab_value WSHED_INIT=numeric_limits<lab_value >::max();
 const lab_value WSHED_MASK=numeric_limits<lab_value >::max()-1;
 const lab_value WSHED_WSHED=numeric_limits<lab_value >::min();
 
-unsigned short Bild<VBild_value>::xsize=numeric_limits<unsigned short >::max();
-unsigned short Bild<VBild_value>::ysize=numeric_limits<unsigned short >::max();
-unsigned short Bild<VBild_value>::zsize=numeric_limits<unsigned short >::max();
+template<> unsigned short Bild<VBild_value>::xsize=numeric_limits<unsigned short>::max();
+template<> unsigned short Bild<VBild_value>::ysize=numeric_limits<unsigned short>::max();
+template<> unsigned short Bild<VBild_value>::zsize=numeric_limits<unsigned short>::max();
 
-unsigned short Bild<lab_value>::xsize=numeric_limits<unsigned short >::max();
-unsigned short Bild<lab_value>::ysize=numeric_limits<unsigned short >::max();
-unsigned short Bild<lab_value>::zsize=numeric_limits<unsigned short >::max();
+template<> unsigned short Bild<lab_value>::xsize=numeric_limits<unsigned short>::max();
+template<> unsigned short Bild<lab_value>::ysize=numeric_limits<unsigned short>::max();
+template<> unsigned short Bild<lab_value>::zsize=numeric_limits<unsigned short>::max();
 
-unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short >::max();
-unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
-unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
+template<> unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short >::max();
+template<> unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
+template<> unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
 
 transform::transform(VImage src) : im(src),D(im)
 {

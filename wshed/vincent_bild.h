@@ -46,12 +46,12 @@ template <class T> class Bild_mem:Bild<T>
 	public:
 	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z)
 	{
-		printf("Erzeuge Datenpuffer %d*%d*%d:%g MB\n",xsize,ysize,zsize,(size()/1048576.)*sizeof(T));
-		if(initVal==0)data=(T*)calloc(size(),sizeof(T));
+		printf("Erzeuge Datenpuffer %d*%d*%d:%g MB\n",this->xsize,this->ysize,this->zsize,(this->size()/1048576.)*sizeof(T));
+		if(initVal==0)data=(T*)calloc(this->size(),sizeof(T));
 		else 
 		{
-			data=(T*)malloc(size()*sizeof(T));
-			for(int i=size()-1;i>=0;i--)data[i]=initVal;
+			data=(T*)malloc(this->size()*sizeof(T));
+			for(int i=this->size()-1;i>=0;i--)data[i]=initVal;
 		}
 	}
 	~Bild_mem(){free(data);}
@@ -66,7 +66,7 @@ template <class T> class Bild_vimage : public Bild<T>
 	public:
 	inline void reset(T value)
 	{
-		for(int i=size()-1;i>=0;i--)at(i)=value;
+		for(int i=this->size()-1;i>=0;i--)at(i)=value;
 	}
 	Bild_vimage(VImage _img):
 		Bild<T>(VImageNColumns(_img),VImageNRows(_img),VImageNBands(_img)),img(_img),
@@ -74,7 +74,7 @@ template <class T> class Bild_vimage : public Bild<T>
 	{
 		int pixMax;
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
-		assert(pixMax==(int)size()); //@todo wenn z nicht richtich is, wird pixMax falsch
+		assert(pixMax==(int)this->size()); //@todo wenn z nicht richtich is, wird pixMax falsch
 	}
 
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}

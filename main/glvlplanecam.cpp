@@ -45,7 +45,6 @@ myPlane(new GLvlCutPlane(tex))
 	link(*myPlane.get());
 //	myPlane->is_free=false; // wird eh durch registrierung gesetzt
 }
-GLvlPlaneCam::~GLvlPlaneCam(){delete myPlane;}
 
 void GLvlPlaneCam::generate()
 {
