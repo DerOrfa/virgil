@@ -107,6 +107,11 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 	view->showOthersHere(view->showOthersHereBtn->isOn());
 
 	((GLvlView*)this)->connect(view,SIGNAL(onVoxel(unsigned int)),SLOT(showSegmentAt(unsigned int)));
+	
+	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
+	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
+
+	updatePlanes.connect(cam->myPlane->compileNextTime);
 	view->onCamChanged();
 }
 
@@ -174,6 +179,7 @@ void  GLvlMasterView::loadIntoWShed()
 	test.zsize.Elsize=1;
 		
 	tex->loadBitMask(test);
+	updatePlanes();	
 	
 /*	switch(VPixelRepn(MasterImg))
 	{
@@ -256,11 +262,3 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 	}
 }
 
-
-/*!
-    \fn GLvlMasterView::updatePlanes()
- */
-void GLvlMasterView::updatePlanes()
-{
-	
-}

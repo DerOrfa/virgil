@@ -23,7 +23,7 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 		while(end<plist->size && p.wert==ID);
 	}
 	else
-	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");}
+	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");abort();}
 }
 SGLVektor GLvlMinimaBase::getCenter(){
     /// @todo implement me

@@ -27,7 +27,7 @@ void GLvlMinima3D::generate()
 	glColor3f(1,1,1);
 	glScalef(scale.SGLV_X,scale.SGLV_Y,scale.SGLV_Z);
 	glDisable(GL_NORMALIZE);
-	 short old_pos[]={0,0,0};
+	short old_pos[]={0,0,0};
 	glPushMatrix();
 	glTranslatef(-.5,-.5,-.5);
 	for(unsigned int i=start;i<end;i++)

@@ -497,3 +497,4 @@ void GLvlView::onMsg(QString msg,bool canskip){}
 void GLvlView::onTransformEnd(){};
 
 void GLvlPlaneView::showSegmentAt(unsigned int index){}
+

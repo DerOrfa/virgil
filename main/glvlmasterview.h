@@ -26,6 +26,7 @@
 #include <list>
 #include <time.h>
 #include "glvlminima3d.h"
+#include <boost/signal.hpp>
 
 using namespace eclasses;
 using namespace boost;
@@ -47,7 +48,6 @@ public:
 	void onMsg(QString msg,bool canskip);
 	void onTransformEnd();
 	void showSegmentAt(unsigned index);
-    void updatePlanes();
 	
 protected:
     void doBenchmark();
@@ -60,6 +60,7 @@ private:
 	shared_ptr<SGLCube> rahmen;
 	shared_ptr<shared_pin_list> Pins;
 	shared_ptr<vincent::transform> v_transform;
+	boost::signal<void ()> updatePlanes;
 };
 
 #endif
