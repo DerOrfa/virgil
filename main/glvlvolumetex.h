@@ -25,14 +25,9 @@ public:
 	GLvlVolumeTex();
 	bool Load3DImage(VImage src);
 	template<class T> bool Load3DImage(Bild<T> &img);
-	struct dimData{
-		unsigned short cnt;
-		float Elsize;
+	class dimData:public dim{
+	public:
 		double outer_mm_size;
-		inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
-		inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
-		inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
-		inline unsigned short mm2idx(const double tex_koord){return rint(tex_koord/Elsize);}
 		
 		unsigned short startgap_cnt,endgap_cnt;
 		double startgap_mm,endgap_mm;
@@ -66,9 +61,9 @@ public:
 			Y.calcGap(starty,endy);
 			Z.calcGap(startz,endz);
 		}
-	}dim;
+	}Info;
 
-	void loadImageInfo(VImage &src);
+	template<class T> void loadImageInfo(Bild<T> &src);
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
     void calcMatr();
@@ -77,7 +72,7 @@ public:
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 private:
-	template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src);
+	template<class T> bool GLvlVolumeTex::fillIndexData(Bild<T> &src);
 	template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VImage &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
 };
 

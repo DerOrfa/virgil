@@ -51,7 +51,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 		tex->loadTint(*i);
 	
 	viewsNeue_SichtAction->setEnabled(tex->valid);
-	rahmen->setDiag(SGLVektor(0,0,0),tex->dim.size);
+	rahmen->setDiag(SGLVektor(0,0,0),tex->Info.size);
 	rahmen->DrahtGitter(true);
 	
 	//Lichtabnahme komplett aus
@@ -59,7 +59,7 @@ rahmen(new SGLCube()),Pins(new shared_pin_list)
 	glview->StdLight->Abnahme.Quadratisch=0;
 	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
 
-	glview->setGridsSize((tex->dim.size.SGLV_X >? tex->dim.size.SGLV_Y >? tex->dim.size.SGLV_Z)*1.1);
+	glview->setGridsSize((tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*1.1);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 
@@ -186,7 +186,7 @@ void  GLvlMasterView::loadIntoWShed()
 void GLvlMasterView::onTransformEnd()
 {
 	tex->setupPal(1,255);//@todo sollten eigentlich die Originalen palettendaten sein
-	GLvlMinima3D::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),v_transform->last_erg);
+	GLvlMinima3D::setup(SGLVektor(tex->Info.X.Elsize,tex->Info.Y.Elsize,tex->Info.Z.Elsize),v_transform->last_erg);
 	qApp->processEvents();
 	
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator i=objs.end();

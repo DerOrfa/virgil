@@ -23,14 +23,34 @@
 #include <vista/VImage.h>
 #include <assert.h>
 #include <limits.h>
+#include <sglmisc.h>
+
+class dim
+{
+public:
+	unsigned short cnt;
+	float Elsize;
+	inline operator unsigned short()const{return cnt;}
+		
+		inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
+		inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
+		inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
+		inline unsigned short mm2idx(const double tex_koord){return (unsigned short)rint(tex_koord/Elsize);}
+};
 
 template <class T> class Bild
 {
 public:
-	const unsigned short xsize,ysize,zsize;
+	union {dim xsize;dim Columns;};
+	union {dim ysize;dim Rows;};
+	union {dim zsize;dim Bands;dim layer;};
 	inline unsigned int size()const{return xsize*ysize*zsize;} 
-	Bild(unsigned short x,unsigned short y,unsigned short z):
-	xsize(x),ysize(y),zsize(z){}
+	Bild(unsigned short x,unsigned short y,unsigned short z)
+	{
+		xsize.cnt=x;
+		ysize.cnt=y;
+		zsize.cnt=z;
+	}
 	inline T &at(const unsigned short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
 	}
@@ -45,9 +65,9 @@ protected:
 public:
 	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		xsize=x;
-		ysize=y;
-		zsize=z;
+		xsize.cnt=x;
+		ysize.cnt=y;
+		zsize.cnt=z;
 		if(data)free(data);
 		init(initVal);
 	}
@@ -80,6 +100,11 @@ template <class T> class Bild_vimage : public Bild<T>
 		lastBand(std::numeric_limits<int>::min())
 	{
 		int pixMax;
+		char *AttrStr;
+
+		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
+			sscanf(AttrStr,"%f %f %f",&Columns.Elsize,&Rows.Elsize,&Bands.Elsize);//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
+		else	{SGLprintWarning("Keine Informationen zur Größe der Voxel gefunden! Nehme 1x1x1mm an.");}
 		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
 	}
 
