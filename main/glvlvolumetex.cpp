@@ -126,8 +126,9 @@ template<class T,class DT> inline bool mapXline(DT *&dst,T &src,int xcnt,EVektor
 			ergVekt = mapPosVektor* *(src++);
 		else
 			ergVekt= mapNegVektor* -*(src++);
-		for(int i=ergVekt.size()-1;i>=0;i--)
+		for(int i=0;i<ergVekt.size();i++)
 			*(dst++)=ergVekt[i];
+		
 	}
 	return true;
 }
@@ -150,21 +151,19 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	GLint intFormat;
 	switch(PosColor.size())
 	{
-		case 1:
-				voxelElemSize=1;
-				intFormat=GL_INTENSITY;break;
+		case 1:	voxelElemSize=1;
+				intFormat=GL_INTENSITY;
+				break;
 		case 2:SGLprintError("Ungültiger Farbvektor");break;
-		case 3:
-				voxelElemSize=3;
-				intFormat=GL_RGB;break;
-		case 4:
-				intFormat=GL_RGBA;
+		case 3:	voxelElemSize=3;
+				intFormat=GL_RGB;
+				break;
+		case 4:	intFormat=GL_RGBA;
 				voxelElemSize=4;
 				break;
-		default:
-			intFormat=GL_LUMINANCE_ALPHA;
-			voxelElemSize=2;
-			break;
+		default:intFormat=GL_LUMINANCE_ALPHA;
+				voxelElemSize=2;
+				break;
 	}
 	//Größe der Textur ("+2" ist für den Rand)
 	GLint size[3];
@@ -178,19 +177,16 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	T *pixels_=pixels;
 	pixels+=xsize*voxelElemSize*ysize;//die erste Ebene
 	
-	int pixMax;
-	VPointer data;
 	int z=0;
 	
-	for(;z<Info.Z.cnt && VSelectBand("Vol2Tex",src,z,&pixMax,&data);z++)
+	for(;z<Info.Z.cnt ;z++)
 	{
-		T *pix= &src.at(0);
+		T *pix= &src.at(0,0,z);
 		
 		pixels+=xsize*voxelElemSize;//erste Zeile leer lassen
 		for(int y=0;y<Info.Y.cnt;y++)
 		{
 			pixels+=voxelElemSize;//ersten Voxel (und seinen alpha) leer lassen
-			pixMax-=Info.X.cnt ;
 			
 			if(intFormat== GL_LUMINANCE_ALPHA)
 				copyXline(pixels,pix,Info.X.cnt);
@@ -200,7 +196,6 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 			pixels+=(xsize-Info.X.cnt-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
 		}
 		pixels+=xsize*voxelElemSize*(ysize-Info.Y.cnt-1);//die restlichen y-Zeilen
-		if(pixMax){SGLprintError("Es wurden nicht alle Voxel gelesen");}
 	}
 	glTexImage3DEXT(TexType,0,intFormat,xsize,ysize,zsize,0,intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,pixels_);
 	free(pixels_);
@@ -240,19 +235,42 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 	
 	glGenTextures(1, &ID);
 	glBindTexture(TexType, ID);
-	EVektor<GLfloat> PosColor(3),NegColor(3);
+	EVektor<GLfloat> PosColor,NegColor;
 	
+	switch(this->renderMode)
+	{
+	case SGL_MTEX_MODE_TINT:
+		PosColor.resize(3);
+		NegColor.resize(3);
+		PosColor[2]=PosColor[1]=.1;
+		NegColor[2]=NegColor[0]=.2;
+		break;
+	case SGL_MTEX_MODE_OVERLAY:
+		PosColor.resize(4);
+		NegColor.resize(4);
+		PosColor[0]=.25;
+		NegColor[1]=.25;
+		PosColor[3]=NegColor[3]=.25;
+		break;
+	}
 	valid=loadPaletted(img);
 	
 	if(!valid)//Fallback wenn Palette nich tut
 	{
-		if(typeid(T)==typeid(GLubyte))valid=loadCommon<T,GLubyte>(GL_UNSIGNED_BYTE,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLbyte))valid=loadCommon<T,GLbyte>(GL_BYTE,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLushort))valid=loadCommon<T,GLushort>(GL_UNSIGNED_SHORT,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLshort))valid=loadCommon<T,GLshort>(GL_SHORT,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLuint))valid=loadCommon<T,GLuint>(GL_UNSIGNED_INT,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLint))valid=loadCommon<T,GLint>(GL_INT,img,PosColor,NegColor);
-		else if(typeid(T)==typeid(GLfloat))valid=loadCommon<T,GLfloat>(GL_FLOAT,img,PosColor,NegColor);
+		if(typeid(T)==typeid(GLubyte))
+			valid=loadCommon<T,GLubyte>(GL_UNSIGNED_BYTE,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLbyte))
+			valid=loadCommon<T,GLbyte>(GL_BYTE,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLushort))
+			valid=loadCommon<T,GLushort>(GL_UNSIGNED_SHORT,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLshort))
+			valid=loadCommon<T,GLshort>(GL_SHORT,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLuint))
+			valid=loadCommon<T,GLuint>(GL_UNSIGNED_INT,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLint))
+			valid=loadCommon<T,GLint>(GL_INT,img,PosColor,NegColor);
+		else if(typeid(T)==typeid(GLfloat))
+			valid=loadCommon<T,GLfloat>(GL_FLOAT,img,PosColor,NegColor);
 		else 
 		{
 			SGLprintWarning("Rechne %s auf %s um",typeid(T).name(),typeid(GLfloat).name());
@@ -260,23 +278,6 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 		}
 	}
 	
-/*	switch(typeid(T))
-	{
-//		case VBitRepn:		VoxelType=GL_BITMAP;VoxelSize=1;break;//@todo Wie wird das Codiert ??
-		case VFloatRepn:	valid=fillFloatData<GLfloat,T>(GL_FLOAT,img,PosColor,NegColor);
-							break;
-		case VDoubleRepn:	valid=fillFloatData<GLfloat,T>(GL_FLOAT,img);SGLprintWarning("rechne double-Werte auf Float runter");break;
-		case VUByteRepn:	
-		{
-			if()
-				
-			else
-				valid=fillFloatData<GLubyte,T>(GL_UNSIGNED_BYTE,img);
-		}break;
-		case VSByteRepn:	valid=fillIndexData<GLbyte>(GL_BYTE,img);break;
-		case VShortRepn:	valid=fillIndexData<GLshort>(GL_SHORT,img);break;//@todo is das jetzt signed ??
-		case VLongRepn:		valid=fillIndexData<GLint>(GL_INT,img);break;//@todo *grml* GL kennt nur 32Bit-INT ??
-	}*/
 	return valid;
 }
 
@@ -354,12 +355,12 @@ void GLvlVolumeTex::loadTint(VImage i)
 {
 	SGLprintState("lade Aktivierungsmap");
 	GLvlVolumeTex *p=new GLvlVolumeTex();//Nich löschen das Teil !
+	p->renderMode=SGL_MTEX_MODE_TINT;
 	p->Load3DImage(i);
-	p->renderMode=SGL_TEX_MODE_TINT;
-	p->envColor[0]=p->envColor[3]=1;
+//	p->envColor[0]=p->envColor[3]=1;
 	p->calcMatr();
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=true;
+	p->weich=false;
 	multitex.reset(p);
 }
 
@@ -373,7 +374,7 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	struct d_byte{GLfloat lum;GLfloat alpha;};
 	unsigned short size=1;
 	while(size<(end+1))size<<=1;
-	if(!start){
+	if(start==0){
 		SGLprintWarning("Ignoriere Paletteneintrag 0");start=1;
 	}
 	d_byte *palette= (d_byte*)calloc(size,sizeof(d_byte));
