@@ -23,6 +23,9 @@
 #include <vista/VImage.h>
 #include "vincent_punkt.h"
 
+namespace vincent
+{
+
 template <class T> class Bild
 {
 	public:
@@ -36,14 +39,13 @@ template <class T> class Bild
 	}
 };
 
-
 template <class T> class Bild_mem:Bild<T>
 {
 	T *data;
 	public:
 	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z)
 	{
-		printf("Erzeuge Datenpuffer %d*%d*%d=%d\n",xsize,ysize,zsize,size());
+		printf("Erzeuge Datenpuffer %d*%d*%d:%g MB\n",xsize,ysize,zsize,(size()/1048576.)*sizeof(T));
 		if(initVal==0)data=(T*)calloc(size(),sizeof(T));
 		else 
 		{
@@ -52,8 +54,8 @@ template <class T> class Bild_mem:Bild<T>
 		}
 	}
 	~Bild_mem(){free(data);}
-	inline T &operator[](kPunkt<T> &p){return data[p.pos()];}
-	inline T &operator[](iPunkt<T> &p){return data[p.pos];}
+	template <class PT> inline T &operator[](kPunkt<PT> &p){return data[p.pos()];}
+	template <class PT> inline T &operator[](iPunkt<PT> &p){return data[p.pos];}
 };
 
 template <class T> class Bild_vimage : public Bild<T>
@@ -73,15 +75,12 @@ template <class T> class Bild_vimage : public Bild<T>
 		int pixMax;
 		if(lastBand!=z)
 		{
-			if(z>240)
-				printf("Hier is was faul\n");
-			else
-				VSelectBand("Vol2Tex",img,z,&pixMax,&data);
+			VSelectBand("Vol2Tex",img,z,&pixMax,&data);
 			lastBand=z;
 		}
 //		assert(pixMax==xsize*ysize); @todo was zum Teufel is pixMax
 		return ((T*)data)[xy];
 	}
 };
-
+}
 #endif

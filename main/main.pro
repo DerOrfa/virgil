@@ -3,8 +3,8 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./main
 # Das Target ist eine Anwendung:  virgil
 
-TARGETDEPS += ../wshed/libwshed.so 
-LIBS += -lwshed \
+TARGETDEPS += ../wshed/libwshed.a 
+LIBS += ../wshed/libwshed.a \
         -lqt_glue \
         -leclasses2 \
         -lvista \

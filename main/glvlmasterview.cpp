@@ -163,7 +163,7 @@ void  GLvlMasterView::loadIntoWShed()
 		case VUByteRepn:	
 		{
 			vincent::transform t(MasterImg);
-			t.test();
+			t();
 			printf("Erzeugt\n");
 		}break;
 	}

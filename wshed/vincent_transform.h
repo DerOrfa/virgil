@@ -20,6 +20,7 @@
 /**
 @author Enrico Reimer,,,
 */
+
 namespace vincent
 {
 class transform : public QObject
@@ -28,8 +29,9 @@ class transform : public QObject
 public:
 	PunktList<VUByte> D;
 	transform(VImage src);
-	~transform();
 	void test();
+	Bild_mem<unsigned short> operator()();
+
 };
 
 }

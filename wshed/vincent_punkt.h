@@ -29,6 +29,9 @@
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
 
+namespace vincent
+{
+
 using namespace std;
 template<class T> class PunktList;
 template <class T> class Bild_vimage;
@@ -90,7 +93,7 @@ public:
 	
 		return pCnt;
 	}
-
+	inline bool invalid()	{return pos==numeric_limits<unsigned int>::max();}
 	
 	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){return pos%size_x;}
 	inline  unsigned short x(){return iPunkt::pos2x(pos,Bild<T>::xsize);}
@@ -120,7 +123,10 @@ public:
 			m[i]=iPunkt<T>(i,img);
 	}
 	~PunktList(){free(m);}
-	inline iPunkt<T> &operator[](unsigned int idx){return m[idx];}
+	inline iPunkt<T> &operator[](unsigned int idx)
+	{
+		return m[idx];
+	}
 };
 
 template<class T> class PunktFifo:public deque< iPunkt<T> >{
@@ -134,5 +140,5 @@ template <class T> class sort_q:public binary_function< iPunkt<T>, iPunkt<T>, bo
 public:
 	inline bool operator()(iPunkt<T> p1,iPunkt<T> p2){return p1.wert <p2.wert;}
 };
-
+}
 #endif
