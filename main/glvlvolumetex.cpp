@@ -225,40 +225,80 @@ GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 {
 	weich=true;
 	repeat=MipMap=false;
+	TexType=GL_TEXTURE_3D;
 }
 
-bool GLvlVolumeTex::Load3DImage(VImage src)
+template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 {
 	if(ID!=0)freeTexture();
 	sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
 	sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0);
 	
-	TexType=GL_TEXTURE_3D;
-	loadImageInfo(src);
+	{
+		Bild_vimage<T> *i=dynamic_cast<Bild_vimage<T> *>(&img);
+		if(i)loadImageInfo(i->src());
+	}
 	
 	glGenTextures(1, &ID);
 	glBindTexture(TexType, ID);
 	EVektor<GLfloat> PosColor(3),NegColor(3);
-	switch(VPixelRepn(src))
+	
+	if(sglChkExt("GL_EXT_paletted_texture","Die Voxelwerte können nicht indiziert werden.",1))
+	{
+		if(typeid(T)==typeid(GLubyte))valid=fillIndexData<GLubyte>(GL_UNSIGNED_BYTE,img);
+		else if(typeid(T)==typeid(GLbyte))valid=fillIndexData<GLbyte>(GL_BYTE,img);
+		else if(typeid(T)==typeid(GLushort))valid=fillIndexData<GLushort>(GL_UNSIGNED_SHORT,img);
+		else if(typeid(T)==typeid(GLshort))valid=fillIndexData<GLshort>(GL_SHORT,img);
+		else if(typeid(T)==typeid(GLuint))valid=fillIndexData<GLuint>(GL_UNSIGNED_INT,img);
+		else if(typeid(T)==typeid(GLint))valid=fillIndexData<GLint>(GL_INT,img);
+	}
+	
+	if(!valid)
+	{
+		if(typeid(T)==typeid(GLubyte))valid=fillIndexData<GLubyte>(GL_UNSIGNED_BYTE,img);
+		else if(typeid(T)==typeid(GLbyte))valid=fillIndexData<GLbyte>(GL_BYTE,img);
+		else if(typeid(T)==typeid(GLushort))valid=fillIndexData<GLushort>(GL_UNSIGNED_SHORT,img);
+		else if(typeid(T)==typeid(GLshort))valid=fillIndexData<GLshort>(GL_SHORT,img);
+		else if(typeid(T)==typeid(GLuint))valid=fillIndexData<GLuint>(GL_UNSIGNED_INT,img);
+		else if(typeid(T)==typeid(GLint))valid=fillIndexData<GLint>(GL_INT,img);
+	}
+	
+	switch(typeid(T))
 	{
 //		case VBitRepn:		VoxelType=GL_BITMAP;VoxelSize=1;break;//@todo Wie wird das Codiert ??
 		case VFloatRepn:	/*PosColor[0]=NegColor[0]=1;*/
 							PosColor[0]=PosColor[1]=.1;
 							NegColor[0]=NegColor[2]=.2;
-							valid=fillFloatData<GLfloat,VFloat>(GL_FLOAT,src,PosColor,NegColor);
+							valid=fillFloatData<GLfloat,T>(GL_FLOAT,img,PosColor,NegColor);
 							break;
-		case VDoubleRepn:	valid=fillFloatData<GLfloat,VDouble>(GL_FLOAT,src);SGLprintWarning("rechne double-Werte auf Float runter");break;
+		case VDoubleRepn:	valid=fillFloatData<GLfloat,T>(GL_FLOAT,img);SGLprintWarning("rechne double-Werte auf Float runter");break;
 		case VUByteRepn:	
 		{
-			if(sglChkExt("GL_EXT_paletted_texture","Die Voxelwerte können nicht indiziert werden.",1))
-				valid=fillIndexData<GLubyte>(GL_UNSIGNED_BYTE,src);
+			if()
+				
 			else
-				valid=fillFloatData<GLubyte,VUByte>(GL_UNSIGNED_BYTE,src);
+				valid=fillFloatData<GLubyte,T>(GL_UNSIGNED_BYTE,img);
 		}break;
-		case VSByteRepn:	valid=fillIndexData<GLbyte>(GL_BYTE,src);break;
-		case VShortRepn:	valid=fillIndexData<GLshort>(GL_SHORT,src);break;//@todo is das jetzt signed ??
-		case VLongRepn:		valid=fillIndexData<GLint>(GL_INT,src);break;//@todo *grml* GL kennt nur 32Bit-INT ??
+		case VSByteRepn:	valid=fillIndexData<GLbyte>(GL_BYTE,img);break;
+		case VShortRepn:	valid=fillIndexData<GLshort>(GL_SHORT,img);break;//@todo is das jetzt signed ??
+		case VLongRepn:		valid=fillIndexData<GLint>(GL_INT,img);break;//@todo *grml* GL kennt nur 32Bit-INT ??
 	}
+	return valid;
+}
+
+bool GLvlVolumeTex::Load3DImage(VImage src)
+{
+	switch(VPixelRepn(src))
+	{
+		case VBitRepn:		{Bild_vimage<VBit> i(src);valid=Load3DImage(i);}break;
+		case VFloatRepn:	{Bild_vimage<VFloat> i(src);valid=Load3DImage(i);}break;
+		case VDoubleRepn:	{Bild_vimage<VDouble> i(src); valid=Load3DImage(i);}break;
+		case VUByteRepn:	{Bild_vimage<VUByte> i(src);valid=Load3DImage(i);}break;
+		case VSByteRepn:	{Bild_vimage<VSByte> i(src);valid=Load3DImage(i);}break;
+		case VShortRepn:	{Bild_vimage<VShort> i(src);valid=Load3DImage(i);}break;
+		case VLongRepn:		{Bild_vimage<VLong> i(src);valid=Load3DImage(i);}break;
+	}
+	
 	return valid;
 }
 

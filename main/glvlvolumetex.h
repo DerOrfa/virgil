@@ -14,6 +14,7 @@
 
 #include <util/sgltextur.h>
 #include <vista/VImage.h>
+#include <bild.h>
 
 /**
 @author Enrico Reimer,,,
@@ -23,6 +24,7 @@ class GLvlVolumeTex : public SGLBaseTex
 public:
 	GLvlVolumeTex();
 	bool Load3DImage(VImage src);
+	template<class T> bool Load3DImage(Bild<T> &img);
 	struct dimData{
 		unsigned short cnt;
 		float Elsize;

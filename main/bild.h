@@ -29,10 +29,12 @@ template <class T> class Bild
 public:
 	const unsigned short xsize,ysize,zsize;
 	inline unsigned int size()const{return xsize*ysize*zsize;} 
-	Bild(unsigned short x,unsigned short y,unsigned short z):xsize(x),ysize(y),zsize(z){}
+	Bild(unsigned short x,unsigned short y,unsigned short z):
+	xsize(x),ysize(y),zsize(z){}
 	inline T &at(const unsigned short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
 	}
+	
 	inline virtual T &at(const unsigned int index)=0;
 };
 
@@ -43,9 +45,9 @@ protected:
 public:
 	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
 	{
-		Bild<T>::xsize=x;
-		Bild<T>::ysize=y;
-		Bild<T>::zsize=z;
+		xsize=x;
+		ysize=y;
+		zsize=z;
 		if(data)free(data);
 		init(initVal);
 	}
@@ -83,6 +85,7 @@ template <class T> class Bild_vimage : public Bild<T>
 
 	inline T &at(unsigned int pos){return ((T*)data)[pos];}
 	inline T at(unsigned int pos)const{return ((T*)data)[pos];}
-	VImage im(){return img;}
+	VImage src()const{return img;}
+	VImage &src(){return img;}
 };
 #endif
