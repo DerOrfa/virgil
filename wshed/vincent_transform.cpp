@@ -55,7 +55,7 @@ void transform::test()	{
 Bild_vimage<lab_value> transform::operator()()
 {
 	Bild_mem<unsigned short> dist(VBild::xsize,VBild::ysize,VBild::zsize,0);
-	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VLongRepn));
+	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VShortRepn));
 	lab.reset(WSHED_INIT);
 	
 	printf("Rechne\n");

@@ -3,22 +3,22 @@
 <KDevPrjSession>
  <DocsAndViews NumberOfDocuments="7" >
   <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
-   <View0 line="170" Type="Source" />
+   <View0 Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/wshed/vincent_bild.h" >
-   <View0 line="58" Type="Source" />
+   <View0 Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:/opt/prog/simpleGL/watershedtest/src/watershedtest.cpp" >
-   <View0 line="636" Type="Source" />
+   <View0 Type="Source" />
   </Doc2>
   <Doc3 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/wshed/vincent_transform.cpp" >
-   <View0 line="69" Type="Source" />
+   <View0 line="115" Type="Source" />
   </Doc3>
   <Doc4 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/wshed/vincent_transform.h" >
-   <View0 line="26" Type="Source" />
+   <View0 line="36" Type="Source" />
   </Doc4>
   <Doc5 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/wshed/vincent_punkt.h" >
-   <View0 line="107" Type="Source" />
+   <View0 Type="Source" />
   </Doc5>
   <Doc6 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlmasterview.h" >
    <View0 line="38" Type="Source" />
@@ -29,7 +29,8 @@
    <breakpointList>
     <breakpoint0 location="/opt/prog/simpleGL/virgil/main/bild.h:77" type="1" condition="" enabled="1" />
     <breakpoint1 location="idx" type="2" condition="" enabled="1" />
-    <breakpoint2 location="/opt/prog/simpleGL/virgil/wshed/vincent_transform.cpp:127" type="1" condition="" enabled="1" />
+    <breakpoint2 location="/opt/prog/simpleGL/virgil/wshed/vincent_transform.cpp:61" type="1" condition="" enabled="1" />
+    <breakpoint3 location="/opt/prog/simpleGL/virgil/wshed/vincent_transform.cpp:154" type="1" condition="" enabled="1" />
    </breakpointList>
   </kdevdebugger>
  </pluginList>

@@ -24,7 +24,7 @@
 namespace vincent
 {
 typedef VUByte VBild_value;
-typedef VLong lab_value;
+typedef VShort lab_value;
 typedef Bild_vimage<VBild_value> VBild;
 
 class transform : public QObject
