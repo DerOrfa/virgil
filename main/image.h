@@ -32,6 +32,23 @@
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
 
+template<class T> class gPunkt
+{
+	public:
+	unsigned int pos;
+	T wert;
+};
+
+template <class T> class sort_q:
+public binary_function< gPunkt<T>, gPunkt<T>, bool>
+{
+public:
+	inline bool operator()(gPunkt<T> p1,gPunkt<T> p2)
+	{
+		return p1.wert <p2.wert;
+	}
+};
+
 template <class T> class sort_f:
 public binary_function<unsigned int,unsigned int,bool>
 {
@@ -39,11 +56,10 @@ public binary_function<unsigned int,unsigned int,bool>
 	PunktList *D;
 public:
 	sort_f(Bild_vimage<T> *_im,PunktList *_D):im(_im),D(_D){}
-	bool operator()(unsigned int p1,unsigned int p2)
+	inline bool operator()(unsigned int p1,unsigned int p2)
 	{
-		Punkt P1(D->operator [ ](p1)),P2(D->operator [ ](p2));
-		T farbe1=im->operator [ ](P1);
-		T farbe2=im->operator [ ](P2);
+		const T farbe1=im->at(PunktRef::pos2xy(p1,D->size_x*D->size_y),PunktRef::pos2z(p1,D->size_x*D->size_y));
+		const T farbe2=im->at(PunktRef::pos2xy(p2,D->size_x*D->size_y),PunktRef::pos2z(p2,D->size_x*D->size_y));
 		return farbe1<farbe2;
 	}
 };
@@ -56,31 +72,40 @@ public:
 	ws_image(VImage src):im(src),D(im.xsize,im.ysize,im.zsize)
 	{
 		printf("Lege %d Punkte an\n",im.size());
-		PunktRef r=D[0];
-		for(unsigned short z=0;z<im.zsize;z++)
-			for(unsigned short y=0;y<im.ysize;y++)
-				for(unsigned short x=0;x<im.xsize;x++)
-				{
-					r->posx=x;r->posy=y;r->posz=z;
-					r++;
-				}
 	}
 	void test()	{
-		
-		PunktRef r=D[sort()[0]];
-		PunktRef l[6];
+		printf("Sortiere\n");
+		sort2();
+		printf("fertsch\n");
+		PunktRef r=D[5000];
+		Punkt l[6];
 		unsigned short len=r.getNachb(l);
 		for(int i=0;i<len;i++)
-			printf("%d-%d-%d:%d\n",l[i]->posx,l[i]->posy,l[i]->posz,im[l[i]]);
+			printf("%d-%d-%d:%d\n",l[i].posx,l[i].posy,l[i].posz,im[l[i]]);
 	}
 	unsigned int* sort()
 	{
-		unsigned int *s_list=(unsigned int*)malloc(im.size()*sizeof(unsigned int));
-		for(unsigned int i=0;i<im.size();i++)s_list[i]=i;
 		sort_f<T> comp(&im,&D);
 		const unsigned int N = im.size();
-		std::sort(s_list, s_list + N,comp);
-		return s_list;
+		std::sort(D.m, D.m + N,comp);
+		return D.m;
+	}
+	unsigned int* sort2()
+	{
+		unsigned int s=im.size();
+		gPunkt<T> *pkts=new gPunkt<T>[s];
+		for(int i=0;i<s;i++)
+		{
+			pkts[i].wert=im.at(PunktRef::pos2xy(i,D.size_x*D.size_y),PunktRef::pos2z(i,D.size_x*D.size_y));
+			pkts[i].pos=i;
+		}
+		sort_q<T> comp;
+		std::sort(pkts, pkts + im.size(),comp);
+		for(int i=0;i<s;i++)
+		{
+			D.m[i]=pkts[i].pos;
+		}
+		delete pkts;
 	}
 };
 

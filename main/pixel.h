@@ -38,15 +38,13 @@ struct Punkt
 		unsigned short _y=numeric_limits<unsigned short>::max(),
 		unsigned short _z=numeric_limits<unsigned short>::max()
 	);
-	Punkt(PunktRef ref);
 };
 
 
 class PunktList
 {
-	unsigned int size_x,size_y,size_z;
-	friend class PunktRef;
 public:
+	unsigned int size_x,size_y,size_z;
 	unsigned int *m;
 	PunktRef operator[](unsigned int _id);
 	PunktList(unsigned int xsize,unsigned int ysize=1,unsigned int zsize=1);
@@ -62,6 +60,7 @@ public:
 	PunktRef(PunktList *_list,unsigned int _id);
 	PunktRef();
 	
+	static Punkt pos2Punkt(const unsigned int pos,PunktList *list);
 	Punkt operator *();
 	Punkt *operator ->();
 	
@@ -73,7 +72,36 @@ public:
   
     operator unspecified_bool_type() const;
 
-	unsigned short PunktRef::getNachb(PunktRef p[]);
+	unsigned short PunktRef::getNachb(Punkt p[]);
+	
+	inline static unsigned short pos2x(const unsigned int pos,const unsigned short size_x){
+		return pos%size_x;
+	}
+	inline  unsigned short x(){
+		return PunktRef::pos2x(list->m[id],list->size_x);
+	}
+	
+	inline static unsigned short pos2y(const unsigned int pos,const unsigned short size_x,const unsigned short size_y){
+		return	(pos/size_x)%size_y; 
+	}
+	inline  unsigned short y(){
+		return PunktRef::pos2y(list->m[id],list->size_x,list->size_y);
+	}
+
+	inline static unsigned short pos2z(const unsigned int pos,const unsigned short size_xy){
+		return pos/size_xy; /*Z-Achse (Band)*/
+	}	
+	inline  unsigned short z(){
+		return PunktRef::pos2z(list->m[id],list->size_x*list->size_y);
+	}
+	
+	inline static unsigned short pos2xy(const unsigned int pos,const unsigned short size_xy){
+		return pos%size_xy;
+	}
+	inline  unsigned int xy(){
+		return PunktRef::pos2xy(list->m[id],list->size_x*list->size_y);
+	}
+
 };
 
 class ptr_fifo:public deque<PunktRef>
