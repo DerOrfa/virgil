@@ -16,6 +16,8 @@ GLvlMinimaBase::GLvlMinimaBase(unsigned int pos):start(pos)
 {
 	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
 	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
+	color[0]=color[2]=0;
+	color[1]=1;
 	if(img)
 	{
 		end=start;

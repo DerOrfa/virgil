@@ -470,18 +470,14 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	return size;
 }
 
-void GLvlVolumeTex::loadBitMask(Bild<VBit> &img,unsigned short xpos,unsigned short ypos,unsigned short zpos)
+void GLvlVolumeTex::loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
 {
 	SGLprintState("lade Bitmaske");
 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
 	p->Load3DImage(img);
-	p->envColor[1]=1;
-	p->calcMatr(SGLVektor(
-		p->Info.X.Elsize*xpos,
-		p->Info.Y.Elsize*ypos,
-		p->Info.Z.Elsize*zpos
-	));
+	memcpy(p->envColor,color,3*sizeof(GLfloat));
+	p->calcMatr(SGLVektor(p->Info.X.Elsize,p->Info.Y.Elsize,p->Info.Z.Elsize).linearprod(pos));
 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
 	p->weich=false;
 	multitex=p;

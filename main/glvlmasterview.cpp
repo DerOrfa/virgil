@@ -243,11 +243,11 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 				if(aktMinima)glview->unshowObj(aktMinima);
 				if(it->second->size() <= MAX_MINIMA_SIZE)
 				{
+					EVektor<unsigned short> pos;
+					pos.fromArray(3,it->second->minEdge.koord);
 					tex->loadBitMask(
 						*(it->second->genTex()),
-						it->second->minEdge.x,
-						it->second->minEdge.y,
-						it->second->minEdge.z
+						pos,it->second->color
 					);
 					glview->showObj(aktMinima=it->second);
 					updatePlanes();

@@ -195,7 +195,7 @@ shared_ptr<Bild_mem<VBit> > GLvlMinima3D::genTex()
 		((Bild<VBit> *)ret)->at(x,y,z)=numeric_limits<VBit>::max();
 	}
 	ret->xsize.Elsize=img->xsize.Elsize;
-	ret->ysize.Elsize=img->xsize.Elsize;
-	ret->zsize.Elsize=img->xsize.Elsize;
+	ret->ysize.Elsize=img->ysize.Elsize;
+	ret->zsize.Elsize=img->zsize.Elsize;
 	return shared_ptr<Bild_mem<VBit> >(ret);
 }

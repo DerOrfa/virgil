@@ -71,7 +71,7 @@ public:
     GLdouble mm2tex_Matrix[4][4];
     
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
-    void loadBitMask(Bild<VBit> &img,unsigned short xpos,unsigned short ypos,unsigned short zpos);
+    void loadBitMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
 private:
 	template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src);
 	template<class T,class ST> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T> &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
