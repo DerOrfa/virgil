@@ -1,0 +1,147 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>pins</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>pins</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>286</width>
+            <height>416</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Pins</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QListView" row="0" column="0" rowspan="1" colspan="4">
+            <column>
+                <property name="text">
+                    <string>Pin</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>X</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Y</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Z</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>pinList</cstring>
+            </property>
+            <property name="selectionMode">
+                <enum>Extended</enum>
+            </property>
+            <property name="showSortIndicator">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Länge des Pfades</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="3">
+            <property name="name">
+                <cstring>abst_text</cstring>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>delPinBtn</cstring>
+            </property>
+            <property name="text">
+                <string>Pin löschen</string>
+            </property>
+        </widget>
+        <spacer row="2" column="2">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>60</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="2" column="1">
+            <property name="name">
+                <cstring>abst_path</cstring>
+            </property>
+            <property name="text">
+                <string>(mind. 2 Pins wählen)</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>pinList</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>pins</receiver>
+        <slot>onSelChange()</slot>
+    </connection>
+    <connection>
+        <sender>delPinBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>pins</receiver>
+        <slot>deletePin()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>onSelChange()</slot>
+    <slot>deletePin()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
