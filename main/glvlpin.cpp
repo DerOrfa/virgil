@@ -18,10 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "glvlpin.h"
+#include <libsgl/util/sglmaterial.h>
 
-GLvlPin::GLvlPin(SGLVektor pos,QString Name):QObject(NULL,Name.latin1())
+GLvlPin::GLvlPin(SGLVektor pos,QString Name):
+QObject(NULL,Name.latin1()),Title(Name.latin1())
 {
 	Kopf.MoveTo(0,0,5);
+	Title.MoveTo(0,0,7);
+	Kopf.Mat->SetColor(0,0,255);
+	Title.Mat->SetColor(255,0,0);
+	
 	Nadel.height=5;
 	Nadel.size_bottom=0;
 	this->Name=Name;
@@ -40,10 +46,12 @@ SGLVektor GLvlPin::getCenter()
 void GLvlPin::compileSubObjects()
 {
 	bool draht=((camera->Pos-pos).Len()<20);
-		Kopf.DrahtGitter(draht);
-		Nadel.DrahtGitter(draht);
+	Title.DrahtGitter(draht);
+	Kopf.DrahtGitter(draht);
+	Nadel.DrahtGitter(draht);
 	Objs.clear();
 	TrObjs.clear();
+	Objs.push_back(Title.Compile(false));
 	Objs.push_back(Kopf.Compile(false));
 	Objs.push_back(Nadel.Compile(false));
 }

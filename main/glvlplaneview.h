@@ -35,9 +35,9 @@
 #include <eclasses/EWndRegistry.h>
 
 #include <qlabel.h> 
+#include "glvlpinsdlg.h"
 
 using namespace efc;
-typedef list< boost::shared_ptr<GLvlPin> >	shared_pin_list;
 
 
 class GLvlView : public GLvlViewBase
@@ -56,6 +56,7 @@ public:
 	void showObjList();
 	boost::shared_ptr<GLvlVolumeTex> tex;
 	static boost::shared_ptr<GLvlSegmentDialog> wshed;
+	static GLvlPinsDlg* pinsDlg;
 	void	selectView(const SGLVektor dir[3]);
 
 protected:
@@ -85,6 +86,7 @@ public slots:
 	void sichtVonLinks();
 
 	virtual void onMsg(QString msg,bool canskip);
+    virtual void showPinsDlg(bool);
 };
 
 class GLvlPlaneView: public GLvlView
@@ -94,8 +96,7 @@ public:
 	GLvlPlaneView(
 		SGLqtSpace* mw, 
 		boost::shared_ptr<GLvlVolumeTex> tex,
-		EWndRegistry *myReg,
-		boost::shared_ptr< shared_pin_list > Pins
+		EWndRegistry *myReg
 		);
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
@@ -111,7 +112,6 @@ public:
 	list<GLvlPlaneView *>::iterator it;
 private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
-	boost::shared_ptr< shared_pin_list > Pins;
 
 public slots:
 	void	lostView();

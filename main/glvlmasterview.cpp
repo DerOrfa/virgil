@@ -35,7 +35,7 @@ using namespace efc;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
 GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
-rahmen(new SGLCube()),Pins(new shared_pin_list)
+rahmen(new SGLCube())
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 	followSegments->setVisible(false);
@@ -115,7 +115,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 		SGLprintError("Es lassen sich keine Planes erzeugen, da die Textur ungültig ist");
 		return;
 	}
-	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg,Pins);
+	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg);
 	
 	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
@@ -134,6 +134,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 
 void GLvlMasterView::closeEvent(QCloseEvent *e)
 {
+	showPinsDlg(false);
 	removeAllChilds();
 	GLvlView::closeEvent(e);
 }

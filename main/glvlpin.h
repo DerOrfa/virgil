@@ -24,6 +24,7 @@
 #include <libsgl/sglmetaobj.h>
 #include <libsgl/primitives/sglquadricobj.h>
 #include <libsgl/helper/sglcamera.h>
+#include <libsgl/text/sgl3dtext.h>
 
 #include <qobject.h>
 
@@ -44,6 +45,7 @@ public:
 private:
 	SGLSphere Kopf;
 	SGLZylinder Nadel;
+	SGL3DText Title;
 	SGLBaseCam *camera;
 };
 

@@ -13,7 +13,7 @@ LIBS += ../wshed/libwshed.a \
 QMAKE_LIBDIR = ../wshed 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
-CONFIG += release \
+CONFIG += debug \
           warn_off \
           qt \
           opengl \
@@ -22,7 +22,8 @@ CONFIG += release \
 TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui \
-         segments.ui 
+         segments.ui \
+         pins.ui 
 HEADERS += glvlcutplane.h \
            glvlmasterview.h \
            glvlpin.h \
@@ -33,7 +34,8 @@ HEADERS += glvlcutplane.h \
            glvlminima.h \
            bild.h \
            glvlsegment.h \
-           glvlsegmentdialog.h 
+           glvlsegmentdialog.h \
+           glvlpinsdlg.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
            glvlmasterview.cpp \
@@ -44,4 +46,5 @@ SOURCES += main.cpp \
            glvlvolumetex.cpp \
            glvlminima.cpp \
            glvlsegment.cpp \
-           glvlsegmentdialog.cpp 
+           glvlsegmentdialog.cpp \
+           glvlpinsdlg.cpp 

@@ -45,15 +45,13 @@ using namespace efc;
 GLvlPlaneView::GLvlPlaneView(
 	SGLqtSpace* mw, 
 	shared_ptr<GLvlVolumeTex> tex,
-	EWndRegistry *myReg,
-	shared_ptr< shared_pin_list > Pins
+	EWndRegistry *myReg
 ):
 GLvlView(mw, tex,myReg),
 cursor(new GLvlPlaneCursor()),
 AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
-AimZStatus((QWidget*)statusBar()),
-Pins(Pins)
+AimZStatus((QWidget*)statusBar())
 {
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
@@ -404,14 +402,14 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 			AimYStatus.setText("Y: "+QString::number(int(cursor->OldPos[1]))+"mm");
 			AimZStatus.setText("Z: "+QString::number(int(cursor->OldPos[2]))+"mm");
 		}
-		if(!Pins->empty())
+/*		if(!Pins->empty())
 		{
 			SGLVektor len= weltKoord-Pins->back()->pos;
 			QString lenStr=stellen?
 				QString::number(len.Len(),'f',stellen):
 				QString::number(int(len.Len()));
 			statusBar()->message("Entfernung zum letzen Pin: "+lenStr+"mm");
-		}
+		}*/
 		if(followSegments->isEnabled() && followSegments->isOn())
 			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
 		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
@@ -446,33 +444,20 @@ void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
 {
 	VUByte  top_resize=0,bottom_resize=0;
 	bool done=false;
-	if(e->state() & Qt::ControlButton)
-	{
-		done=true;
-		top_resize=numeric_limits<short>::max();
-	}
-	if(e->state() & Qt::ShiftButton)
-	{
-		done=true;
-		bottom_resize=numeric_limits<short>::min();
-	}
-	if(done)
-	{
-		onResizeSegment(top_resize,bottom_resize);
-		e->accept();
-	}else 
-	{
 		newPinDlg dlg;
+		dlg.koord_x_text->setText(QString::number(cursor->OldPos.SGLV_X));
+		dlg.koord_y_text->setText(QString::number(cursor->OldPos.SGLV_Y));
+		dlg.koord_z_text->setText(QString::number(cursor->OldPos.SGLV_Z));
 		if(dlg.exec()==QDialog::Accepted)
 		{
-			shared_ptr<GLvlPin> pin=
-				shared_ptr<GLvlPin>(new GLvlPin(cursor->OldPos,dlg.pinNameEdit->text()));
-			pin->setCamera(glview->Camera.get());
-			glview->registerObj(pin);
-			glview->sendShowObj(pin);
-			Pins->push_back(pin);
+			if(!GLvlView::pinsDlg)showPinsDlg(true);
+			new GLvlPinsDlg::pinItem(glview,SGLVektor(
+				dlg.koord_x_text->text().toFloat(),
+				dlg.koord_y_text->text().toFloat(),
+				dlg.koord_z_text->text().toFloat()),
+				dlg.pinNameEdit->text()
+			);
 		}
-	}
 }
 
 
@@ -527,4 +512,16 @@ void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 		e->accept();
 	}
 }
+
+void GLvlView::showPinsDlg(bool toggle)
+{
+	if(toggle)
+	{
+		if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg;
+		pinsDlg->show();
+	}
+	else if(GLvlView::pinsDlg) pinsDlg->hide();
+}
+
+GLvlPinsDlg* GLvlView::pinsDlg=NULL;
 
