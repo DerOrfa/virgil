@@ -52,7 +52,6 @@ private:
 	SGLqtSpace * mw;
 	ERegistry *masterReg;
 	shared_ptr<SGLCube> rahmen;
-	shared_ptr<GLvlMinima> test;
 	shared_ptr<shared_pin_list> Pins;
 };
 

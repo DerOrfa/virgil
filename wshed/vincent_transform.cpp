@@ -44,10 +44,10 @@ transform::transform(VImage src) : im(src),D(im)
 
 void transform::test()	{
 	VAttrList out_list = VCreateAttrList();
-	FILE *out_file=fopen("/tmp/out.v","w");
+//	FILE *out_file=fopen("/tmp/out.v","w");
 	VAppendAttr(out_list,"image",NULL,VImageRepn,im.im());
-	Bild_vimage<lab_value> im1=operator()();
-	PunktList<lab_value> voxels =getVoxels(im1);
+	boost::shared_ptr<  Bild_vimage<lab_value>  > im1=operator()();
+	boost::shared_ptr< PunktList<lab_value> > voxels =getVoxels(*im1);
 	printf("Voxelliste Erzeugt\n");
 /*	vincent::Bild_vimage<VUByte> im2(VCreateImage(vincent::VBild::zsize,vincent::VBild::ysize,vincent::VBild::xsize,VUByteRepn));
 	for(unsigned int i=0;i<im.size();i++)
@@ -57,7 +57,7 @@ void transform::test()	{
 	fclose(out_file);*/
 }
 
-Bild_vimage<lab_value> transform::operator()()
+boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 {
 	Bild_mem<unsigned short> dist(VBild::xsize,VBild::ysize,VBild::zsize,0);
 	Bild_vimage<lab_value> lab(VCreateImage(VBild::zsize,VBild::ysize,VBild::xsize,VShortRepn));
@@ -161,14 +161,14 @@ Bild_vimage<lab_value> transform::operator()()
 		}
 		reached(h,curlab-numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
-	return lab;
+	return boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 }
 
-PunktList<lab_value> transform::getVoxels(Bild_vimage<lab_value> im)
+boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)
 {
-	PunktList<lab_value> D(im);
+	boost::shared_ptr< PunktList<lab_value> > D(new PunktList<lab_value>(im));
 	sort_q<lab_value> comp;
-	std::sort(D.m, D.m + im.size(),comp);
+	std::sort(D->m, D->m + im.size(),comp);
 	return D;
 }
 

@@ -26,6 +26,7 @@
 
 #include <vista/VImage.h>
 #include <qstatusbar.h> 
+#include "../wshed/vincent_punkt.h"
 
 
 using namespace boost;
@@ -33,8 +34,7 @@ using namespace eclasses;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
 GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
-rahmen(new SGLCube()),test(new GLvlMinima(tex)),
-Pins(new shared_pin_list)
+rahmen(new SGLCube()),Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 	toolTabs->removePage(toolTabs->page(3));
@@ -46,7 +46,7 @@ Pins(new shared_pin_list)
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
 //	test->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
-	
+
 	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
 		tex->loadTint(*i);
@@ -59,7 +59,7 @@ Pins(new shared_pin_list)
 	glview->setGridsSize((tex->dim.size.SGLV_X >? tex->dim.size.SGLV_Y >? tex->dim.size.SGLV_Z)*1.1);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
-	glview->registerObj(test);
+//	glview->registerObj(test);
 
 	mw = glview;
 	onNewSpace(mw);
@@ -168,9 +168,10 @@ void  GLvlMasterView::loadIntoWShed()
 			statusBar()->message("Initialisiere");
 			vincent::transform t(MasterImg);
 			((GLvlView*)this)->connect(&t,SIGNAL(reached(vincent::lab_value ,unsigned short)),SLOT(onReached(vincent::lab_value,unsigned short )));
-			t.test();
+			GLvlMinima::setup(SGLVektor(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize),tex,t());
 			tex->setupPal(1,255);
 			glview->sendRedraw();
+			glview->registerObj(shared_ptr<GLvlMinima>(new GLvlMinima(2000000)));
 		}break;
 	}
 }

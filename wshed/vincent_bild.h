@@ -31,7 +31,7 @@ template <class T> class Bild
 {
 	public:
 	static unsigned short xsize,ysize,zsize;
-	inline unsigned int size(){return xsize*ysize*zsize;}
+	inline unsigned int size()const{return xsize*ysize*zsize;} 
 	Bild(unsigned short x,unsigned short y,unsigned short z)
 	{
 		xsize=x;
@@ -79,6 +79,7 @@ template <class T> class Bild_vimage : public Bild<T>
 
 	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}
 	inline T &at(unsigned int pos){return ((T*)data)[pos];}
+	inline T at(unsigned int pos)const{return ((T*)data)[pos];}
 	VImage im(){return img;}
 };
 }

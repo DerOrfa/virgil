@@ -108,7 +108,7 @@
       </envvars>
     </run>
     <general>
-      <activedir>main</activedir>
+      <activedir>wshed</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>

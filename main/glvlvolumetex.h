@@ -48,9 +48,9 @@ public:
 		{
 			return mm2idx(Koord)-startgap_cnt;
 		}
-		inline double Index2outerTexKoord(const unsigned short idx)
+		inline double Index2TexKoord(const unsigned short idx)
 		{
-			return idx2mm(idx+startgap_cnt);
+			return idx2mm(idx);
 		}
 	};
 	struct texInfo

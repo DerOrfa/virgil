@@ -16,6 +16,7 @@
 #include "vincent_bild.h"
 #include "vincent_punkt.h"
 #include <vista/Vlib.h>
+#include <boost/shared_ptr.hpp>
 
 /**
 @author Enrico Reimer,,,
@@ -35,8 +36,8 @@ public:
 	PunktList<VUByte> D;
 	transform(VImage src);
 	void test();
-	Bild_vimage<lab_value> operator()();
-	PunktList<lab_value> getVoxels(Bild_vimage<lab_value> im);
+	boost::shared_ptr< Bild_vimage<lab_value> > operator()();
+	static boost::shared_ptr< PunktList<lab_value> > getVoxels(const Bild_vimage<lab_value> &im);
 
 signals:
     void reached(vincent::lab_value h,unsigned short objs);

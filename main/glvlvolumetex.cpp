@@ -303,9 +303,9 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)
 
 SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)
 {
-	const double x=dim.X.Index2outerTexKoord(idx%dim.X.holeSize());
-	const double y=dim.Y.Index2outerTexKoord((idx/dim.X.holeSize())%dim.Y.holeSize());
-	const double z=dim.Z.Index2outerTexKoord(idx/(dim.X.holeSize()*dim.Y.holeSize()));
+	const double x=dim.X.Index2TexKoord(idx%dim.X.cnt);
+	const double y=dim.Y.Index2TexKoord((idx/dim.X.cnt)%dim.Y.cnt);
+	const double z=dim.Z.Index2TexKoord(idx/(dim.X.cnt*dim.Y.cnt));
 /*
 X:pos%size_x
 Y:(pos/size_x)%size_y

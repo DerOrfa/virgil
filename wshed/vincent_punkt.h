@@ -31,6 +31,7 @@
 
 namespace vincent
 {
+enum richtung {nord=0,sued=1,ost=2,west=3,ueber=4,unter=5};
 
 using namespace std;
 template<class T> class PunktList;
@@ -43,7 +44,7 @@ public:
 	unsigned int pos;
 	
 	iPunkt(unsigned int _id=numeric_limits<unsigned int>::max()):pos(_id){}
-	iPunkt(unsigned int _id,Bild_vimage<T> &img):pos(_id)
+	iPunkt(unsigned int _id,const Bild_vimage<T> &img):pos(_id)
 	{
 		if(	Bild<T>::xsize==numeric_limits<unsigned short>::max() && 
 			Bild<T>::ysize==numeric_limits<unsigned short>::max() &&
@@ -52,7 +53,7 @@ public:
 		wert=img.at(pos);
 	}
 	
-	unsigned short getNachb(iPunkt<T> p[],Bild_vimage<T> &img)
+	unsigned short getNachb(iPunkt<T> p[],const Bild_vimage<T> &img)
 	{
 		unsigned short posx=x();
 		unsigned short posy=y();
@@ -75,6 +76,28 @@ public:
 			p[pCnt++]=iPunkt(pos-Bild<T>::ysize*Bild<T>::xsize,img);/*unterer Nachb*/
 	
 		return pCnt;
+	}
+	void getNachbStruct(iPunkt<T> p[],const Bild_vimage<T> &img)
+	{
+		unsigned short posx=x();
+		unsigned short posy=y();
+		unsigned short posz=z();
+		
+		unsigned short pCnt=0;
+		if(posx+1<Bild<T>::xsize) /*nich in letzter Spalte*/
+			p[ost]=iPunkt(pos+1,img);/*östlicher Nachb*/
+		if(posx)
+			p[west]=iPunkt(pos-1,img);/*westlicher Nachb*/
+		
+		if(posy+1<Bild<T>::ysize) /*nich in letzter Zeile*/
+			p[sued]=iPunkt(pos+Bild<T>::xsize,img);/* südlicher Nachb */
+		if(posy) /*nich in letzter Zeile*/
+			p[nord]=iPunkt(pos-Bild<T>::xsize,img);/* nördlicher Nachb */
+	
+		if(posz+1<Bild<T>::zsize) /*nich in letzter Ebene*/
+			p[ueber]=iPunkt(pos+Bild<T>::ysize*Bild<T>::xsize,img);/*oberer Nachb*/
+		if(posz) /*nich in letzter Ebene*/
+			p[unter]=iPunkt(pos-Bild<T>::ysize*Bild<T>::xsize,img);/*unterer Nachb*/
 	}
 	inline bool invalid()	{return pos==numeric_limits<unsigned int>::max();}
 	
@@ -99,7 +122,7 @@ public:
 		m= (iPunkt<T>*)malloc(xsize*ysize*zsize*sizeof(iPunkt<T>));
 		for(unsigned int i=0;i<xsize*ysize*zsize;i++)m[i].pos=i;
 	}
-	PunktList(Bild_vimage<T> &img)
+	PunktList(const Bild_vimage<T> &img)
 	{
 		m= (iPunkt<T>*)malloc(img.size()*sizeof(iPunkt<T>));
 		for(unsigned int i=0;i<img.size();i++)
