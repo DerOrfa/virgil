@@ -48,11 +48,6 @@ public:
 		boost::shared_ptr<GLvlVolumeTex> tex,
 		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
 	);
-    static void setup2(
-		SGLVektor norm,
-		boost::shared_ptr<GLvlVolumeTex> tex,
-		boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
-	);
 };
 
 #endif

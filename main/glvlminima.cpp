@@ -14,8 +14,16 @@
 
 GLvlMinima::GLvlMinima(unsigned int pos):start(pos)
 {
-	//@todo ende bestimmen
-	//@todo auf setup prüfen
+	if(img)
+	{
+		end=start;
+		vincent::iPunkt<vincent::lab_value> p=(*plist)[start];
+		vincent::lab_value ID=p.wert;
+		do p=(*plist)[++end]; 
+		while(p.wert==ID);
+	}
+	else
+	{SGLprintError("GLvlMinima::setup wurde nich ausgeführt, das Objekt kann nicht angelegt werden");}
 }
 
 /*!
@@ -26,6 +34,7 @@ void GLvlMinima::generate()
 	vincent::lab_value ID=(*plist)[start].wert;
 	cout << tex->texIndex2texKoord((*plist)[start].pos) << endl;
 	glColor3f(1,1,1);
+	glScalef(tex->dim.X.Elsize,tex->dim.Y.Elsize,tex->dim.Z.Elsize);
 	glDisable(GL_NORMALIZE);
 	for(unsigned int i=start;i<end;i++)
 	{
@@ -39,26 +48,11 @@ void GLvlMinima::generate()
 				mask|=1<<i;
 		}
 		if(!mask)continue;
-		SGLVektor Voxel=tex->texIndex2texKoord(plist->operator[](end).pos);
 		glPushMatrix();
-		glTranslatef(Voxel.SGLV_X-.5,Voxel.SGLV_Y-.5,Voxel.SGLV_Z-.5);
+		glTranslatef(p.x()-.5,p.y()-.5,p.z()-.5);
 		glCallList(caps+mask);
 		glPopMatrix();
 	}
-/*	for(end=start;p.wert==ID;p=plist->operator[](++end))
-	{
-		vincent::iPunkt<vincent::lab_value> nachb[6];
-		p.getNachbStruct(nachb,*img);
-		SGLVektor Voxel=tex->texIndex2texKoord(plist->operator[](end).pos);
-		glPushMatrix();
-		glTranslatef(Voxel.SGLV_X-.5,Voxel.SGLV_Y-.5,Voxel.SGLV_Z-.5);
-		for(unsigned short i=0;i<6;i++)
-		{
-			if(nachb[i].invalid() || p.wert!=nachb[i].wert)
-				makePoly(i);
-		}
-		glPopMatrix();
-	}*/
 	glEnable(GL_NORMALIZE);
 }
 
@@ -80,47 +74,7 @@ shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
     \fn GLvlMinima::setup_norm(SGLVektor norm)
  */
 
-const GLshort GLvlMinima::diff[6][5][3]={
-{{0,1,1},{1,1,1},{1,1,0},{0,1,0}, { 0, 1, 0}},//Nord
-{{0,0,0},{1,0,0},{1,0,1},{0,0,1}, { 0,-1, 0}},//Sued
-{{1,0,0},{1,1,0},{1,1,1},{1,0,1}, { 1, 0, 0}},//Ost
-{{0,0,1},{0,1,1},{0,1,0},{0,0,0}, {-1, 0, 0}},//West
-{{0,0,1},{1,0,1},{1,1,1},{0,1,1}, { 0, 0, 1}},//Ueber
-{{0,1,0},{1,1,0},{1,0,0},{0,0,0}, { 0, 0,-1}} //Unter
-};
-
 void GLvlMinima::setup(
-	SGLVektor norm,
-	boost::shared_ptr<GLvlVolumeTex> tex,
-	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
-)
-{	
-	if(caps)glDeleteLists(caps,6);
-	caps=glGenLists(6);
-	for(int d=0;d<6;d++)
-	{
-		assert(glIsList(caps+d));
-		glNewList(caps+d,GL_COMPILE);glBegin(GL_QUADS);
-		{
-			glNormal3sv(diff[d][4]);
-			for(int i=0;i<4;i++)
-				glVertex3sv(diff[d][i]);
-		}
-		glEnd();glEndList();
-
-	}
-	assert(glGetError()==GL_NO_ERROR);
-	
-	GLvlMinima::tex=tex;
-	GLvlMinima::img=img;
-	GLvlMinima::plist=vincent::transform::getVoxels(*img);
-	
-	for(int pos=0;pos<img->size()-1;pos++)
-		assert(plist->operator[](pos).wert<=plist->operator[](pos+1).wert);
-}
-
-
-void GLvlMinima::setup2(
 	SGLVektor norm,
 	boost::shared_ptr<GLvlVolumeTex> tex,
 	boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value>  > img
