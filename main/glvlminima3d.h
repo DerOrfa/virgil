@@ -33,14 +33,15 @@ public:
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 };
 
-class GLvlMinima3DList : public list< GLvlMinima3D >
+class GLvlMinima3DList : public list<shared_ptr<GLvlMinima3D> >
 {
 public:
 	union {
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	GLvlMinima3DList(GLvlMinima3D &img);
+	GLvlMinima3DList(shared_ptr<GLvlMinima3D> img);
+	GLvlMinima3DList();
 	void getDim(dim &X,dim &Y, dim &Z);
 	void getOffset(unsigned short offset[3],GLvlMinima3DList::iterator i);
 };

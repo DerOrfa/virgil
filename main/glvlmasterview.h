@@ -55,13 +55,17 @@ public:
 	void onTransformEnd();
 	void showSegmentAt(unsigned index);
 	void resizeCurrSegment(short topdelta,short bottomdelta);
+	void selectCurrSegment();
     void redrawAktSegment();
+    bool loadSegmentTex(shared_ptr<GLvlMinima3D> img,EVektor<unsigned short> pos);
+    void loadSegmentListTex(GLvlMinima3DList &img,EVektor<unsigned short> pos);
 
 protected:
     void doBenchmark();
 	void closeEvent(QCloseEvent *e);
 	map<vincent::lab_value,shared_ptr<GLvlMinima3D> > objs;
 	shared_ptr<GLvlMinima3D> aktMinima;
+	GLvlMinima3DList selMinima;
 };
 
 #endif

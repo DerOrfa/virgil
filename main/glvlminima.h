@@ -43,8 +43,6 @@ public:
 	dim getXDim()const;
 	dim getYDim()const;
 	dim getZDim()const;
-	
-	GLfloat color[3];
 };
 
 #endif

@@ -109,6 +109,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 
 	((GLvlView*)this)->connect(view,SIGNAL(onVoxel(unsigned int)),SLOT(showSegmentAt(unsigned int)));
 	((GLvlView*)this)->connect(view,SIGNAL(onResizeSegment(short,short)),SLOT(resizeCurrSegment(short,short)));
+	((GLvlView*)this)->connect(view,SIGNAL(selectSegment()),SLOT(selectCurrSegment()));
 	
 	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
@@ -205,6 +206,9 @@ void GLvlMasterView::onTransformEnd()
 		vincent::lab_value id=GLvlMinima3D::plist->operator[](index).wert;
 		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlMinima3D> >(id,shared_ptr<GLvlMinima3D>(new GLvlMinima3D(index))));
 	}
+	EVektor<unsigned short> pos;
+	pos.fromArray(3,selMinima.minEdge.koord);
+	loadSegmentListTex(selMinima,pos);
 	glview->sendRedraw();
 	
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
@@ -237,32 +241,34 @@ void GLvlMasterView::showSegmentAt(unsigned int index)
 		vincent::lab_value id=v_transform->last_erg->at(index);
 		if(id==vincent::WSHED_WSHED)return;
 		map<vincent::lab_value,shared_ptr<GLvlMinima3D> >::iterator it=objs.find(id);
-		
+		GLfloat color[3]={0,1,0};
 		if(it!=objs.end())
 		{
 			if(aktMinima!=it->second)
 			{
 				if(aktMinima)glview->unshowObj(aktMinima);
-				tex->multitex=boost::shared_ptr<SGLBaseTex>();
+				tex->multitex->multitex=boost::shared_ptr<SGLBaseTex>();
 				if(it->second->size() <= MAX_MINIMA_SIZE)
 				{
 					EVektor<unsigned short> pos;
 					pos.fromArray(3,it->second->minEdge.koord);
-					tex->loadColorMask(
-						*it->second,
-						pos,it->second->color
-					);
-					for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
-						(*it)->registerDynamicTex(*tex->multitex);
-					updatePlanes.forward(tex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
-					//direktes connect(cam->myPlane->compileNextTime) ginge zwar auf, müsste hier aber erst erkennen, ob (*it) Plane is
-					tex->multitex->changed();
-					glview->showObj(aktMinima=it->second);
+					loadSegmentTex(it->second,pos);
+					glview->showObj(aktMinima=it->second);	
 				}
 			}
 		}
 		else {SGLprintWarning("Ungültiges Objekt %d",id);}
 	}
+}
+
+void GLvlMasterView::selectCurrSegment()
+{
+	if(!aktMinima)return;
+	selMinima.push_back(aktMinima);
+	EVektor<unsigned short> pos;
+	pos.fromArray(3,selMinima.minEdge.koord);
+	loadSegmentListTex(selMinima,pos);
+	glview->sendRedraw();
 }
 
 void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
@@ -278,21 +284,72 @@ void GLvlMasterView::resizeCurrSegment(short topdelta,short bottomdelta)
  */
 void GLvlMasterView::redrawAktSegment()
 {
-	assert(aktMinima);
+	if(!aktMinima)return;
 	tex->multitex=boost::shared_ptr<SGLBaseTex>();
 		
-		EVektor<unsigned short> pos;
-		pos.fromArray(3,aktMinima->minEdge.koord);
-		tex->loadColorMask(
-			*(aktMinima->genTex()),
-			pos,aktMinima->color
-		);
+	EVektor<unsigned short> pos;
+	pos.fromArray(3,aktMinima->minEdge.koord);
+
+	loadSegmentTex(aktMinima,pos);
+	aktMinima->compileNextTime();
+	glview->sendRedrawOther();
+	glview->sendRedraw();
+}
+
+
+/*!
+    \fn GLvlMasterView::loadSegmentTex(GLvlMinima3D &img,EVektor<unsigned short> pos)
+ */
+bool GLvlMasterView::loadSegmentTex(shared_ptr<GLvlMinima3D> img,EVektor<unsigned short> pos)
+{
+	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+	p->renderMode=SGL_MTEX_MODE_COLORMASK;
+	
+	GLvlMinima3DList t(img);
+	p->loadMinimaMask(t);
+	p->envColor[0]=0;
+	p->envColor[1]=1;
+	p->envColor[2]=0;
+	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
+	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+	p->weich=false;
+	if(tex->multitex)
+	{
+		tex->multitex->multitex=p;
 		for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
-			(*it)->registerDynamicTex(*tex->multitex);
-		updatePlanes.forward(tex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
+			(*it)->registerDynamicTex(*tex->multitex->multitex);
+		updatePlanes.forward(tex->multitex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
 		//direktes connect(cam->myPlane->compileNextTime) ginge zwar auf, müsste hier aber erst erkennen, ob (*it) Plane is
-		tex->multitex->changed();
-		aktMinima->compileNextTime();
-		glview->sendRedrawOther();
-		glview->sendRedraw();
+		tex->multitex->multitex->changed();
+	}
+	else {SGLprintError("zweiter Maskenlayer fehlt");return false;}
+	return true;
+}
+
+
+/*!
+    \fn GLvlMasterView::loadSegmentListTex(GLvlMinima3DList &img,EVektor<unsigned short> pos)
+ */
+void GLvlMasterView::loadSegmentListTex(GLvlMinima3DList &lst,EVektor<unsigned short> pos)
+{
+	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+	p->renderMode=SGL_MTEX_MODE_COLORMASK;
+	
+	p->loadMinimaMask(lst);
+	p->envColor[0]=0;
+	p->envColor[1]=0;
+	p->envColor[2]=1;
+	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
+	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+	p->weich=false;
+	boost::shared_ptr<SGLBaseTex> temp;
+	if(tex->multitex)temp=tex->multitex->multitex;
+	tex->multitex=p;
+	tex->multitex->multitex=temp;
+		
+	for(QValueList<SGLqtSpace *>::iterator it=childs.begin();it!=childs.end();it++)
+		(*it)->registerDynamicTex(*tex->multitex);
+	updatePlanes.forward(tex->multitex->changed);//updatePlanes zeichnet explizit alle Planes neu - auf den Zug können wir aufspringen
+	//direktes connect(cam->myPlane->compileNextTime) ginge zwar auf, müsste hier aber erst erkennen, ob (*it) Plane is
+	tex->multitex->changed();
 }

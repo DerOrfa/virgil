@@ -421,7 +421,8 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 				QString::number(int(len.Len()));
 			statusBar()->message("Entfernung zum letzen Pin: "+lenStr+"mm");
 		}
-		onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
+		if(followSegment->isEnabled() && followSegment->isChecked())
+			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
 		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
 		//besser prüfen, ob sich das Voxel geändert hat
 	}
@@ -516,7 +517,9 @@ void GLvlView::onMsg(QString msg,bool canskip){}
 void GLvlView::onTransformEnd(){};
 
 void GLvlPlaneView::showSegmentAt(unsigned int index){}
-void GLvlPlaneView::resizeCurrSegment(short topdelta,short bottomdelta){};
+void GLvlPlaneView::resizeCurrSegment(short topdelta,short bottomdelta){}
+void GLvlPlaneView::selectCurrSegment(){}
+
 void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 {
 	short top_resize=0,bottom_resize=0;
@@ -538,3 +541,11 @@ void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 	}else e->ignore();
 }
 
+void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
+{
+	if(e->state()==Qt::LeftButton && !glview->MouseInfo.MovedPastDownBtn)
+	{
+		selectSegment();
+		e->accept();
+	}
+}

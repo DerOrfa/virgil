@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>519</width>
-            <height>469</height>
+            <width>560</width>
+            <height>468</height>
         </rect>
     </property>
     <property name="caption">
@@ -483,6 +483,49 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
+                    <string>Segmente</string>
+                </attribute>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>followSegment</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>90</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>verfolgen</string>
+                    </property>
+                    <property name="accel">
+                        <string>Space</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton8</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>390</x>
+                            <y>10</y>
+                            <width>130</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>erzeugen</string>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
                     <string>&amp;Cursor</string>
                 </attribute>
                 <hbox>
@@ -676,9 +719,6 @@
     <item text="Views" name="unnamed">
         <action name="viewsNeue_SichtAction"/>
     </item>
-    <item text="wshed" name="wshed">
-        <action name="wshedloadAction"/>
-    </item>
 </menubar>
 <toolbars>
 </toolbars>
@@ -753,17 +793,6 @@
         </property>
         <property name="accel">
             <string>Ctrl+B</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>wshedloadAction</cstring>
-        </property>
-        <property name="text">
-            <string>load</string>
-        </property>
-        <property name="menuText">
-            <string>load</string>
         </property>
     </action>
 </actions>
@@ -883,8 +912,8 @@
         <slot>canKipp(bool)</slot>
     </connection>
     <connection>
-        <sender>wshedloadAction</sender>
-        <signal>activated()</signal>
+        <sender>pushButton8</sender>
+        <signal>clicked()</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>loadIntoWShed()</slot>
     </connection>

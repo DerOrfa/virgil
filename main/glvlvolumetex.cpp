@@ -106,7 +106,7 @@ bool GLvlVolumeTex::loadMinimaMask(GLvlMinima3DList &src)
 	{
 		unsigned short offset[3]={1,1,1};
 		src.getOffset(offset,i);
-		i->writeTex(offset,pixels);
+		(*i)->writeTex(offset,pixels);
 	}
 
 	glTexImage3DEXT(TexType,0,GL_ALPHA4,size[0],size[1],size[2],0,GL_ALPHA,gl_type,&pixels.at(0));
@@ -531,31 +531,31 @@ unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,b
 	return size;
 }
 
-void GLvlVolumeTex::loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
-{
-	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-	p->Load3DImage(img);
-	memcpy(p->envColor,color,3*sizeof(GLfloat));
-	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=false;
-	multitex=p;
-}
-
-void GLvlVolumeTex::loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,GLfloat color[3])
-{
-	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
-	p->renderMode=SGL_MTEX_MODE_COLORMASK;
-	
-	GLvlMinima3DList t(img);
-	p->loadMinimaMask(t);
-	memcpy(p->envColor,color,3*sizeof(GLfloat));
-	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
-	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-	p->weich=false;
-	multitex=p;
-}
-
+// void GLvlVolumeTex::loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3])
+// {
+// 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+// 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
+// 	p->Load3DImage(img);
+// 	memcpy(p->envColor,color,3*sizeof(GLfloat));
+// 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
+// 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+// 	p->weich=false;
+// 	multitex=p;
+// }
+// 
+// void GLvlVolumeTex::loadColorMask(GLvlMinima3D &img,EVektor<unsigned short> pos,GLfloat color[3])
+// {
+// 	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+// 	p->renderMode=SGL_MTEX_MODE_COLORMASK;
+// 	
+// 	GLvlMinima3DList t(img);
+// 	p->loadMinimaMask(t);
+// 	memcpy(p->envColor,color,3*sizeof(GLfloat));
+// 	p->calcMatr(SGLVektor(p->Info.X.getElsize('X'),p->Info.Y.getElsize('Y'),p->Info.Z.getElsize('Z')).linearprod(pos));
+// 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
+// 	p->weich=false;
+// 	multitex=p;
+// }
+// 
 
 SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

@@ -78,6 +78,7 @@ public slots:
 	virtual void onTransformEnd();
 	virtual void showSegmentAt(unsigned int index)=0;
 	virtual void resizeCurrSegment(short topdelta,short bottomdelta)=0;
+	virtual void selectCurrSegment()=0;
 };
 
 class GLvlPlaneView: public GLvlView
@@ -98,6 +99,7 @@ public:
 	void showCursHere(bool toggle);
     void showSegmentAt(unsigned int index);
 	void resizeCurrSegment(short topdelta,short bottomdelta);
+	void selectCurrSegment();
 	shared_ptr<GLvlPlaneCursor> cursor;
 
 private:
@@ -110,11 +112,13 @@ public slots:
 private slots:
     void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+	virtual void mouseDoubleClickEvent(QMouseEvent *e);
 	virtual void wheelEvent ( QWheelEvent * e );
+	virtual void mouseReleaseEvent(QMouseEvent * e );
 signals:
     void onVoxel(unsigned int index);
 	void onResizeSegment(short,short);
+	void selectSegment();
 };
 
 #endif
