@@ -20,8 +20,8 @@ QMAKE_LIBDIR = ../wshed \
                ../../libsgl 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
-CONFIG += debug \
-          warn_on \
+CONFIG += release \
+          warn_off \
           qt \
           opengl \
           x11 

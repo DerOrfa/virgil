@@ -18,21 +18,21 @@
 namespace vincent
 {
 
-const lab_value WSHED_INIT=-1;
-const lab_value WSHED_MASK=-2;
+const lab_value WSHED_INIT=numeric_limits<lab_value >::max();
+const lab_value WSHED_MASK=numeric_limits<lab_value >::max()-1;
 const lab_value WSHED_WSHED=0;
 
-unsigned short Bild<VBild_value>::xsize=numeric_limits<VBild_value>::max();
-unsigned short Bild<VBild_value>::ysize=numeric_limits<VBild_value>::max();
-unsigned short Bild<VBild_value>::zsize=numeric_limits<VBild_value>::max();
+unsigned short Bild<VBild_value>::xsize=numeric_limits<unsigned short >::max();
+unsigned short Bild<VBild_value>::ysize=numeric_limits<unsigned short >::max();
+unsigned short Bild<VBild_value>::zsize=numeric_limits<unsigned short >::max();
 
-unsigned short Bild<lab_value>::xsize=numeric_limits<lab_value>::max();
-unsigned short Bild<lab_value>::ysize=numeric_limits<lab_value>::max();
-unsigned short Bild<lab_value>::zsize=numeric_limits<lab_value>::max();
+unsigned short Bild<lab_value>::xsize=numeric_limits<unsigned short >::max();
+unsigned short Bild<lab_value>::ysize=numeric_limits<unsigned short >::max();
+unsigned short Bild<lab_value>::zsize=numeric_limits<unsigned short >::max();
 
-unsigned short Bild<unsigned short >::xsize=numeric_limits<unsigned short >::max();
-unsigned short Bild<unsigned short >::ysize=numeric_limits<unsigned short >::max();
-unsigned short Bild<unsigned short >::zsize=numeric_limits<unsigned short >::max();
+unsigned short Bild<unsigned short>::xsize=numeric_limits<unsigned short >::max();
+unsigned short Bild<unsigned short>::ysize=numeric_limits<unsigned short >::max();
+unsigned short Bild<unsigned short>::zsize=numeric_limits<unsigned short >::max();
 
 transform::transform(VImage src) : QObject(),im(src),D(im)
 {
@@ -85,18 +85,18 @@ Bild_vimage<lab_value> transform::operator()()
 //			wenn p einen nachbar q hat, der zu mindestens einem erkannten Basin gehört (zu einem unbekannten kann er nich gehören)
 //			(gehört der Nachb zu einem Basin, hat per def ein niedrigeres h, da er schon vorher bearbeitet worden sin muss)
 //			(steilster anstieg ist Implizit, da niedrigste Pkt zuerst gelabelt werden)
-				if(lab[nachb[i]]>0 || lab[nachb[i]]==WSHED_WSHED)
+				if(lab[nachb[i]]!= WSHED_MASK && lab[nachb[i]]!=WSHED_INIT)
 				{
-					dist[nachb[i]]=1;//Abstand zum nächsten Punkt, der schon "unter wasser" steht
-					fifoA.push(nachb[i]);
+					dist[D[p]]=1;//Abstand zum nächsten Punkt, der schon "unter wasser" steht
+					fifoA.push(D[p]);
 					break;
 				}
 		}
-
 		//Alle Wasserkanten (Punkte an Grenze zu Basins) sind in fifo
+		
 		curdistA=1;
 		fifoA.push_null();
-		//Basins volllaufen lassen
+		//Plateaus volllaufen lassen
 		for(iPunkt<VBild_value> p=fifoA.pop();fifoA.size();p=fifoA.pop())
 		{
 			//wenn keine Wasserscheiden mehr da, lassen wir das Wasser IN DER EBENE weiterlaufen 
@@ -113,9 +113,9 @@ Bild_vimage<lab_value> transform::operator()()
 			unsigned short nLen=p.getNachb(nachb,im);
 			for(unsigned short i=0;i<nLen;i++)
 			{
-				if(dist[nachb[i]]<curdistA && (lab[nachb[i]]>0 || lab[nachb[i]] == WSHED_WSHED)) //q belongs to existing basin or WSHED
+				if(dist[nachb[i]]<curdistA && (lab[nachb[i]]!= WSHED_MASK && lab[nachb[i]]!=WSHED_INIT)) //q belongs to existing basin or WSHED
 				{
-					if(lab[nachb[i]]>0)
+					if(lab[nachb[i]]!= WSHED_MASK && lab[nachb[i]]!=WSHED_INIT && lab[nachb[i]]!=WSHED_WSHED)
 					{
 						if(lab[p] == WSHED_MASK || lab[p] == WSHED_WSHED)lab[p]=lab[nachb[i]];
 						else if(lab[p]!=lab[nachb[i]])lab[p]=WSHED_WSHED;
@@ -123,12 +123,11 @@ Bild_vimage<lab_value> transform::operator()()
 					else if(lab[p]==WSHED_MASK)lab[p]=WSHED_WSHED;
 				}
 				else 
-					if(lab[nachb[i]]==WSHED_MASK ) //q hat selbe höhe wie p, ist aber nicht teil der aktuellen wasserkante => Plateau
-						if(dist[nachb[i]]==0)
-						{
-							dist[nachb[i]]=curdistA+1;//Punkte innerhalb eines Plateaus sind weiter weg vom Wasser
-							fifoA.push(nachb[i]);
-						}
+					if(lab[nachb[i]]==WSHED_MASK && dist[nachb[i]]==0) //q hat selbe höhe wie p, ist aber nicht teil der aktuellen wasserkante => Plateau
+					{
+						dist[nachb[i]]=curdistA+1;//Punkte innerhalb eines Plateaus sind weiter weg vom Wasser
+						fifoA.push(nachb[i]);
+					}
 			}
 		}
 		//neue lokale Minima erkennen
