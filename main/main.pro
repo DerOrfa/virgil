@@ -13,7 +13,7 @@ LIBS += ../wshed/libwshed.a \
 QMAKE_LIBDIR = ../wshed 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
-CONFIG += debug \
+CONFIG += release \
           warn_off \
           qt \
           opengl \

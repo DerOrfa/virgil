@@ -32,17 +32,13 @@ GLvlSegment::GLvlSegment(unsigned int index):isMinima(true)
 }
 GLvlSegment::~GLvlSegment()
 {
-	undisplay(true);//@todo eigentlich nicht nett - es könnte ja sein, daß Teilevon ihm gerade von anderen Angez werden
+	undisplay();//@todo eigentlich nicht nett - es könnte ja sein, daß Teilevon ihm gerade von anderen Angez werden
 }
 
-bool GLvlSegment::display(bool incl3D)
+bool GLvlSegment::display()
 {
-	if(incl3D)for(GLvlSegment::iterator i=begin();i!=end();i++)
-		if((*i)->volume() <= MAX_MINIMA_SIZE)
-		{
-			if((*i)->myList)(*i)->compileNextTime();
-			else target3D->showObj(*i);
-		}
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		(*i)->show(*target3D,*this,*i);
 	
 	EVektor<unsigned short> pos;
 	myTex=boost::shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex());
@@ -61,12 +57,12 @@ bool GLvlSegment::display(bool incl3D)
 //	else targetTex->addMTexBegin(myTex,true);
 	return true;
 }
-void GLvlSegment::undisplay(bool incl3D)
+void GLvlSegment::undisplay()
 {
 	if(myTex)targetTex->delMTex(myTex,true);
 	myTex=boost::shared_ptr<GLvlVolumeTex>();
-	if(incl3D)for(GLvlSegment::iterator i=begin();i!=end();i++)
-		target3D->unshowObj(*i);
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+		(*i)->unshow(*target3D,*this,*i);
 }
 
 void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
@@ -115,16 +111,12 @@ void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
 boost::shared_ptr<GLvlVolumeTex> GLvlSegment::targetTex;
 SGLqtSpace *GLvlSegment::target3D;
 
-void GLvlSegment::redisplay(bool incl3D)
+void GLvlSegment::redisplay()
 {
 	EVektor<unsigned short> pos;
 	
 	if(myTex)for(GLvlSegment::iterator i=begin();i!=end();i++)
-		if((*i)->volume() <= MAX_MINIMA_SIZE)
-		{
-			if((*i)->myList)(*i)->compileNextTime();
-			else target3D->showObj(*i);
-		}
+		(*i)->reshow(*target3D,*this,*i);
 	
 	myTex->loadSegment(*this);
 	SGLVektor offset(myTex->Info.X.getElsize('X'),myTex->Info.Y.getElsize('Y'),myTex->Info.Z.getElsize('Z'));

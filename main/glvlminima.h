@@ -22,6 +22,10 @@
 
 #define MAX_MINIMA_SIZE 500000
 
+#include <set>
+
+class GLvlSegment;
+
 /**
 @author Enrico Reimer,,,
 */
@@ -30,6 +34,7 @@ class GLvlMinima:public SGLFlObj
 {
 	static GLuint caps;
 	static SGLVektor scale;
+	set<GLvlSegment*> users;
 	inline static void QuadBegin(GLuint id)
 	{
 		assert(glIsList(id));
@@ -96,6 +101,10 @@ public:
 	void getPktKoord(const unsigned int indexRel,unsigned short &x,unsigned short &y,unsigned short &z)const;
 	vincent::lab_value getID()const;
 	GLvlMinima(const GLvlMinima&);
+    void reshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+    void show(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+    void unshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+    void update_users();
 };
 
 #endif

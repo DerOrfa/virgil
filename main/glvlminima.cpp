@@ -12,14 +12,17 @@
 #include "glvlminima.h"
 #include <libsgl/sglvektor.h>
 #include "glvlvolumetex.h"
+#include "glvlsegment.h"
+#include <libsgl/sglmisc.h>
 
 GLvlMinima::GLvlMinima(const GLvlMinima&)
 {
-	cout << "Kopiere Minima" << endl;
+	SGLprintError("Minima dürfen nicht kopiert werden");
 }
 
 GLvlMinima::GLvlMinima(unsigned int pos):start(pos),incl_wshed(true)
 {
+
 	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
 	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
 	if(img)
@@ -57,6 +60,7 @@ bool GLvlMinima::chCapAbsTop(VUByte Top)
 		topCap= topBorder() <? Top;
 		if(topCap<=bottomCap)
 			bottomCap=topCap-1;
+		update_users();
 		return true;
 	}
 	else return false;
@@ -69,6 +73,7 @@ bool GLvlMinima::chCapAbsBottom(VUByte Bottom)
 		bottomCap= bottomBorder() >? Bottom;
 		if(bottomCap>=topCap)
 			topCap=bottomCap+1;
+		update_users();
 		return true;
 	}
 	else return false;
@@ -78,6 +83,7 @@ bool GLvlMinima::chCapAbs(VUByte Top,VUByte Bottom)
 	if(Bottom>=Top)Top=Bottom+1;
 	bool update=chCapAbsTop(Top);
 	if(chCapAbsBottom(Bottom))update=true;
+	if(update)update_users();
 	return  update;
 }
 
@@ -128,6 +134,7 @@ bool GLvlMinima::chCapRel(signed char Top_delta,signed char Bottom_delta)
 		if(this->bottomCap > bottomBorder())
 		{this->bottomCap--;update =true;}
 	}
+	if(update)update_users();
 	return update;
 }
 
@@ -383,3 +390,43 @@ SGLVektor GLvlMinima::scale;
 boost::shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
 boost::shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
 boost::shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
+
+
+void GLvlMinima::reshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)
+{
+	if(volume() <= MAX_MINIMA_SIZE)
+	{
+		if(users.find(&seg)==users.end())show(space,seg,self);//Wenn das aufrufende seg neu hier is, is kein compileNextTime nötig, denn das Min hat sich nich geändert
+		else if(myList)compileNextTime();
+		else 
+		{
+			SGLprintError("Hier stimmt was nich, reshow ohne show");
+			space.showObj(self);
+		}
+	}
+}
+
+
+void GLvlMinima::show(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)
+{
+	assert(self.get()==this);
+	if(volume() <= MAX_MINIMA_SIZE)
+	{
+		if(!users.size() )space.showObj(self);
+//@todo mylist ließe weitere kontrollen zu
+		users.insert(&seg);
+	}
+}
+
+
+void GLvlMinima::unshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)
+{	
+	users.erase(&seg);
+	if(users.size())space.unshowObj(self);
+}
+
+void GLvlMinima::update_users()
+{
+	for(set<GLvlSegment*>::iterator it;it!=users.end();it++)
+		(*it)->redisplay();
+}

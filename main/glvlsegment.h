@@ -26,13 +26,6 @@ class GLvlMinima;
 
 class GLvlSegment: public std::list< boost::shared_ptr<GLvlMinima> >
 {
-	class redisplaySlot:public SGLSlot
-	{
-	public:
-		 GLvlSegment &myseg;
-		redisplaySlot(GLvlSegment &_myseg);
-		void operator()();
-	};
 protected:
 	union EdgeData{
 		struct {unsigned short x,y,z;};
@@ -45,9 +38,9 @@ public:
 	GLvlSegment(boost::shared_ptr<GLvlMinima> img);
 	virtual ~GLvlSegment();
 	static void setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex);
-	bool display(bool incl3D);
-	void undisplay(bool incl3D);
-	void redisplay(bool incl3D);
+	bool display();
+	void undisplay();
+	void redisplay();
 	void getDim(dim &X,dim &Y, dim &Z);
 	void getOffset(unsigned short offset[3],GLvlSegment::iterator i);
 
