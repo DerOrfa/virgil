@@ -24,28 +24,33 @@ public:
 	GLvlVolumeTex();
 	bool Load3DImage(VImage src);
 	struct dimData{
-		int cnt;
+		unsigned short cnt;
 		float Elsize;
-		double mm_size,outer_mm_size;
-		short startgap_cnt,endgap_cnt;
+		double outer_mm_size;
+		inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
+		inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
+		inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
+		inline unsigned short mm2idx(const double tex_koord){return tex_koord/Elsize;}
+		
+		unsigned short startgap_cnt,endgap_cnt;
 		double startgap_mm,endgap_mm;
 		inline void calcGap(int start,int end)
 		{
-			startgap_cnt=start;startgap_mm=startgap_cnt*Elsize;
-			endgap_cnt=end;endgap_mm=endgap_cnt*Elsize;
-			outer_mm_size=(start+cnt+end)*Elsize;
+			startgap_cnt=start;
+			startgap_mm=idx2mm(startgap_cnt);
+			
+			endgap_cnt=end;
+			endgap_mm=idx2mm(endgap_cnt);
+			outer_mm_size=idx2mm(start+cnt+end);
 		}
-		inline unsigned short holeSize()
+		inline unsigned short holeSize(){return startgap_cnt +cnt+endgap_cnt;}
+		inline unsigned short outerTexKoord2Index(const double Koord)
 		{
-			return startgap_cnt +cnt+endgap_cnt;
+			return mm2idx(Koord)-startgap_cnt;
 		}
-		inline unsigned short outerTexKoord2Index(const double &Koord)
+		inline double Index2outerTexKoord(const unsigned short idx)
 		{
-			return  (unsigned short)(Koord*outer_mm_size*holeSize());
-		}
-		inline double Index2outerTexKoord(const unsigned short &idx)
-		{
-			return  idx/(outer_mm_size*holeSize());
+			return idx2mm(idx+startgap_cnt);
 		}
 	};
 	struct texInfo
@@ -53,44 +58,23 @@ public:
 		union {dimData X;dimData Columns;};
 		union {dimData Y;dimData Rows;};
 		union {dimData Z;dimData Bands;dimData layer;};
-		SGLVektor top_left_front,bottom_right_back;
-		SGLVektor outer_top_left_front,outer_bottom_right_back;
-		SGLVektor outer2inner_trans_mm;
-		void calcGaps(int startx,int endx,int starty,int endy,int startz,int endz)
+		SGLVektor size;
+		void calcGaps(unsigned short startx,unsigned short endx,unsigned short starty,unsigned short endy,unsigned short startz,unsigned short endz)
 		{
 			X.calcGap(startx,endx);
 			Y.calcGap(starty,endy);
 			Z.calcGap(startz,endz);
-
-			outer_top_left_front=SGLVektor(
-				(-X.mm_size/2-X.startgap_mm),
-				(Y.mm_size/2+Y.startgap_mm),
-				(Z.mm_size/2+Z.startgap_mm)
-			);
-
-			outer_bottom_right_back=SGLVektor(
-				(X.mm_size/2+X.endgap_mm),
-				(-Y.mm_size/2-Y.endgap_mm),
-				(-Z.mm_size/2-Z.endgap_mm)
-			);
-			outer2inner_trans_mm=SGLVektor(
-				X.endgap_mm-X.startgap_mm,//platz rechts (positiver quadrant)
-				Y.endgap_mm-Y.startgap_mm, //platz unten (negativer quadrant)
-				Z.endgap_mm-Z.startgap_mm //platz hinten (pos quadrant)
-			);
 		}
 	}dim;
 
 	void loadImageInfo(VImage &src);
-	SGLVektor weltKoord2texKoord(const SGLVektor &welt);
-	SGLVektor texKoord2weltKoord(const SGLVektor &welt);
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
     void calcMatr();
     void loadTint(VImage i);
     GLdouble mm2tex_Matrix[4][4];
-//    GLdouble gl2mm_Matrix[4][4];
-    unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
+    
+	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 private:
 	template<class T> bool GLvlVolumeTex::fillIndexData(GLenum gl_type,VImage &src);
 	template<class T,class ST> bool GLvlVolumeTex::fillFloatData(GLenum gl_type,VImage &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());

@@ -3,6 +3,29 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./main
 # Das Target ist eine Anwendung:  virgil
 
+TARGETDEPS += ../wshed/libwshed.a 
+LIBS += ../wshed/libwshed.a \
+        -lqt_glue \
+        -leclasses2 \
+        -lvista \
+        -lsgl \
+        -lboost_signals 
+INCLUDEPATH = ../../qt_glue \
+              /opt/prog/eclasses/eclasses2/ \
+              $(HOME)/emath/ \
+              ../../libsgl/ 
+QMAKE_LIBDIR = ../wshed \
+               ../../qt_glue \
+               /opt/prog/eclasses/eclasses2 \
+               ../../libsgl 
+DEFINES = GL_GLEXT_PROTOTYPES 
+TARGET = virgil 
+CONFIG += debug \
+          warn_off \
+          qt \
+          opengl \
+          x11 
+TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui 
 HEADERS += glvlcutplane.h \
@@ -22,26 +45,3 @@ SOURCES += main.cpp \
            glvlplaneview.cpp \
            glvlvolumetex.cpp \
            glvlminima.cpp 
-TARGETDEPS += ../wshed/libwshed.a
-LIBS += ../wshed/libwshed.a \
--lqt_glue \
--leclasses2 \
--lvista \
--lsgl \
--lboost_signals
-INCLUDEPATH = ../../qt_glue \
-/opt/prog/eclasses/eclasses2/ \
-$(HOME)/emath/ \
-../../libsgl/
-QMAKE_LIBDIR = ../wshed \
-../../qt_glue \
-/opt/prog/eclasses/eclasses2 \
-../../libsgl
-DEFINES = GL_GLEXT_PROTOTYPES
-TARGET = virgil
-CONFIG += debug \
-warn_off \
-qt \
-opengl \
-x11
-TEMPLATE = app

@@ -158,7 +158,7 @@ void GLvlView::setCoordAim()
 {
 	if(selfChange)return;
 	assert(glview && glview->Camera);
-	SGLVektor V=tex->texKoord2weltKoord(SGLVektor(xCoordAim->value(),yCoordAim->value(),zCoordAim->value()));
+	SGLVektor V=SGLVektor(xCoordAim->value(),yCoordAim->value(),zCoordAim->value());
 
 	glview->Camera->ViewMatr.outDated=true;
 	glview->Camera->LookAt=V;
@@ -182,7 +182,7 @@ void GLvlView::setCoordCam()
 {
 	if(selfChange)return;
 	assert(glview && glview->Camera);
-	SGLVektor V=tex->texKoord2weltKoord(SGLVektor(xCoordCam->value(),yCoordCam->value(),zCoordCam->value()));
+	SGLVektor V=SGLVektor(xCoordCam->value(),yCoordCam->value(),zCoordCam->value());
 
 	glview->Camera->ViewMatr.outDated=true;
 	glview->Camera->Pos=V;
@@ -201,8 +201,8 @@ void GLvlView::onCamChanged()
 	assert(tex->TexType==GL_TEXTURE_3D);
 	SGLBaseCam *cam=glview->Camera.get();
 	
-	SGLVektor Pos=tex->weltKoord2texKoord(cam->Pos);
-	SGLVektor LookAt=tex->weltKoord2texKoord(cam->LookAt);
+	SGLVektor Pos=cam->Pos;
+	SGLVektor LookAt=cam->LookAt;
 	
 	SGLVektor senkr=(cam->Pos-cam->LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
 	float winkel=cam->UpVect.SGLV_X<0 ? cam->UpVect.VektWink(senkr):-cam->UpVect.VektWink(senkr);

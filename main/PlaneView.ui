@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>561</width>
+            <width>563</width>
             <height>429</height>
         </rect>
     </property>
@@ -343,6 +343,14 @@
                             </size>
                         </property>
                     </spacer>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel3_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Y</string>
+                        </property>
+                    </widget>
                     <widget class="QSpinBox">
                         <property name="name">
                             <cstring>yCoordAim</cstring>
@@ -352,14 +360,6 @@
                         </property>
                         <property name="minValue">
                             <number>-999</number>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel3_2</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Y</string>
                         </property>
                     </widget>
                     <spacer>
@@ -374,11 +374,19 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>0</width>
+                                <width>16</width>
                                 <height>20</height>
                             </size>
                         </property>
                     </spacer>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel2_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Z</string>
+                        </property>
+                    </widget>
                     <widget class="QSpinBox">
                         <property name="name">
                             <cstring>zCoordAim</cstring>
@@ -388,14 +396,6 @@
                         </property>
                         <property name="minValue">
                             <number>-999</number>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel2_2</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Z</string>
                         </property>
                     </widget>
                     <spacer>

@@ -282,39 +282,11 @@ void GLvlVolumeTex::loadImageInfo(VImage &src)
 	dim.Rows.cnt =VImageNRows(src);
 	dim.Bands.cnt =VImageNBands(src);
 	
-	dim.Columns.mm_size=dim.Columns.Elsize*dim.Columns.cnt;
-	dim.Rows.mm_size=dim.Rows.Elsize*dim.Rows.cnt;
-	dim.Bands.mm_size=dim.Bands.Elsize*dim.Bands.cnt;
-	dim.top_left_front=SGLVektor(
-		-dim.X.mm_size/2,
-		dim.Y.mm_size/2,
-		dim.Z.mm_size/2
+	dim.size=SGLVektor(
+		dim.X.mm_size(1),
+		dim.Y.mm_size(1),
+		dim.Z.mm_size(1)
 	);
-	dim.bottom_right_back=SGLVektor(
-		dim.X.mm_size/2,
-		-dim.Y.mm_size/2,
-		-dim.Z.mm_size/2
-	);
-}
-
-SGLVektor GLvlVolumeTex::texKoord2weltKoord(const SGLVektor &tex)
-{
-	return tex; //Texturkoordinaten und Weltkoordinaten sind (zur Zeit) gleich
-}
-
-/*!
-    \fn GLvlVolumeTex::weltKoord2texKoord(SGLVektor welt)
-	
-	Die ermittelten Koordinaten beziehen sich auf die "outer_tex"
-	wenn absolut true, dann in mm sonst in openGL-texturcoordinaten (0-1)
- */
-SGLVektor GLvlVolumeTex::weltKoord2texKoord(const SGLVektor &welt)
-{
-/*	EMatrix<GLdouble> mult;
-	mult.fromArray(4,4,(GLdouble*)mm2tex_Matrix);*/
-	//Momentan sind Welt und Texturkoordinaten (in mm) (bis auf die Verschiebung des Schwerpunktes) das Selbe
-	
-	return welt;
 }
 
 //@todo noch nich getestet
@@ -331,9 +303,9 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)
 
 SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)
 {
-	const double x=dim.X.Index2outerTexKoord(xidx);
-	const double y=dim.Y.Index2outerTexKoord(yidx);
-	const double x=dim.Z.Index2outerTexKoord(zidx);
+	const double x=dim.X.Index2outerTexKoord(idx%dim.X.holeSize());
+	const double y=dim.Y.Index2outerTexKoord((idx/dim.X.holeSize())%dim.Y.holeSize());
+	const double z=dim.Z.Index2outerTexKoord(idx/(dim.X.holeSize()*dim.Y.holeSize()));
 /*
 X:pos%size_x
 Y:(pos/size_x)%size_y
@@ -347,6 +319,8 @@ pos/size_xy
  */
 void GLvlVolumeTex::calcMatr()
 {
+	printf("Rechne\n");
+
 	for(int i=0;i<15;i++)
 		((GLdouble*)mm2tex_Matrix)[i]=0;
 	((GLdouble*)mm2tex_Matrix)[15]=1;
@@ -355,13 +329,9 @@ void GLvlVolumeTex::calcMatr()
 	mm2tex_Matrix[1][1]=1/dim.Y.outer_mm_size;
 	mm2tex_Matrix[2][2]=1/dim.Z.outer_mm_size;
 	
-	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*(dim.X.mm_size/2+dim.X.startgap_mm);
-	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*(dim.Y.mm_size/2+dim.Y.startgap_mm);
-	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*(dim.Z.mm_size/2+dim.Z.startgap_mm);
-	
-/*	gl2mm_Matrix[3][0]=-(dim.X.mm_size/2+dim.X.startgap_mm);
-	gl2mm_Matrix[3][1]=-(dim.Y.mm_size/2+dim.Y.startgap_mm);
-	gl2mm_Matrix[3][2]=-(dim.Z.mm_size/2+dim.Z.startgap_mm);*/
+	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*(dim.X.startgap_mm+dim.X.Elsize/2);//@todo warum muss das um nen halben Pixel verschoben werden
+	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*(dim.Y.startgap_mm+dim.Y.Elsize/2);
+	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*(dim.Z.startgap_mm+dim.Z.Elsize/2);
 }
 
 

@@ -33,7 +33,7 @@ using namespace eclasses;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
 GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
-rahmen(new SGLCube()),test(new GLvlMinima()),
+rahmen(new SGLCube()),test(new GLvlMinima(tex)),
 Pins(new shared_pin_list)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
@@ -45,17 +45,18 @@ Pins(new shared_pin_list)
 	tex->Load3DImage(*src.begin());//Master-Textur
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
+//	test->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
 	
 	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
 		tex->loadTint(*i);
 	
 	viewsNeue_SichtAction->setEnabled(tex->valid);
-	rahmen->setDiag(tex->dim.top_left_front,tex->dim.bottom_right_back);
+	rahmen->setDiag(SGLVektor(0,0,0),tex->dim.size);
 	rahmen->DrahtGitter(true);
 	
 	
-	glview->setGridsSize((tex->dim.top_left_front.SGLV_X >? tex->dim.top_left_front.SGLV_Y >? tex->dim.top_left_front.SGLV_Z)*1.1);
+	glview->setGridsSize((tex->dim.size.SGLV_X >? tex->dim.size.SGLV_Y >? tex->dim.size.SGLV_Z)*1.1);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 	glview->registerObj(test);
