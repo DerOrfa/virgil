@@ -3,7 +3,7 @@
 # Unterverzeichnis relativ zum Projektverzeichnis: ./wshed
 # Das Target ist eine Bibliothek:  
 
-CONFIG += debug \
+CONFIG += release \
           warn_on \
           staticlib 
 TEMPLATE = lib 

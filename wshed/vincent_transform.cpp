@@ -20,7 +20,7 @@ namespace vincent
 
 const lab_value WSHED_INIT=numeric_limits<lab_value >::max();
 const lab_value WSHED_MASK=numeric_limits<lab_value >::max()-1;
-const lab_value WSHED_WSHED=0;
+const lab_value WSHED_WSHED=numeric_limits<lab_value >::min();
 
 unsigned short Bild<VBild_value>::xsize=numeric_limits<unsigned short >::max();
 unsigned short Bild<VBild_value>::ysize=numeric_limits<unsigned short >::max();
@@ -60,7 +60,7 @@ Bild_vimage<lab_value> transform::operator()()
 	
 	printf("Rechne\n");
 	PunktFifo<VBild_value> fifoA;
-	lab_value curlab=0;
+	lab_value curlab=numeric_limits<lab_value >::min();
 	unsigned short curdistA;
 
 // 	Start Flooding
@@ -69,12 +69,11 @@ Bild_vimage<lab_value> transform::operator()()
 	VBild_value h_max=D[im.size()-1].wert;
 	
 	printf("%d-%d\n",h_min,h_max);
-
-	for(VBild_value h=h_min;h<=h_max;h++)
+	VBild_value h=h_min;
+	do
 	{
 		if(D[aktP].wert!=h)
 			printf("leeres h=%d\n",h);
-		else printf("%d\n",h);
 		//Alle Punkte mit h markieren
 		for(unsigned int p=aktP;p<im.size() && D[p].wert==h;p++)
 		{
@@ -144,7 +143,6 @@ Bild_vimage<lab_value> transform::operator()()
 					iPunkt<VBild_value> q=fifoA.pop();
 					iPunkt<VBild_value> nachb[6];
 					unsigned short nLen=q.getNachb(nachb,im);
-//					printf("Nachbarn für %d-%d-%d:%d\n",q.x(),q.y(),q.z(),q.wert);
 					for(unsigned short i=0;i<nLen;i++)
 					{
 						
@@ -152,15 +150,13 @@ Bild_vimage<lab_value> transform::operator()()
 						{
 							fifoA.push(nachb[i]);
 							lab[nachb[i]]=curlab;
-//							printf("M:%d-%d-%d:%d\n",nachb[i].x(),nachb[i].y(),nachb[i].z(),nachb[i].wert);
 						}
-//						else printf("-:%d-%d-%d:%d\n",nachb[i].x(),nachb[i].y(),nachb[i].z(),nachb[i].wert);
 					}
 				}
 			}
 		}
-		printf("%d Minima\n",curlab);
-	}
+		printf("%d Minima\n",curlab-numeric_limits<lab_value >::min());
+	}while((h++)<h_max);
 	return lab;
 }
 }

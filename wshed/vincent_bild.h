@@ -71,28 +71,17 @@ template <class T> class Bild_vimage : public Bild<T>
 	}
 	Bild_vimage(VImage _img):
 		Bild<T>(VImageNRows(_img),VImageNColumns(_img),VImageNBands(_img)),img(_img),
-		lastBand(numeric_limits<int>::min()){}
-
-	template <class PT> inline T &operator[](kPunkt<PT> &p){return at(p.xy(),p.posz);}
-	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.xy(),p.z());}
-	inline T &at(unsigned int pos)
-	{
-		return at(pos,-1);
-	}
-	inline T &at(unsigned int xy,int z)
+		lastBand(numeric_limits<int>::min())
 	{
 		int pixMax;
-		if(lastBand!=z)
-		{
-			VSelectBand("Vol2Tex",img,z,&pixMax,&data);
-			lastBand=z;
-		}
-		assert((z==-1 && pixMax==xsize*ysize*zsize) || (pixMax==xsize*ysize)); //@todo wenn z nicht richtich is, wird pixMax falsch
-//besser z==-1 => data zeigt auf komplettes bild
-		return ((T*)data)[xy];
+		VSelectBand("Vol2Tex",img,-1,&pixMax,&data);
+		assert(pixMax==(int)size()); //@todo wenn z nicht richtich is, wird pixMax falsch
 	}
-	VImage im()
-	{return img;}
+
+	template <class PT> inline T &operator[](kPunkt<PT> &p){return at(p.pos());}
+	template <class PT> inline T &operator[](iPunkt<PT> &p){return at(p.pos);}
+	inline T &at(unsigned int pos){return ((T*)data)[pos];}
+	VImage im(){return img;}
 };
 }
 #endif

@@ -62,7 +62,7 @@ public:
 			Bild<T>::ysize==numeric_limits<unsigned short>::max() &&
 			Bild<T>::zsize==numeric_limits<unsigned short>::max())
 			printf("die Bilddaten wurden möglicherweise noch nicht initialisiert\n");
-		wert=img.at(xy(),z());
+		wert=img.at(pos);
 	}
 	
 	static kPunkt<T> pos2koord(const unsigned int pos){
