@@ -95,7 +95,7 @@
                 <cstring>delPinBtn</cstring>
             </property>
             <property name="text">
-                <string>Pin löschen</string>
+                <string>Pin l&amp;öschen</string>
             </property>
         </widget>
         <spacer row="2" column="2">

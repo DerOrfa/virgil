@@ -8,9 +8,17 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>432</width>
-            <height>504</height>
+            <width>424</width>
+            <height>440</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
     </property>
     <property name="caption">
         <string>Segmente</string>
@@ -19,16 +27,43 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QPushButton">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>startWShedBtn</cstring>
+                <cstring>frame13</cstring>
             </property>
-            <property name="text">
-                <string>Waterschedtransformation starten</string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>startWShedBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>W&amp;aterschedtransformation starten</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Schliessen</string>
+                    </property>
+                    <property name="accel">
+                        <string>Esc</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -43,7 +78,7 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox1</cstring>
+                <cstring>segm_group</cstring>
             </property>
             <property name="title">
                 <string>Segmentierung</string>
@@ -98,17 +133,20 @@
                         <cstring>new_seg_btn</cstring>
                     </property>
                     <property name="text">
-                        <string>neues Segment</string>
+                        <string>&amp;neues Segment</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                 </widget>
             </vbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox2</cstring>
+                <cstring>min_group</cstring>
             </property>
             <property name="title">
-                <string>Minimagruppe</string>
+                <string>Minimumgruppe</string>
             </property>
             <grid>
                 <property name="name">
@@ -246,7 +284,7 @@ WShed</string>
                         <cstring>pushButton2</cstring>
                     </property>
                     <property name="text">
-                        <string>übertragen an</string>
+                        <string>&amp;übertragen an</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="1">
@@ -318,6 +356,12 @@ WShed</string>
         <signal>clicked()</signal>
         <receiver>SegmentDialog</receiver>
         <slot>newSegment()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton7</sender>
+        <signal>clicked()</signal>
+        <receiver>SegmentDialog</receiver>
+        <slot>close()</slot>
     </connection>
 </connections>
 <slots>

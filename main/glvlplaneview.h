@@ -35,10 +35,10 @@
 #include <eclasses/EWndRegistry.h>
 
 #include <qlabel.h> 
-#include "glvlpinsdlg.h"
 
 using namespace efc;
 
+class GLvlPinsDlg;
 
 class GLvlView : public GLvlViewBase
 {

@@ -1,3 +1,6 @@
+// g++ -lvista -DPIC_SIZE=50
+
+
 /***************************************************************************
  *   Copyright (C) 2004 by Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-   *
  *   reimer@santiago                                                       *
@@ -22,7 +25,6 @@
 #include <config.h>
 #endif
 
-//g++ watershedtest.cpp -lvista
 
 //<vista-zeuch>
 
@@ -55,17 +57,17 @@ int main(int argc, char *argv[])
 	out_list = VCreateAttrList();
 	VUByte *data;
 
-	VImage dst=VCreateImage(100,100,100,VUByteRepn);
+	VImage dst=VCreateImage(PIC_SIZE,PIC_SIZE,PIC_SIZE,VUByteRepn);
 	VSelectBand("Vol2Tex",dst,-1,NULL,(void**)&data);
 
 
-	for(int z=0;z<100;z++)
-	  for(int y=0;y<100;y++)
-	    for(int x=0;x<100;x++)
-	      data[x+(y*100)+(z*100*100)]=
-		((x> 50 && x < 60)||
-		(y> 50 && y < 60)||
-		 (z> 50 && z < 60)) ? 255:100;
+	for(int z=0;z<PIC_SIZE;z++)
+	  for(int y=0;y<PIC_SIZE;y++)
+	    for(int x=0;x<PIC_SIZE;x++)
+	      data[x+(y*PIC_SIZE)+(z*PIC_SIZE*PIC_SIZE)]=
+		((x> PIC_SIZE/2 - 5 && x < PIC_SIZE/2+5)||
+		(y> PIC_SIZE/2 - 5 && y < PIC_SIZE/2+5)||
+		 (z> PIC_SIZE/2 - 5 && z < PIC_SIZE/2+5)) ? 255:PIC_SIZE;
 	
 	
 	VAppendAttr(out_list,"image",NULL,VImageRepn,dst);

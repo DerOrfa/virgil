@@ -37,6 +37,7 @@ void GLvlPinsDlg::deletePin()
 void GLvlPinsDlg::onSelChange()
 {
 	double len=0;
+
 	QString trackStr;
 	GLvlPinsDlg::pinItem* prev=NULL;
 	for(QListViewItemIterator it(pinList);it.current();it++)
@@ -44,18 +45,14 @@ void GLvlPinsDlg::onSelChange()
 		GLvlPinsDlg::pinItem* pinItem=dynamic_cast<GLvlPinsDlg::pinItem*>(it.current());
 		if(pinItem && pinItem->isSelected())
 		{
-			if(prev)
-			{
-				trackStr += "-"+pinItem->text(0);
-				len+=(pinItem->operator*().pos-prev->operator*().pos).Len();
-			}
-			else trackStr = pinItem->text(0);
-			prev=pinItem;
+			for(list<GLvlPinsDlg::pinItem*>::iterator it=selPinList.begin();it!=selPinList.end();i++)
+				if(*it=pinItem)break;
+			
 		}
 	}
 	abst_path->setText(trackStr);
 	abst_text->setText(QString::number(len)+"mm");
-	
+
 }
 
 GLvlPinsDlg::pinItem::pinItem(SGLqtSpace * space,const SGLVektor &pos,const QString text):

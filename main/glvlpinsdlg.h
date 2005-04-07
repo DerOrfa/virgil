@@ -44,6 +44,8 @@ protected:
 protected slots:
   /*$PROTECTED_SLOTS$*/
 
+protected:
+    list<GLvlPinsDlg::pinItem*> selPinList;
 };
 
 

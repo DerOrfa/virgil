@@ -45,6 +45,9 @@ rahmen(new SGLCube())
 	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setEnabled(false);
 	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setEnabled(false);
 
+	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
+	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
+
 	line_red->hide();
 	line_green->hide();
 	line_blue->hide();

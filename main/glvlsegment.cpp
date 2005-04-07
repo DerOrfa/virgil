@@ -73,37 +73,37 @@ void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _
 
 void GLvlSegment::getOffset(unsigned short offset[3],GLvlSegment::iterator i)
 {
-        assert((*i)->minEdge.x-minEdge.x >= 0);
-        assert((*i)->minEdge.y-minEdge.y >= 0);
-        assert((*i)->minEdge.z-minEdge.z >= 0);
-        
-        offset[0]+= ((*i)->minEdge.x-minEdge.x);
-        offset[1]+= ((*i)->minEdge.y-minEdge.y);
-        offset[2]+= ((*i)->minEdge.z-minEdge.z);
+	assert((*i)->minEdge.x-minEdge.x >= 0);
+	assert((*i)->minEdge.y-minEdge.y >= 0);
+	assert((*i)->minEdge.z-minEdge.z >= 0);
+
+	offset[0]+= ((*i)->minEdge.x-minEdge.x);
+	offset[1]+= ((*i)->minEdge.y-minEdge.y);
+	offset[2]+= ((*i)->minEdge.z-minEdge.z);
 }
 
 void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
 {
-        X.setElsize(GLvlMinima::img->xsize.getElsize('X'));
-        Y.setElsize(GLvlMinima::img->ysize.getElsize('Y'));
-        Z.setElsize(GLvlMinima::img->zsize.getElsize('Z'));
-        
-        minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
-        maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
+	X.setElsize(GLvlMinima::img->xsize.getElsize('X'));
+	Y.setElsize(GLvlMinima::img->ysize.getElsize('Y'));
+	Z.setElsize(GLvlMinima::img->zsize.getElsize('Z'));
 
-        for(GLvlSegment::iterator i=begin();i!=end();i++)
-        {
-                minEdge.x = minEdge.x <? (*i)->minEdge.x;
-                minEdge.y = minEdge.y <? (*i)->minEdge.y;
-                minEdge.z = minEdge.z <? (*i)->minEdge.z;
-        
-                maxEdge.x = maxEdge.x >? (*i)->maxEdge.x;
-                maxEdge.y = maxEdge.y >? (*i)->maxEdge.y;
-                maxEdge.z = maxEdge.z >? (*i)->maxEdge.z;
-        }
-        X.setCnt(maxEdge.x-minEdge.x+1);
-        Y.setCnt(maxEdge.y-minEdge.y+1);
-        Z.setCnt(maxEdge.z-minEdge.z+1);
+	minEdge.x=minEdge.y=minEdge.z=numeric_limits<unsigned short>::max();
+	maxEdge.x=maxEdge.y=maxEdge.z=numeric_limits<unsigned short>::min();
+
+	for(GLvlSegment::iterator i=begin();i!=end();i++)
+	{
+		minEdge.x = minEdge.x <? (*i)->minEdge.x;
+		minEdge.y = minEdge.y <? (*i)->minEdge.y;
+		minEdge.z = minEdge.z <? (*i)->minEdge.z;
+
+		maxEdge.x = maxEdge.x >? (*i)->maxEdge.x;
+		maxEdge.y = maxEdge.y >? (*i)->maxEdge.y;
+		maxEdge.z = maxEdge.z >? (*i)->maxEdge.z;
+	}
+	X.setCnt(maxEdge.x-minEdge.x+1);
+	Y.setCnt(maxEdge.y-minEdge.y+1);
+	Z.setCnt(maxEdge.z-minEdge.z+1);
 }
 
 

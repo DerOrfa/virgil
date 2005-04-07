@@ -19,12 +19,12 @@
 #include <qpushbutton.h> 
 #include <qslider.h> 
 #include <qspinbox.h>
-#include <qcheckbox.h> 
+#include <qcheckbox.h>
+#include <qgroupbox.h>
 
 GLvlSegmentDialog::GLvlSegmentDialog(QWidget* parent,VImage &_Img): 
 SegmentDialog(parent,NULL,FALSE, Qt::WDestructiveClose),Img(_Img),aktSegment(NULL)
-{
-}
+{}
 
 GLvlSegmentDialog::~GLvlSegmentDialog()
 {
@@ -75,7 +75,7 @@ void GLvlSegmentDialog::onWatershedReady(bool)
 		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
 		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlSegment> >(id,shared_ptr<GLvlSegment>(new GLvlSegment(index))));
 	}
-//	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
+	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
 void GLvlSegmentDialog::registerSegment(boost::shared_ptr<GLvlSegment> seg)
@@ -206,6 +206,7 @@ void GLvlSegmentDialog::startTransform()
 void GLvlSegmentDialog::onMsg(QString text,bool)
 {
 	wshed_status_inf->setText(text);
+	this->setCaption(text);
 	qApp->processEvents();//Nebenläufigkeit faken
 }
 

@@ -205,7 +205,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Blickpunkt</string>
+                    <string>Blickpu&amp;nkt</string>
                 </attribute>
                 <hbox>
                     <property name="name">
@@ -867,12 +867,6 @@
         <signal>activated()</signal>
         <receiver>GLvlViewBase</receiver>
         <slot>doConfig()</slot>
-    </connection>
-    <connection>
-        <sender>viewsNeue_SichtAction</sender>
-        <signal>activated()</signal>
-        <receiver>GLvlViewBase</receiver>
-        <slot>newPlane()</slot>
     </connection>
     <connection>
         <sender>start_benchmark</sender>

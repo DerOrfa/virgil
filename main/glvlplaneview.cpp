@@ -23,6 +23,7 @@
 #include "glvlplanecam.h"
 #include "newPinDlg.h"
 #include "glvlmasterview.h"
+#include "glvlpinsdlg.h"
 
 #include <qframe.h>
 #include <qlayout.h>
@@ -55,11 +56,6 @@ AimZStatus((QWidget*)statusBar())
 {
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
-//	toolTabs->removePage(toolTabs->page(0));
-/*	menuBar()->removeItemAt (0);
-	menuBar()->removeItemAt (0);*/
-	fileSegmentierungAction->disconnect();
-	viewsNeue_SichtAction->disconnect();
 	
 	fileExitAction->setMenuText("Sicht schließen");
 	myReg->Suicide=true;
@@ -228,31 +224,6 @@ void GLvlView::onCamChanged()
 	yCoordAim->setValue((int)LookAt.SGLV_Y);
 	zCoordAim->setValue((int)LookAt.SGLV_Z);
 	
-/*	if(	GLvlView::default_oben[0].VektWink(cam.Pos)<5 &&
-		GLvlView::default_oben[1].VektWink(cam.LookAt)<5 &&
-		GLvlView::default_oben[2].VektWink(cam.UpVect)<5)
-		viewSelector->setCurrentItem(0);
-	else if(	GLvlView::default_unten[0].VektWink(cam.Pos)<5 &&
-				GLvlView::default_unten[1].VektWink(cam.LookAt)<5 &&
-				GLvlView::default_unten[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(1);
-	else if(	GLvlView::default_rechts[0].VektWink(cam.Pos)<5 &&
-				GLvlView::default_rechts[1].VektWink(cam.LookAt)<5 &&
-				GLvlView::default_rechts[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(2);
-	else if(	GLvlView::default_links[0].VektWink(cam.Pos)<5 &&
-				GLvlView::default_links[1].VektWink(cam.LookAt)<5 &&
-				GLvlView::default_links[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(3);
-	else if(	GLvlView::default_vorn[0].VektWink(cam.Pos)<5 &&
-				GLvlView::default_vorn[1].VektWink(cam.LookAt)<5 &&
-				GLvlView::default_vorn[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(4);
-	else if(	GLvlView::default_hinten[0].VektWink(cam.Pos)<5 &&
-				GLvlView::default_hinten[1].VektWink(cam.LookAt)<5 &&
-				GLvlView::default_hinten[2].VektWink(cam.UpVect)<5)
-				viewSelector->setCurrentItem(5);*/
-	//View selector gibts nich mehr
 	selfChange=false;
 }
 
