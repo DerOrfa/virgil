@@ -10,12 +10,26 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
+      <part>KDevBookmarks</part>
+      <part>KDevClassView</part>
+      <part>KDevClearCase</part>
       <part>KDevcopyto</part>
+      <part>KDevCTags</part>
       <part>KDevCTags2</part>
+      <part>CvsService</part>
+      <part>KDevDebugger</part>
+      <part>KDevDoxygen</part>
+      <part>KDevFileGroups</part>
+      <part>KDevFileView</part>
+      <part>KDevdistpart</part>
+      <part>KDevPerforce</part>
+      <part>KDevQuickOpen</part>
+      <part>KDevsubversion</part>
+      <part>KDevVisualBoyAdvance</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -73,12 +87,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell></dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -108,7 +122,7 @@
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
     </make>
