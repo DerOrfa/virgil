@@ -39,20 +39,27 @@ void GLvlPinsDlg::onSelChange()
 	double len=0;
 
 	QString trackStr;
-	GLvlPinsDlg::pinItem* prev=NULL;
+	list<GLvlPinsDlg::pinItem*> oldList=selPinList;
+	list<GLvlPinsDlg::pinItem*> newList;
 	for(QListViewItemIterator it(pinList);it.current();it++)
 	{
 		GLvlPinsDlg::pinItem* pinItem=dynamic_cast<GLvlPinsDlg::pinItem*>(it.current());
+		GLvlPinsDlg::pinItem* newItem=NULL;
 		if(pinItem && pinItem->isSelected())
 		{
-			for(list<GLvlPinsDlg::pinItem*>::iterator it=selPinList.begin();it!=selPinList.end();i++)
-				if(*it=pinItem)break;
-			
+			bool found=false;
+			for(list<GLvlPinsDlg::pinItem*>::iterator it=oldList.begin();it!=oldList.end();)
+				if(*it=pinItem)
+				{
+					it=oldList.erase(it);
+					found=true;
+					break;
+				}
+				else it++;
+			if(!found)newList.push_back(pinItem);
 		}
 	}
-	abst_path->setText(trackStr);
-	abst_text->setText(QString::number(len)+"mm");
-
+	
 }
 
 GLvlPinsDlg::pinItem::pinItem(SGLqtSpace * space,const SGLVektor &pos,const QString text):
