@@ -33,6 +33,7 @@ public:
 		pinItem(SGLqtSpace * space,const SGLVektor &pos,const QString text);
 	};
 	GLvlPinsDlg::pinItem* newPin(SGLqtSpace * space,const SGLVektor &pos,const QString text);
+    void measure();
 
 public slots:
 	virtual void          deletePin();
@@ -45,7 +46,7 @@ protected slots:
   /*$PROTECTED_SLOTS$*/
 
 protected:
-    list<GLvlPinsDlg::pinItem*> selPinList;
+    list<QListViewItemIterator> selPinList;
 };
 
 
