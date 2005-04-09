@@ -36,7 +36,7 @@ public:
 	// es scheint, daß die smart-pointer einen Zeiger auf andere Referenzen halten, und sie bekommen große probs, 
 	// wenn sich diese in Folge von reallozierung verlagern => deshalb kein vector
 	void compileSubObjects();
-	SGLVektor getCenter();
+	SGLVektor getCenter()const;
 	SGLVektor OldPos;
 	bool goTo(SGLVektor pos);
 private:

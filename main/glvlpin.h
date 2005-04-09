@@ -38,8 +38,8 @@ Q_OBJECT
 public:
 	GLvlPin(SGLVektor pos,QString Name);
 	void compileSubObjects();
-	SGLVektor getCenter();
-    void setCamera(SGLBaseCam *cam);
+	SGLVektor getCenter()const;
+	void setCamera(SGLBaseCam *cam);
 	QString Name;
 	SGLVektor pos;
 private:

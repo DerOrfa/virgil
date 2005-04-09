@@ -33,7 +33,7 @@ bool GLvlPlaneCursor::goTo(SGLVektor pos)
 	else return false;
 }
 
-SGLVektor GLvlPlaneCursor::getCenter()
+SGLVektor GLvlPlaneCursor::getCenter()const
 {
 	return SGLVektor();
 }

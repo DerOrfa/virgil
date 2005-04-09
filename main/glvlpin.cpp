@@ -35,7 +35,7 @@ QObject(NULL,Name.latin1()),Title(Name.latin1())
 	MoveTo(pos);
 }
 
-SGLVektor GLvlPin::getCenter()
+SGLVektor GLvlPin::getCenter()const
 {
 	return SGLVektor();
 }

@@ -353,7 +353,7 @@ void GLvlMinima::getPktKoord(const unsigned int indexRel,unsigned short &x,unsig
 	z=p.z(img->xsize,img->ysize);
 }
 
-SGLVektor GLvlMinima::getCenter(){
+SGLVektor GLvlMinima::getCenter()const{
     /// @todo implement me
 }
 

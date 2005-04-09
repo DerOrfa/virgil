@@ -96,15 +96,15 @@ public:
 		const vincent::transform &transform,
 		VImage &src
 	);
-    SGLVektor getCenter();
+	SGLVektor getCenter()const;
 	void writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)const;
 	void getPktKoord(const unsigned int indexRel,unsigned short &x,unsigned short &y,unsigned short &z)const;
 	vincent::lab_value getID()const;
 	GLvlMinima(const GLvlMinima&);
-    void reshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
-    void show(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
-    void unshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
-    void update_users();
+	void reshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+	void show(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+	void unshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self);
+	void update_users();
 };
 
 #endif

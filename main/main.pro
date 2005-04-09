@@ -3,23 +3,6 @@
 # Subdir relative project main directory: ./main
 # Target is an application:  virgil
 
-TARGETDEPS += ../wshed/libwshed.a 
-LIBS += ../wshed/libwshed.a \
-        -lqt_glue \
-        -leclasses2 \
-        -lvista \
-        -lsgl \
-        -lboost_signals 
-QMAKE_LIBDIR = ../wshed 
-DEFINES = GL_GLEXT_PROTOTYPES 
-TARGET = virgil 
-CONFIG += debug \
-          warn_off \
-          qt \
-          opengl \
-          thread \
-          x11 
-TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui \
          segments.ui \
@@ -35,7 +18,8 @@ HEADERS += glvlcutplane.h \
            bild.h \
            glvlsegment.h \
            glvlsegmentdialog.h \
-           glvlpinsdlg.h 
+           glvlpinsdlg.h \
+           glvlrule.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
            glvlmasterview.cpp \
@@ -47,4 +31,22 @@ SOURCES += main.cpp \
            glvlminima.cpp \
            glvlsegment.cpp \
            glvlsegmentdialog.cpp \
-           glvlpinsdlg.cpp 
+           glvlpinsdlg.cpp \
+           glvlrule.cpp 
+TARGETDEPS += ../wshed/libwshed.a
+LIBS += ../wshed/libwshed.a \
+-lqt_glue \
+-leclasses2 \
+-lvista \
+-lsgl \
+-lboost_signals
+QMAKE_LIBDIR = ../wshed
+DEFINES = GL_GLEXT_PROTOTYPES
+TARGET = virgil
+CONFIG += debug \
+warn_off \
+qt \
+opengl \
+thread \
+x11
+TEMPLATE = app
