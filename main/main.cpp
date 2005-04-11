@@ -33,6 +33,8 @@
 #include <stdlib.h>
 //</vista-zeuch>
 
+#include <exception>
+
 int main( int argc, char ** argv ) 
 {
 //<vista-zeuch>
@@ -79,7 +81,8 @@ int main( int argc, char ** argv )
 		exit(1);
 	}
 //</vista-zeuch>
-	
+	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+
 	SGLshowInfos=false;
     QApplication a(argc,argv);
 	SGLprintState("Initialisiere Schnittstelle ...");

@@ -93,13 +93,13 @@ void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
 
 	for(GLvlSegment::iterator i=begin();i!=end();i++)
 	{
-		minEdge.x = minEdge.x <? (*i)->minEdge.x;
-		minEdge.y = minEdge.y <? (*i)->minEdge.y;
-		minEdge.z = minEdge.z <? (*i)->minEdge.z;
+		minEdge.x <?= (*i)->minEdge.x;
+		minEdge.y <?= (*i)->minEdge.y;
+		minEdge.z <?= (*i)->minEdge.z;
 
-		maxEdge.x = maxEdge.x >? (*i)->maxEdge.x;
-		maxEdge.y = maxEdge.y >? (*i)->maxEdge.y;
-		maxEdge.z = maxEdge.z >? (*i)->maxEdge.z;
+		maxEdge.x >?= (*i)->maxEdge.x;
+		maxEdge.y >?= (*i)->maxEdge.y;
+		maxEdge.z >?= (*i)->maxEdge.z;
 	}
 	X.setCnt(maxEdge.x-minEdge.x+1);
 	Y.setCnt(maxEdge.y-minEdge.y+1);

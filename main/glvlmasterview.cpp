@@ -18,10 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "glvlmasterview.h"
-#include <qpushbutton.h>
-#include <qaction.h> 
-#include <qtabwidget.h>
 #include "glvlplanecam.h"
+#include "glvlpinsdlg.h"
 #include <eclasses/EWorkOnCfgDlg.h>
 
 #include <vista/VImage.h>
@@ -29,6 +27,9 @@
 #include <qapplication.h> 
 #include <qcheckbox.h>
 #include <qframe.h> 
+#include <qpushbutton.h>
+#include <qaction.h> 
+#include <qtabwidget.h>
 
 using namespace boost;
 using namespace efc;
@@ -91,9 +92,13 @@ rahmen(new SGLCube())
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
 		
 	GLvlSegment::setup(glview,tex);
+	GLvlView::activeCam=glview->Camera;
 	
 	onCamChanged();
 	setCaption("Übersicht");
+
+	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
+	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
 }
 
 

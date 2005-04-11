@@ -30,7 +30,6 @@ class GLvlRule : public SGLMetaObj
 	private:
 		SGL3DText Bemassung;
 		SGLStrecke Masslinie;
-		SGLBaseCam *camera;
 };
 
 #endif

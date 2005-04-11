@@ -10,12 +10,15 @@
 //
 //
 #include "glvlrule.h"
+#include "glvlplaneview.h"
 #include <libsgl/util/sglmaterial.h>
 
 GLvlRule::GLvlRule(SGLVektor _from,SGLVektor _to):from(_from),to(_to),Masslinie(from,to)
 {
 	Bemassung.MoveTo(getCenter());
 	Bemassung.Mat->SetColor(255,0,0);
+	Bemassung.FaceAt=&GLvlView::activeCam->Pos;
+	GLvlView::activeCam->link(Bemassung);
 }
 
 SGLVektor GLvlRule::getCenter()const
@@ -28,20 +31,10 @@ SGLVektor GLvlRule::getCenter()const
  */
 void GLvlRule::compileSubObjects()
 {
-	Bemassung.DrahtGitter((camera->Pos-getCenter()).Len()<20);
+	Bemassung.DrahtGitter((GLvlView::activeCam->Pos-getCenter()).Len()<20);
 	Objs.clear();
 	TrObjs.clear();
 	Objs.push_back(Bemassung.Compile(false));
 	Objs.push_back(Masslinie.Compile(false));
 }
 
-
-/*!
-    \fn GLvlRule::setCamera(SGLBaseCam *cam)
- */
-void GLvlRule::setCamera(SGLBaseCam *cam)
-{
-	camera=cam;
-	Bemassung.FaceAt=&cam->Pos;
-	cam->link(Bemassung);
-}

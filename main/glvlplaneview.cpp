@@ -126,7 +126,8 @@ void GLvlPlaneView::lostView()
 }
 
 GLvlView::GLvlView(SGLqtSpace* mw, shared_ptr<GLvlVolumeTex> tex,EWndRegistry *myReg):
-GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0)//Das MasterWnd darf erst durch die app gelöscht werden
+GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0),//Das MasterWnd darf erst durch die app gelöscht werden
+onGotFocus(myCam)
 {
 	selfChange=false;
 	this->myReg=myReg;
@@ -137,6 +138,7 @@ void GLvlView::setupSpace(SGLqtSpace *space)
 {
 	glview = space;
 	glview->registerDynamicTex(*tex);
+	glview->gotFocus.connect(onGotFocus);
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
 	assert(glViewContainer->layout());//eigentlich sollte SGLqtSpace sicherstellen, daß sein Parent ein layout hat ..
 	glViewContainer->layout()->setMargin(1);
@@ -348,6 +350,8 @@ SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVe
 
 GLvlSegmentDialog* GLvlView::wshed=NULL;
 GLvlPinsDlg* GLvlView::pinsDlg=NULL;
+ConfigDlg* GLvlView::configDlg=NULL;
+boost::shared_ptr<SGLBaseCam> GLvlView::activeCam;
 
 
 /*!
@@ -423,7 +427,7 @@ void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
 		dlg.koord_z_text->setText(QString::number(cursor->OldPos.SGLV_Z));
 		if(dlg.exec()==QDialog::Accepted)
 		{
-			if(!GLvlView::pinsDlg)showPinsDlg(true);
+			showPinsDlg(true);
 			new GLvlPinsDlg::pinItem(glview,SGLVektor(
 				dlg.koord_x_text->text().toFloat(),
 				dlg.koord_y_text->text().toFloat(),
@@ -486,14 +490,18 @@ void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 	}
 }
 
+void GLvlView::showConfigDlg(bool toggle)
+{
+	assert(configDlg);
+	if(toggle)configDlg->show();
+	else configDlg->hide();
+}
+
 void GLvlView::showPinsDlg(bool toggle)
 {
-	if(toggle)
-	{
-		if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg;
-		pinsDlg->show();
-	}
-	else if(GLvlView::pinsDlg) pinsDlg->hide();
+	assert(pinsDlg);
+	if(toggle)pinsDlg->show();
+	else pinsDlg->hide();
 }
 
 

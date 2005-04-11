@@ -12,10 +12,11 @@
 
 
 #include "glvlpinsdlg.h"
+#include "glvlrule.h"
 #include "glvlplaneview.h"
 #include <libsgl/sglqtspace.h>
 
-GLvlPinsDlg::GLvlPinsDlg(QWidget* parent) : pins(parent,0)
+GLvlPinsDlg::GLvlPinsDlg(QWidget* parent,SGLqtSpace *masterSpace) : pins(parent,0),space(masterSpace)
 {}
 
 void GLvlPinsDlg::deletePin()
@@ -87,6 +88,11 @@ void GLvlPinsDlg::measure()
 {
 	double len=0;
 	assert(selPinList.size()>1);
+	
+	for(list<boost::shared_ptr<GLvlRule> >::iterator i=rulers.begin();i!=rulers.end();i++)
+		space->unshowObj(*i);
+	rulers.clear();
+	
 	list<QListViewItemIterator>::iterator it=selPinList.begin();
 	QString pathText="["+it->current()->text(0)+"]";
 	GLvlPinsDlg::pinItem* prev=dynamic_cast<GLvlPinsDlg::pinItem*>(it->current());
@@ -101,4 +107,7 @@ void GLvlPinsDlg::measure()
 	}
 	abst_path->setText(pathText);
 	abst_text->setText(QString::number(len)+"mm");
+	
+	rulers.push_back(boost::shared_ptr<GLvlRule>(new GLvlRule(SGLVektor(0,0,0),SGLVektor(50,50,50))));
+	space->showObj(rulers.back());
 }

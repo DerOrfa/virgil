@@ -552,6 +552,7 @@
     <item text="&amp;Dialoge" name="Dialoge">
         <action name="fileSegmentierungAction"/>
         <action name="dialogePinsAction"/>
+        <action name="dialogeOptionenAction"/>
     </item>
     <item text="Standart&amp;ansichten" name="Standartansichten">
         <action name="sicht_von_obenAction"/>
@@ -854,6 +855,20 @@
             <string>Pins</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>dialogeOptionenAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Optionen</string>
+        </property>
+        <property name="menuText">
+            <string>Optionen</string>
+        </property>
+    </action>
 </actions>
 <connections>
     <connection>
@@ -1006,6 +1021,12 @@
         <receiver>GLvlViewBase</receiver>
         <slot>showPinsDlg(bool)</slot>
     </connection>
+    <connection>
+        <sender>dialogeOptionenAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GLvlViewBase</receiver>
+        <slot>showConfigDlg(bool)</slot>
+    </connection>
 </connections>
 <slots>
     <slot>canRoll(bool toggle)</slot>
@@ -1031,6 +1052,7 @@
     <slot>sichtVonRechts()</slot>
     <slot>sichtVonLinks()</slot>
     <slot>showPinsDlg(bool)</slot>
+    <slot>showConfigDlg(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

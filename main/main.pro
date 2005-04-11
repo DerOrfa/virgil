@@ -6,7 +6,8 @@
 FORMS += newPinDlg.ui \
          PlaneView.ui \
          segments.ui \
-         pins.ui 
+         pins.ui \
+         config.ui 
 HEADERS += glvlcutplane.h \
            glvlmasterview.h \
            glvlpin.h \

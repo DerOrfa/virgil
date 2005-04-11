@@ -31,6 +31,10 @@
 //
 //
 #include "glvlplanecam.h"
+#include "glvlplaneview.h"
+
+#include <qslider.h> 
+
 
 GLvlPlaneCam::GLvlPlaneCam(boost::shared_ptr<GLvlVolumeTex> tex): 
 SGLBaseCam(0,0,150),
@@ -89,7 +93,7 @@ void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 {
 	if(e->state()&Qt::MidButton)
 	{
-		SGLVektor schiebVekt=getLookVektor()*-relMoveY;
+		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01*GLvlView::configDlg->plane_transfer_speed->value());
 		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
 		//movecam ist nicht nötig, da move_cam_with_aim true ist
 		compileNextTime();

@@ -21,6 +21,7 @@
 #ifndef GLVLPLANEVIEW_H
 #define GLVLPLANEVIEW_H
 
+#include <libsgl/sglsignal.h>
 #include <libsgl/sglqtspace.h>
 #include "glvlsegmentdialog.h"
 #include "glvlplanecam.h"
@@ -30,11 +31,13 @@
 #include "../wshed/vincent_transform.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
+#include "config.h"
 #include <vista/VImage.h>
 
 #include <eclasses/EWndRegistry.h>
 
 #include <qlabel.h> 
+
 
 using namespace efc;
 
@@ -57,6 +60,8 @@ public:
 	boost::shared_ptr<GLvlVolumeTex> tex;
 	static GLvlSegmentDialog* wshed;
 	static GLvlPinsDlg* pinsDlg;
+	static ConfigDlg* configDlg;
+	static boost::shared_ptr<SGLBaseCam> activeCam;
 	void	selectView(const SGLVektor dir[3]);
 
 protected:
@@ -65,6 +70,14 @@ protected:
 	void closeEvent(QCloseEvent *e);
 	boost::shared_ptr<SGLBaseCam> myCam;
 private:
+	class SGLgotFocusSlot:public  SGLSlot
+	{
+		const boost::shared_ptr<SGLBaseCam> myCam;
+	public:
+		SGLgotFocusSlot(boost::shared_ptr<SGLBaseCam> _myCam):myCam(_myCam){}
+		void operator()(int reason){GLvlView::activeCam=myCam;}
+	}onGotFocus;
+
 	bool selfChange;
 	static SGLVektor default_oben[3],default_unten[3],default_vorn[3],default_hinten[3],default_rechts[3],default_links[3];
 
@@ -87,6 +100,7 @@ public slots:
 
 	virtual void onMsg(QString msg,bool canskip);
     virtual void showPinsDlg(bool);
+	virtual void showConfigDlg(bool toggle);
 };
 
 class GLvlPlaneView: public GLvlView
