@@ -18,6 +18,7 @@ GLvlRule::GLvlRule(SGLVektor _from,SGLVektor _to):from(_from),to(_to),Masslinie(
 	Bemassung.MoveTo(getCenter());
 	Bemassung.Mat->SetColor(255,0,0);
 	Bemassung.FaceAt=&GLvlView::activeCam->Pos;
+	cout << GLvlView::activeCam->Pos << endl; 
 	GLvlView::activeCam->link(Bemassung);
 }
 

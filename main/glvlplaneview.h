@@ -72,10 +72,14 @@ protected:
 private:
 	class SGLgotFocusSlot:public  SGLSlot
 	{
-		const boost::shared_ptr<SGLBaseCam> myCam;
+		const boost::shared_ptr<SGLBaseCam> &myCam;
 	public:
-		SGLgotFocusSlot(boost::shared_ptr<SGLBaseCam> _myCam):myCam(_myCam){}
-		void operator()(int reason){GLvlView::activeCam=myCam;}
+		SGLgotFocusSlot(const boost::shared_ptr<SGLBaseCam> &_myCam):myCam(_myCam){}
+		void operator()(int reason){
+			cout << this << " got Focus: old " << GLvlView::activeCam->Pos;
+			GLvlView::activeCam=myCam;
+			cout << " new " << GLvlView::activeCam->Pos << endl;
+		}
 	}onGotFocus;
 
 	bool selfChange;

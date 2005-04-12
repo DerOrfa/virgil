@@ -27,7 +27,6 @@ class GLvlRule : public SGLMetaObj
 		SGLVektor getCenter()const;
 		void setCamera(SGLBaseCam *cam);
 		SGLVektor from,to;
-	private:
 		SGL3DText Bemassung;
 		SGLStrecke Masslinie;
 };

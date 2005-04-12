@@ -92,10 +92,11 @@ rahmen(new SGLCube())
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
 		
 	GLvlSegment::setup(glview,tex);
-	GLvlView::activeCam=glview->Camera;
 	
 	onCamChanged();
+	GLvlView::activeCam=glview->Camera;
 	setCaption("Übersicht");
+	cout << GLvlView::activeCam << endl;
 
 	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
