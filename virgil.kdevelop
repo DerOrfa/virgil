@@ -11,11 +11,11 @@
     </keywords>
     <ignoreparts>
       <part>KDevBookmarks</part>
-      <part>KDevClearCase</part>
-      <part>KDevcopyto</part>
       <part>KDevCTags</part>
       <part>KDevCTags2</part>
       <part>CvsService</part>
+      <part>KDevClearCase</part>
+      <part>KDevcopyto</part>
       <part>KDevDoxygen</part>
       <part>KDevFileGroups</part>
       <part>KDevFileView</part>
@@ -104,7 +104,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>testdata.v</programargs>
+      <programargs>~/cgtbsmMK3T_gauss.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
