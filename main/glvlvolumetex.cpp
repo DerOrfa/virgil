@@ -173,8 +173,8 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 			for(int x=0;x<Info.X.getCnt('X');x++)
 			{
 				T pix=src.at(index);
-				min <?= pix;
-				max >?= pix;
+				min = std::min(pix,min);
+				max = std::max(pix,max);
 				(*pixels)=pix;
 				pixels++;index++;
 			}

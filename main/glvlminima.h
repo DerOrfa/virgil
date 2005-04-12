@@ -82,13 +82,13 @@ public:
 		const unsigned short y=p.y(GLvlMinima::img->xsize,GLvlMinima::img->ysize);
 		const unsigned short z=p.z(GLvlMinima::img->xsize,GLvlMinima::img->ysize);
 			
-		min.x <?= x;
-		min.y <?= y;
-		min.z <?= z;
+		min.x = std::min(x,min.x);
+		min.y = std::min(y,min.y);
+		min.z = std::min(z,min.z);
 	
-		max.x >?= x;
-		max.y >?= y;
-		max.z >?= z;
+		max.x = std::max(x,max.x);
+		max.y = std::max(y,max.y);
+		max.z = std::max(z,max.z);
 	}
 	void generate();
 	static void setup(
