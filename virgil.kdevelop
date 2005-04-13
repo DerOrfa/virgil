@@ -11,11 +11,11 @@
     </keywords>
     <ignoreparts>
       <part>KDevBookmarks</part>
+      <part>KDevClearCase</part>
+      <part>KDevcopyto</part>
       <part>KDevCTags</part>
       <part>KDevCTags2</part>
       <part>CvsService</part>
-      <part>KDevClearCase</part>
-      <part>KDevcopyto</part>
       <part>KDevDoxygen</part>
       <part>KDevFileGroups</part>
       <part>KDevFileView</part>
@@ -27,7 +27,7 @@
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -85,12 +85,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
-      <programargs/>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell></dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -104,7 +104,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>~/cgtbsmMK3T_gauss.v</programargs>
+      <programargs>testdata.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -114,13 +114,13 @@
       </envvars>
     </run>
     <general>
-      <activedir></activedir>
+      <activedir>main</activedir>
     </general>
     <make>
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
     </make>
@@ -142,7 +142,7 @@
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>${APPNAMELC}.tag</docurl>
-      <usermanualurl/>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <substmap>

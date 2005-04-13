@@ -1,10 +1,13 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="1" >
-  <Doc0 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlrule.cpp" >
-   <View0 line="39" Type="Source" />
+ <DocsAndViews NumberOfDocuments="2" >
+  <Doc0 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlposlistener.cpp" >
+   <View0 line="17" Type="Source" />
   </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlposlistener.h" >
+   <View0 line="26" Type="Source" />
+  </Doc1>
  </DocsAndViews>
  <pluginList>
   <kdevvalgrind>
@@ -18,6 +21,7 @@
     <breakpoint0 location="/SCR/reimer/prog/simpleGL/libsgl/text/sgl3dtext.cpp:28" type="1" condition="" enabled="0" />
     <breakpoint1 location="/scr/santiago1/reimer/prog/simpleGL/libsgl/sglobjbase.cpp:183" type="1" condition="" enabled="1" />
     <breakpoint2 location="/SCR/reimer/prog/simpleGL/libsgl/helper/sgldisplist.cpp:101" type="1" condition="" enabled="1" />
+    <breakpoint3 location="/opt/prog/virgil/main/glvlplaneview.cpp:486" type="1" condition="" enabled="1" />
    </breakpointList>
   </kdevdebugger>
  </pluginList>

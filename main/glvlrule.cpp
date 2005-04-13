@@ -18,6 +18,7 @@ from(_from),to(_to),
 Masslinie(from,to),
 Bemassung((QString::number((to-from).Len())+"mm").latin1())
 {
+	Bemassung.MoveTo(getCenter());
 	Bemassung.Mat->SetColor(255,0,0);
 	Bemassung.FaceAt=&GLvlView::activeCam->Pos;
 	GLvlView::activeCam->link(*this);
@@ -36,8 +37,6 @@ SGLVektor GLvlRuler::getCenter()const
  */
 void GLvlRuler::compileSubObjects()
 {
-	Bemassung.MoveTo(getCenter());
-	Bemassung.Scale(1);
 	Bemassung.DrahtGitter((GLvlView::activeCam->Pos-getCenter()).Len()<20);
 	Objs.clear();
 	TrObjs.clear();

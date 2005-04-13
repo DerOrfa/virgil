@@ -99,7 +99,7 @@ public slots:
 	void sichtVonLinks();
 
 	virtual void onMsg(QString msg,bool canskip);
-    virtual void showPinsDlg(bool);
+	virtual void showPinsDlg(bool);
 	virtual void showConfigDlg(bool toggle);
 };
 
@@ -119,9 +119,12 @@ public:
 	void init();
 	void showCursThere(bool toggle);
 	void showCursHere(bool toggle);
-    void showSegmentAt(unsigned int index);
+	void showSegmentAt(unsigned int index);
 	void resizeCurrSegment(short topdelta,short bottomdelta);
 	void selectCurrSegment();
+	void jumpToCursor();
+	void jumpTo(const SGLVektor &to);
+
 	boost::shared_ptr<GLvlPlaneCursor> cursor;
 	list<GLvlPlaneView *>::iterator it;
 private:

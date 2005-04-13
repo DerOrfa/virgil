@@ -20,7 +20,8 @@ HEADERS += glvlcutplane.h \
            glvlsegment.h \
            glvlsegmentdialog.h \
            glvlpinsdlg.h \
-           glvlrule.h 
+           glvlrule.h \
+           glvlposlistener.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
            glvlmasterview.cpp \
@@ -33,7 +34,8 @@ SOURCES += main.cpp \
            glvlsegment.cpp \
            glvlsegmentdialog.cpp \
            glvlpinsdlg.cpp \
-           glvlrule.cpp 
+           glvlrule.cpp \
+           glvlposlistener.cpp 
 TARGETDEPS += ../wshed/libwshed.a
 LIBS += ../wshed/libwshed.a \
 -lqt_glue \

@@ -211,11 +211,11 @@ void GLvlView::onCamChanged()
 	assert(tex->TexType==GL_TEXTURE_3D);
 	SGLBaseCam &cam=*(glview->Camera);
 	
-	SGLVektor Pos=cam.Pos;
-	SGLVektor LookAt=cam.LookAt;
+	const SGLVektor &Pos=cam.Pos;
+	const SGLVektor &LookAt=cam.LookAt;
 	
-	SGLVektor senkr=(cam.Pos-cam.LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
-	float winkel=cam.UpVect.SGLV_X<0 ? cam.UpVect.VektWink(senkr):-cam.UpVect.VektWink(senkr);
+	const SGLVektor senkr=(cam.Pos-cam.LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
+	const float winkel=cam.UpVect.SGLV_X<0 ? cam.UpVect.VektWink(senkr):-cam.UpVect.VektWink(senkr);
 	rollDeg->setValue((int)winkel);
 
 	xCoordCam->setValue((int)Pos.SGLV_X);
@@ -483,7 +483,9 @@ void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 
 void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 {
-	if(e->state()==Qt::LeftButton && !glview->MouseInfo.MovedPastDownBtn)
+	if(e->state()==(Qt::LeftButton | ControlButton) && !glview->MouseInfo.MovedPastDownBtn)
+		jumpToCursor();
+	else if(e->state()==Qt::LeftButton && !glview->MouseInfo.MovedPastDownBtn)
 	{
 		selectSegment();
 		e->accept();
@@ -505,3 +507,10 @@ void GLvlView::showPinsDlg(bool toggle)
 }
 
 
+void GLvlPlaneView::jumpToCursor(){jumpTo(cursor->OldPos);}
+void GLvlPlaneView::jumpTo(const SGLVektor &to)
+{
+	glview->Camera->MoveAimTo(to);
+	glview->sendRedraw();
+	onCamChanged();
+}
