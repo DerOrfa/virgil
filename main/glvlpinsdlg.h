@@ -19,13 +19,13 @@
 #include <qlistview.h>
 
 class SGLqtSpace;
-class GLvlRule;
+class GLvlRuler;
 
 class GLvlPinsDlg : public pins
 {
 	Q_OBJECT
 	SGLqtSpace *space;
-	list<boost::shared_ptr<GLvlRule> > rulers;
+	list<boost::shared_ptr<GLvlRuler> > rulers;
 public:
 	GLvlPinsDlg(QWidget* parent,SGLqtSpace *masterSpace);
 	class pinItem:public QListViewItem,public boost::shared_ptr<GLvlPin>

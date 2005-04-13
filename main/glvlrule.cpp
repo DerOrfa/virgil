@@ -13,24 +13,27 @@
 #include "glvlplaneview.h"
 #include <libsgl/util/sglmaterial.h>
 
-GLvlRule::GLvlRule(SGLVektor _from,SGLVektor _to):from(_from),to(_to),Masslinie(from,to)
+GLvlRuler::GLvlRuler(SGLVektor _from,SGLVektor _to):
+from(_from),to(_to),
+Masslinie(from,to),
+Bemassung(QString::number((to-from).Len()).latin1())
 {
+	Bemassung.tiefe=10;
 	Bemassung.MoveTo(getCenter());
 	Bemassung.Mat->SetColor(255,0,0);
 	Bemassung.FaceAt=&GLvlView::activeCam->Pos;
-	cout << GLvlView::activeCam->Pos << endl; 
 	GLvlView::activeCam->link(Bemassung);
 }
 
-SGLVektor GLvlRule::getCenter()const
+SGLVektor GLvlRuler::getCenter()const
 {
-	return (from+from)*.5*(to-from).Len();
+	return from+(to-from)*.5;
 }
 
 /*!
     \fn GLvlPlaneCursor::compileSubObjects()
  */
-void GLvlRule::compileSubObjects()
+void GLvlRuler::compileSubObjects()
 {
 	Bemassung.DrahtGitter((GLvlView::activeCam->Pos-getCenter()).Len()<20);
 	Objs.clear();

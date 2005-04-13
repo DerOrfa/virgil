@@ -89,7 +89,7 @@ void GLvlPinsDlg::measure()
 	double len=0;
 	assert(selPinList.size()>1);
 	
-	for(list<boost::shared_ptr<GLvlRule> >::iterator i=rulers.begin();i!=rulers.end();i++)
+	for(list<boost::shared_ptr<GLvlRuler> >::iterator i=rulers.begin();i!=rulers.end();i++)
 		space->unshowObj(*i);
 	rulers.clear();
 	
@@ -108,6 +108,6 @@ void GLvlPinsDlg::measure()
 	abst_path->setText(pathText);
 	abst_text->setText(QString::number(len)+"mm");
 	
-	rulers.push_back(boost::shared_ptr<GLvlRule>(new GLvlRule(SGLVektor(0,0,0),SGLVektor(50,50,50))));
+	rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler(SGLVektor(0,0,0),SGLVektor(50,50,50))));
 	space->showObj(rulers.back());
 }

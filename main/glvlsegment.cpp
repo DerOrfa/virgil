@@ -18,6 +18,7 @@
 GLvlSegment::GLvlSegment(const GLvlSegment &)
 {
 	cout << "Kopiere Segment" << endl;
+	abort();
 }
 
 

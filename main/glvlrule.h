@@ -19,10 +19,10 @@
 /**
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
  */
-class GLvlRule : public SGLMetaObj
+class GLvlRuler : public SGLMetaObj
 {
 	public:
-		GLvlRule(SGLVektor from,SGLVektor to);
+		GLvlRuler(SGLVektor from,SGLVektor to);
 		void compileSubObjects();
 		SGLVektor getCenter()const;
 		void setCamera(SGLBaseCam *cam);
