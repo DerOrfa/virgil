@@ -3,6 +3,23 @@
 # Subdir relative project main directory: ./main
 # Target is an application:  virgil
 
+TARGETDEPS += ../wshed/libwshed.a 
+LIBS += ../wshed/libwshed.a \
+        -lqt_glue \
+        -leclasses2 \
+        -lvista \
+        -lsgl \
+        -lboost_signals 
+QMAKE_LIBDIR = ../wshed 
+DEFINES = GL_GLEXT_PROTOTYPES 
+TARGET = virgil 
+CONFIG += release \
+          warn_off \
+          qt \
+          opengl \
+          thread \
+          x11 
+TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui \
          segments.ui \
@@ -36,20 +53,3 @@ SOURCES += main.cpp \
            glvlpinsdlg.cpp \
            glvlrule.cpp \
            glvlposlistener.cpp 
-TARGETDEPS += ../wshed/libwshed.a
-LIBS += ../wshed/libwshed.a \
--lqt_glue \
--leclasses2 \
--lvista \
--lsgl \
--lboost_signals
-QMAKE_LIBDIR = ../wshed
-DEFINES = GL_GLEXT_PROTOTYPES
-TARGET = virgil
-CONFIG += debug \
-warn_off \
-qt \
-opengl \
-thread \
-x11
-TEMPLATE = app

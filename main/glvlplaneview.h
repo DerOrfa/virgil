@@ -75,7 +75,14 @@ private:
 		const boost::shared_ptr<SGLBaseCam> &myCam;
 	public:
 		SGLgotFocusSlot(const boost::shared_ptr<SGLBaseCam> &_myCam):myCam(_myCam){}
-		void operator()(int reason){GLvlView::activeCam=myCam;}
+		void operator()(int reason){
+			if(GLvlView::activeCam!=myCam)
+			{
+				cout << "aktiveCam:" << GLvlView::activeCam << endl << GLvlView::activeCam->Pos << endl;
+				GLvlView::activeCam=myCam;
+			}
+			
+		}
 	}onGotFocus;
 
 	bool selfChange;

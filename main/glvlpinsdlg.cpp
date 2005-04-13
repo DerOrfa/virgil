@@ -56,7 +56,7 @@ void GLvlPinsDlg::onSelChange()
 			if(!found)selPinList.push_back(listIt);
 		}
 	}
-	if(selPinList.size()>1)measure();
+	measure();
 }
 
 GLvlPinsDlg::pinItem::pinItem(SGLqtSpace * space,const SGLVektor &pos,const QString text):
@@ -87,7 +87,6 @@ GLvlPinsDlg::pinItem* GLvlPinsDlg::newPin(SGLqtSpace * space,const SGLVektor &po
 void GLvlPinsDlg::measure()
 {
 	double len=0;
-	assert(selPinList.size()>1);
 	
 	for(list<boost::shared_ptr<GLvlRuler> >::iterator i=rulers.begin();i!=rulers.end();i++)
 	{
@@ -95,25 +94,26 @@ void GLvlPinsDlg::measure()
 		space->unshowObj(*i);
 	}
 	rulers.clear();
-	
-	list<QListViewItemIterator>::iterator it=selPinList.begin();
-	QString pathText="["+it->current()->text(0)+"]";
-	GLvlPinsDlg::pinItem* prev=dynamic_cast<GLvlPinsDlg::pinItem*>(it->current());
-	while((++it)!=selPinList.end())
+	if(selPinList.size()>1)
 	{
-		GLvlPinsDlg::pinItem *const curr=dynamic_cast<GLvlPinsDlg::pinItem*>(it->current());
-		if(curr){
-			pathText+="-["+curr->text(0)+"]";
-			len+=((*curr)->pos-(*prev)->pos).Len();
-			
-			rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler((*prev)->pos,(*curr)->pos)));
-			space->showObj(rulers.back());
-			space->sendShowObj(rulers.back());
-
-			prev=curr;
-		}
-	}
-	abst_path->setText(pathText);
-	abst_text->setText(QString::number(len)+"mm");
+		list<QListViewItemIterator>::iterator it=selPinList.begin();
+		QString pathText="["+it->current()->text(0)+"]";
+		GLvlPinsDlg::pinItem* prev=dynamic_cast<GLvlPinsDlg::pinItem*>(it->current());
+		while((++it)!=selPinList.end())
+		{
+			GLvlPinsDlg::pinItem *const curr=dynamic_cast<GLvlPinsDlg::pinItem*>(it->current());
+			if(curr){
+				pathText+="-["+curr->text(0)+"]";
+				len+=((*curr)->pos-(*prev)->pos).Len();
+				
+				rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler((*prev)->pos,(*curr)->pos)));
+				space->showObj(rulers.back());
+				space->sendShowObj(rulers.back());
 	
+				prev=curr;
+			}
+		}
+		abst_path->setText(pathText);
+		abst_text->setText(QString::number(len)+"mm");
+	}	
 }
