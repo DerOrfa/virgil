@@ -90,7 +90,10 @@ void GLvlPinsDlg::measure()
 	assert(selPinList.size()>1);
 	
 	for(list<boost::shared_ptr<GLvlRuler> >::iterator i=rulers.begin();i!=rulers.end();i++)
+	{
+		space->sendUnshowObj(*i);
 		space->unshowObj(*i);
+	}
 	rulers.clear();
 	
 	list<QListViewItemIterator>::iterator it=selPinList.begin();
@@ -102,12 +105,15 @@ void GLvlPinsDlg::measure()
 		if(curr){
 			pathText+="-["+curr->text(0)+"]";
 			len+=((*curr)->pos-(*prev)->pos).Len();
+			
+			rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler((*prev)->pos,(*curr)->pos)));
+			space->showObj(rulers.back());
+			space->sendShowObj(rulers.back());
+
 			prev=curr;
 		}
 	}
 	abst_path->setText(pathText);
 	abst_text->setText(QString::number(len)+"mm");
 	
-	rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler(SGLVektor(0,0,0),SGLVektor(50,50,50))));
-	space->showObj(rulers.back());
 }
