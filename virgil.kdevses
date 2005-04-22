@@ -1,22 +1,31 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="5" >
-  <Doc0 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlposlistener.cpp" >
-   <View0 line="15" Type="Source" />
+ <DocsAndViews NumberOfDocuments="8" >
+  <Doc0 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlplaneview.cpp" >
+   <View0 line="222" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlposlistener.h" >
-   <View0 line="23" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlmasterview.cpp" >
+   <View0 line="183" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlplaneview.h" >
-   <View0 line="77" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/qt_glue/sglqtspace.cpp" >
+   <View0 line="279" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///opt/prog/virgil/main/glvlpinsdlg.cpp" >
-   <View0 line="104" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/qt_glue/sglqtspace.h" >
+   <View0 line="60" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="http://www.sgi.com/tech/stl/UniqueSortedAssociativeContainer.html" >
-   <View0 Type="Documentation" />
+  <Doc4 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlplanecam.h" >
+   <View0 line="40" Type="Source" />
   </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/moc_glvlplaneview.cpp" >
+   <View0 line="296" Type="Source" />
+  </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/qt_glue/moc_sglqtspace.cpp" >
+   <View0 line="179" Type="Source" />
+  </Doc6>
+  <Doc7 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/libsgl/sglspace.h" >
+   <View0 line="84" Type="Source" />
+  </Doc7>
  </DocsAndViews>
  <pluginList>
   <kdevvalgrind>
@@ -31,6 +40,8 @@
     <breakpoint1 location="/scr/santiago1/reimer/prog/simpleGL/libsgl/sglobjbase.cpp:183" type="1" condition="" enabled="1" />
     <breakpoint2 location="/SCR/reimer/prog/simpleGL/libsgl/helper/sgldisplist.cpp:101" type="1" condition="" enabled="1" />
     <breakpoint3 location="/opt/prog/virgil/main/glvlplaneview.cpp:486" type="1" condition="" enabled="1" />
+    <breakpoint4 location="/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlplaneview.cpp:209" type="1" condition="" enabled="1" />
+    <breakpoint5 location="/scr/santiago1/reimer/prog/simpleGL/qt_glue/sglqtspace.cpp:68" type="1" condition="" enabled="1" />
    </breakpointList>
   </kdevdebugger>
  </pluginList>

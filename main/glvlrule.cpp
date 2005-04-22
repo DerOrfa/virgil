@@ -19,6 +19,7 @@ Masslinie(from,to),
 Bemassung((QString::number((to-from).Len())+"mm").latin1())
 {
 	Bemassung.MoveTo(getCenter());
+	Bemassung.Scale((GLvlView::activeCam->Pos-getCenter()).Len()/100);
 	Bemassung.Mat->SetColor(255,0,0);
 	Bemassung.FaceAt=&GLvlView::activeCam->Pos;
 	GLvlView::activeCam->link(*this);
