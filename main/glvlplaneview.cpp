@@ -67,9 +67,9 @@ AimZStatus((QWidget*)statusBar())
 	AimYStatus.setMinimumSize(80,5);
 	AimZStatus.setMinimumSize(80,5);
 
-	statusBar()->addWidget(&AimXStatus,0,true);
-	statusBar()->addWidget(&AimYStatus,0,true);
-	statusBar()->addWidget(&AimZStatus,0,true);
+	statusBar()->addWidget(&AimXStatus,10,true);
+	statusBar()->addWidget(&AimYStatus,10,true);
+	statusBar()->addWidget(&AimZStatus,10,true);
 	
 	AimXStatus.setText("0");
 	AimYStatus.setText("0");
@@ -403,7 +403,7 @@ void GLvlPlaneView::init()
 	glview->registerObj(cursor);
 
 	cam->connect(glview,
-		SIGNAL(pressedMouseMove(QMouseEvent *,float ,float )),
+		SIGNAL(pressedMouseMoveRel(QMouseEvent *,float ,float )),
 		SLOT(schieben(QMouseEvent *,float ,float )));
 	cursor->connect( fangToggle, SIGNAL( toggled(bool) ),SLOT(setFang(bool)));
 	cursor->connect( spinCursorSize, SIGNAL( valueChanged(int) ),SLOT(setSize(int)));
