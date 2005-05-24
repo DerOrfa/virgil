@@ -1,23 +1,28 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="2" >
-  <Doc0 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlplaneview.cpp" >
-   <View0 line="69" Type="Source" />
+ <DocsAndViews NumberOfDocuments="3" >
+  <Doc0 NumberOfViews="1" URL="file:/opt/prog/simpleGL/libsgl/sglspace.cpp" >
+   <View0 line="276" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:/scr/santiago1/reimer/prog/simpleGL/virgil/main/glvlplaneview.h" >
-   <View0 line="114" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:/opt/prog/simpleGL/virgil/main/glvlplaneview.cpp" >
+   <View0 line="140" Type="Source" />
   </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:/usr/include/boost/signals/signal_template.hpp" >
+   <View0 line="282" Type="Source" />
+  </Doc2>
  </DocsAndViews>
  <pluginList>
+  <kdevbookmarks>
+   <bookmarks/>
+  </kdevbookmarks>
+  <kdevsubversion>
+   <subversion recurseresolve="1" recurserelocate="1" recursemerge="1" recursecommit="1" base="" recursepropget="1" recurseswitch="1" recurseupdate="1" recursepropset="1" recursediff="1" recurserevert="1" forcemove="1" recursecheckout="1" forceremove="1" recurseadd="1" recurseproplist="1" forcemerge="1" />
+  </kdevsubversion>
   <kdevdebugger>
-   <breakpointList/>
+   <breakpointList>
+    <breakpoint0 location="/opt/prog/simpleGL/libsgl/sglspace.cpp:546" type="1" condition="" enabled="1" />
+   </breakpointList>
   </kdevdebugger>
-  <kdevvalgrind>
-   <executable path="" params="" />
-   <valgrind path="" params="" />
-   <calltree path="" params="" />
-   <kcachegrind path="" />
-  </kdevvalgrind>
  </pluginList>
 </KDevPrjSession>

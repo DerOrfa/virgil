@@ -9,34 +9,10 @@
     <keywords>
       <keyword>Qt</keyword>
     </keywords>
-    <ignoreparts>
-      <part>kdevopenwith</part>
-      <part>kdevabbrev</part>
-      <part>kdevbookmarks</part>
-      <part>kdevctags2</part>
-      <part>kdevsnippet</part>
-      <part>kdevdoxygen</part>
-      <part>kdevkonsoleview</part>
-      <part>kdevfilegroups</part>
-      <part>kdevfileselector</part>
-      <part>kdevfileview</part>
-      <part>kdevfilelist</part>
-      <part>kdevdistpart</part>
-      <part>kdevpartexplorer</part>
-      <part>kdevquickopen</part>
-      <part>kdevregexptest</part>
-      <part>kdevreplace</part>
-      <part>kdevrbdebugger</part>
-      <part>kdevscripting</part>
-      <part>kdevfilter</part>
-      <part>kdevastyle</part>
-      <part>kdevtexttools</part>
-      <part>kdevtools</part>
-      <part>kdevvisualboyadvance</part>
-    </ignoreparts>
+    <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -94,12 +70,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <programargs>~/cgtbsmMK3T_gauss.v</programargs>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -113,7 +89,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>~/cgtbsmMK3T_gauss.v</programargs>
+      <programargs> ~/cgtbsmMK3T.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -129,7 +105,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
     </make>
