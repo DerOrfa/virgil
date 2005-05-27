@@ -339,7 +339,7 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 
 GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 {
-	weich=false;
+	weich=true;
 	repeat=MipMap=false;
 //	identity=true;
 	TexType=GL_TEXTURE_3D;
