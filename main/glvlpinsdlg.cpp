@@ -88,7 +88,7 @@ void GLvlPinsDlg::measure()
 {
 	double len=0;
 	
-	for(list<boost::shared_ptr<GLvlRuler> >::iterator i=rulers.begin();i!=rulers.end();i++)
+	for(list<SGLshPtr<GLvlRuler> >::iterator i=rulers.begin();i!=rulers.end();i++)
 	{
 		space->sendUnshowObj(*i);
 		space->unshowObj(*i);
@@ -106,7 +106,7 @@ void GLvlPinsDlg::measure()
 				pathText+="-["+curr->text(0)+"]";
 				len+=((*curr)->pos-(*prev)->pos).Len();
 				
-				rulers.push_back(boost::shared_ptr<GLvlRuler>(new GLvlRuler((*prev)->pos,(*curr)->pos)));
+				rulers.push_back(SGLshPtr<GLvlRuler>(new GLvlRuler((*prev)->pos,(*curr)->pos)));
 				space->showObj(rulers.back());
 				space->sendShowObj(rulers.back());
 	

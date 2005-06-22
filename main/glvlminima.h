@@ -53,13 +53,13 @@ public:
 	inline VUByte GLvlMinima::bottomBorder()const{return (*org)[(*plist)[start]];};
 	inline VUByte GLvlMinima::topBorder()const{return (*org)[(*plist)[end-1]];};
 
-	static boost::shared_ptr< vincent::Bild_vimage<vincent::lab_value> > img;
-	static boost::shared_ptr< vincent::Bild_vimage<VUByte> > org;
+	static SGLshPtr< vincent::Bild_vimage<vincent::lab_value> > img;
+	static SGLshPtr< vincent::Bild_vimage<VUByte> > org;
 	VUByte bottomCap,topCap;
 	
 	
 	unsigned int start,end;
-	static boost::shared_ptr< vincent::PunktList<vincent::lab_value> > plist;
+	static SGLshPtr< vincent::PunktList<vincent::lab_value> > plist;
 	GLvlMinima(unsigned int pos);
 	bool incl_wshed;
 	inline unsigned int volume()const{return end-start;}

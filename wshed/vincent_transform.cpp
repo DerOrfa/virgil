@@ -24,7 +24,7 @@ const lab_value WSHED_WSHED=std::numeric_limits<lab_value >::min();
 
 transform::transform(VImage src) : im(src),D(im){}
 
-boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
+SGLshPtr<  Bild_vimage<lab_value>  > transform::operator()()
 {
 	Bild_mem<unsigned short> dist(im.xsize,im.ysize,im.zsize,0);
 	Bild_vimage<lab_value> lab(VCreateImage(im.zsize,im.ysize,im.xsize,VShortRepn));
@@ -128,7 +128,7 @@ boost::shared_ptr<  Bild_vimage<lab_value>  > transform::operator()()
 		reached(h,curlab-std::numeric_limits<lab_value >::min());
 	}while((h++)<h_max);
 	msg("Watershedtransformation abgeschlossen",true);
-	last_erg = boost::shared_ptr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
+	last_erg = SGLshPtr< Bild_vimage<lab_value> >(new Bild_vimage<lab_value>(lab));
 	last_erg->xsize.setElsize(im.xsize.getElsize('X'));
 	last_erg->ysize.setElsize(im.ysize.getElsize('Y'));
 	last_erg->zsize.setElsize(im.zsize.getElsize('Z'));
@@ -142,9 +142,9 @@ void transform::run()
 	end();
 }
 
-boost::shared_ptr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)const
+SGLshPtr< PunktList<lab_value> > transform::getVoxels(const Bild_vimage<lab_value> &im)const
 {
-	boost::shared_ptr< PunktList<lab_value> > ret(new PunktList<lab_value>(D,im,WSHED_WSHED));
+	SGLshPtr< PunktList<lab_value> > ret(new PunktList<lab_value>(D,im,WSHED_WSHED));
 	sort_q<lab_value> comp;
 	
 	std::stable_sort(ret->m, ret->m + ret->size,comp);

@@ -226,7 +226,7 @@ void GLvlMinima::setup(
 {	
 	GLvlMinima::img=transform.last_erg;
 	GLvlMinima::plist=transform.getVoxels(*img);
-	org= boost::shared_ptr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(src));
+	org= SGLshPtr< vincent::Bild_vimage<VUByte> >(new vincent::Bild_vimage<VUByte>(src));
 
 	const GLshort vertexes[8][3] = {{0,1,1}, {1,1,1}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,0,0}, {0,0,0}};
 	const GLfloat normales[8][3] = {{-0.57735,0.57735,0.57735}, {0.57735,0.57735,0.57735}, {0.57735,0.57735,-0.57735}, {-0.57735,0.57735,-0.57735}, {-0.57735,-0.57735,0.57735}, {0.57735,-0.57735,0.57735}, {0.57735,-0.57735,-0.57735}, {-0.57735,-0.57735,-0.57735}};
@@ -388,9 +388,9 @@ void GLvlMinima::writeTex(const unsigned short offset[3],Bild<GLubyte> &textur)c
 
 GLuint GLvlMinima::caps=0;
 SGLVektor GLvlMinima::scale;
-boost::shared_ptr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
-boost::shared_ptr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
-boost::shared_ptr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
+SGLshPtr<vincent::Bild_vimage<vincent::lab_value> > GLvlMinima::img;
+SGLshPtr< vincent::Bild_vimage<VUByte> > GLvlMinima::org;
+SGLshPtr<vincent::PunktList<vincent::lab_value> > GLvlMinima::plist;
 
 
 void GLvlMinima::reshow(SGLqtSpace &space,GLvlSegment &seg,const shared_obj &self)

@@ -21,7 +21,7 @@
 class GLvlCutPlane : public SGL3DPlane
 {
 public:
-	GLvlCutPlane(boost::shared_ptr<GLvlVolumeTex> volumeTex);
+	GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex);
 	void resetTexKoord();
 };
 

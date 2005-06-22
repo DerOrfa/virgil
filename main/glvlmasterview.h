@@ -37,7 +37,7 @@ using namespace boost;
 class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 	SGLqtSpace * mw;
 	ERegistry *masterReg;
-	shared_ptr<SGLCube> rahmen;
+	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
 public:
 	GLvlMasterView(std::list<VImage> src);
@@ -48,7 +48,7 @@ public:
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
-    void loadWShedDlg();
+	 void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{

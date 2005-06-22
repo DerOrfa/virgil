@@ -33,9 +33,9 @@ class GLvlPlaneCam : public QObject, public SGLBaseCam
 {
 Q_OBJECT
 public:
-	GLvlPlaneCam(boost::shared_ptr<GLvlVolumeTex> tex);
+	GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex);
 	void generate();
-	boost::shared_ptr<GLvlCutPlane> myPlane;
+	SGLshPtr<GLvlCutPlane> myPlane;
 	GLfloat farbe[3];
 signals:
 	void camChanged();

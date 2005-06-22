@@ -9,10 +9,37 @@
     <keywords>
       <keyword>Qt</keyword>
     </keywords>
-    <ignoreparts/>
+    <ignoreparts>
+      <part>kdevopenwith</part>
+      <part>kdevabbrev</part>
+      <part>kdevbookmarks</part>
+      <part>kdevctags2</part>
+      <part>kdevsnippet</part>
+      <part>kdevdebugger</part>
+      <part>kdevdocumentation</part>
+      <part>kdevdoxygen</part>
+      <part>kdevkonsoleview</part>
+      <part>kdevfilegroups</part>
+      <part>kdevfileselector</part>
+      <part>kdevfileview</part>
+      <part>kdevfilelist</part>
+      <part>kdevdistpart</part>
+      <part>kdevpartexplorer</part>
+      <part>kdevquickopen</part>
+      <part>kdevregexptest</part>
+      <part>kdevreplace</part>
+      <part>kdevrbdebugger</part>
+      <part>kdevscripting</part>
+      <part>kdevfilter</part>
+      <part>kdevastyle</part>
+      <part>kdevtexttools</part>
+      <part>kdevtools</part>
+      <part>kdevvalgrind</part>
+      <part>kdevvisualboyadvance</part>
+    </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -105,7 +132,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
     </make>
@@ -165,7 +192,7 @@
       <qtdesigner/>
     </designerintegration>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>

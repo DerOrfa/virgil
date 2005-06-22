@@ -35,7 +35,7 @@ using namespace boost;
 using namespace efc;
 
 GLvlMasterView::GLvlMasterView(std::list<VImage> src):
-GLvlView( NULL, shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
+GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
 rahmen(new SGLCube())
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
@@ -133,7 +133,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 	view->showInOthers(view->schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
 	view->showOthersHere(view->schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
 
-	shared_ptr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
+	SGLshPtr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
 
 	updatePlanes.connect(cam->myPlane->compileNextTime);

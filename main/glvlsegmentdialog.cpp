@@ -66,19 +66,19 @@ void GLvlSegmentDialog::onWatershedReady(bool)
 		SGLVektor(GLvlSegment::targetTex->Info.X.getElsize('X'),GLvlSegment::targetTex->Info.Y.getElsize('Y'),GLvlSegment::targetTex->Info.Z.getElsize('Z')),
 		*v_transform,GLvlMasterView::MasterImg
 	);
-	map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator i=objs.end();
+	map<vincent::lab_value,SGLshPtr<GLvlSegment> >::iterator i=objs.end();
 	for(unsigned int index = 0;
 		index<GLvlMinima::plist->size;
 		index=i->second->front()->end
 	)
 	{
 		vincent::lab_value id=GLvlMinima::plist->operator[](index).wert;
-		i=objs.insert(i,pair<vincent::lab_value,shared_ptr<GLvlSegment> >(id,shared_ptr<GLvlSegment>(new GLvlSegment(index))));
+		i=objs.insert(i,pair<vincent::lab_value,SGLshPtr<GLvlSegment> >(id,SGLshPtr<GLvlSegment>(new GLvlSegment(index))));
 	}
 	onMsg("Waterschedtransformation nach vincent abgeschlossen, " + QString::number(objs.size()) + " Segmente wurden registriert",false);
 }
 
-void GLvlSegmentDialog::registerSegment(boost::shared_ptr<GLvlSegment> seg)
+void GLvlSegmentDialog::registerSegment(SGLshPtr<GLvlSegment> seg)
 {
 	if(aktSegment)aktSegment->undisplay();
 	aktSegment=new SegmentItem(segList,seg->front());
@@ -110,7 +110,7 @@ TARGET ## _cap_max_text->setText(EString(MAX));	\
 #undef SET_CAP_DATA
 }
 
-void GLvlSegmentDialog::selectMinima(boost::shared_ptr<GLvlSegment> min)
+void GLvlSegmentDialog::selectMinima(SGLshPtr<GLvlSegment> min)
 {
 	
 	if(aktMinima!=min)
@@ -127,13 +127,13 @@ void GLvlSegmentDialog::selectMinima(boost::shared_ptr<GLvlSegment> min)
 }
 
 
-GLvlSegmentDialog::MinimaItem::MinimaItem(QListViewItem *parent,boost::shared_ptr<GLvlMinima> min):
-QListViewItem(parent,"Minima"+QString::number(min->getID())),boost::shared_ptr<GLvlMinima>(min)
+GLvlSegmentDialog::MinimaItem::MinimaItem(QListViewItem *parent,SGLshPtr<GLvlMinima> min):
+QListViewItem(parent,"Minima"+QString::number(min->getID())),SGLshPtr<GLvlMinima>(min)
 {
 	showInf();
 }
 
-GLvlSegmentDialog::SegmentItem::SegmentItem(QListView *parent,boost::shared_ptr<GLvlMinima> min):
+GLvlSegmentDialog::SegmentItem::SegmentItem(QListView *parent,SGLshPtr<GLvlMinima> min):
 QListViewItem(parent,"Segment"+QString::number(min->getID())),GLvlSegment(min)
 {
 	new GLvlSegmentDialog::MinimaItem(this,min);
@@ -142,7 +142,7 @@ QListViewItem(parent,"Segment"+QString::number(min->getID())),GLvlSegment(min)
 	showInf();
 }
 
-void GLvlSegmentDialog::SegmentItem::addMinima(boost::shared_ptr<GLvlMinima> min)
+void GLvlSegmentDialog::SegmentItem::addMinima(SGLshPtr<GLvlMinima> min)
 {
 	push_back(min);
 	new GLvlSegmentDialog::MinimaItem(this,min);
@@ -190,7 +190,7 @@ void GLvlSegmentDialog::startTransform()
 		case VUByteRepn:	
 		{
 //			glview->SetQuality(0);
-			v_transform = shared_ptr<vincent::transform>(new vincent::transform(GLvlMasterView::MasterImg));
+			v_transform = SGLshPtr<vincent::transform>(new vincent::transform(GLvlMasterView::MasterImg));
 			this->connect(&*v_transform,SIGNAL(reached(vincent::VBild_value ,unsigned short)),SLOT(onReached(vincent::VBild_value,unsigned short )));
 			this->connect(&*v_transform,SIGNAL(msg(QString,bool)),SLOT(onMsg(QString,bool)));
 			qApp->processEvents();//Nebenläufigkeit faken
@@ -223,7 +223,7 @@ void GLvlSegmentDialog::findMinima(unsigned int index)
 void GLvlSegmentDialog::findMinima(vincent::lab_value id)
 {
 		if(id==vincent::WSHED_WSHED)return;
-		map<vincent::lab_value,shared_ptr<GLvlSegment> >::iterator it=objs.find(id);
+		map<vincent::lab_value,SGLshPtr<GLvlSegment> >::iterator it=objs.find(id);
 		if(it!=objs.end())
 		{
 			selectMinima(it->second);
@@ -283,27 +283,7 @@ void GLvlSegmentDialog::newSegment()
 }
 
 
-/*!
-    \fn GLvlSegmentDialog::redisplayMinima(const boost::shared_ptr<GLvlSegment> &min)
- */
-// void GLvlSegmentDialog::redisplayMinima(boost::shared_ptr<GLvlSegment> &min)
-// {
-// 	assert(min->isMinima);
-// 	min->redisplay();
-// 	
-// 	for(QListViewItemIterator it(segList);it.current();it++)
-// 	{
-// 		MinimaItem* minItem=dynamic_cast<MinimaItem*>(it.current());
-// 		if(minItem && *minItem == min->front())
-// 		{
-// 			SegmentItem* seg=dynamic_cast<SegmentItem*>(minItem->parent());
-// 			if(seg)seg->redisplay(true);
-// 			else {SGLprintError("Konnte Segment des Minima 0x%x nicht ermitteln",minItem);}
-// 		}
-// 	}
-// }
-
-bool GLvlSegmentDialog::isMinimaInSegm(const boost::shared_ptr<GLvlSegment> &min)
+bool GLvlSegmentDialog::isMinimaInSegm(const SGLshPtr<GLvlSegment> &min)
 {
 	assert(min->isMinima);
 	for(QListViewItemIterator it(segList);it.current();it++)

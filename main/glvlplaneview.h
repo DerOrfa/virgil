@@ -49,7 +49,7 @@ class GLvlView : public GLvlViewBase
 public:
 	GLvlView(
 		SGLqtSpace* mw, 
-		boost::shared_ptr<GLvlVolumeTex> tex,
+		SGLshPtr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg
 	);
 	virtual bool loadCfg();
@@ -57,24 +57,24 @@ public:
 	SGLqtSpace * glview;
 	void showOthersHere(bool toggle);
 	void showObjList();
-	boost::shared_ptr<GLvlVolumeTex> tex;
+	SGLshPtr<GLvlVolumeTex> tex;
 	static GLvlSegmentDialog* wshed;
 	static GLvlPinsDlg* pinsDlg;
 	static ConfigDlg* configDlg;
-	static boost::shared_ptr<SGLBaseCam> activeCam;
+	static SGLshPtr<SGLBaseCam> activeCam;
 	void	selectView(const SGLVektor dir[3]);
 
 protected:
 	EWndRegistry *myReg;
 	void setupSpace(SGLqtSpace *space);
 	void closeEvent(QCloseEvent *e);
-	boost::shared_ptr<SGLBaseCam> myCam;
+	SGLshPtr<SGLBaseCam> myCam;
 private:
 	class SGLgotFocusSlot:public  SGLSlot
 	{
-		const boost::shared_ptr<SGLBaseCam> &myCam;
+		const SGLshPtr<SGLBaseCam> &myCam;
 	public:
-		SGLgotFocusSlot(const boost::shared_ptr<SGLBaseCam> &_myCam):myCam(_myCam){}
+		SGLgotFocusSlot(const SGLshPtr<SGLBaseCam> &_myCam):myCam(_myCam){}
 		void operator()(int reason){
 			if(GLvlView::activeCam!=myCam)
 			{
@@ -116,7 +116,7 @@ class GLvlPlaneView: public GLvlView
 public:
 	GLvlPlaneView(
 		SGLqtSpace* mw, 
-		boost::shared_ptr<GLvlVolumeTex> tex,
+		SGLshPtr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg
 		);
 	virtual ~GLvlPlaneView();
@@ -132,7 +132,7 @@ public:
 	void jumpToCursor();
 	void jumpTo(const SGLVektor &to);
 
-	boost::shared_ptr<GLvlPlaneCursor> cursor;
+	SGLshPtr<GLvlPlaneCursor> cursor;
 	list<GLvlPlaneView *>::iterator it;
 private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;

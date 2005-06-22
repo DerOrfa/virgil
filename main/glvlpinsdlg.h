@@ -25,10 +25,10 @@ class GLvlPinsDlg : public pins
 {
 	Q_OBJECT
 	SGLqtSpace *space;
-	list<boost::shared_ptr<GLvlRuler> > rulers;
+	list<SGLshPtr<GLvlRuler> > rulers;
 public:
 	GLvlPinsDlg(QWidget* parent,SGLqtSpace *masterSpace);
-	class pinItem:public QListViewItem,public boost::shared_ptr<GLvlPin>
+	class pinItem:public QListViewItem,public SGLshPtr<GLvlPin>
 	{
 	public:
 		SGLqtSpace	&mySpace;

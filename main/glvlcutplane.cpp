@@ -12,7 +12,7 @@
 #include "glvlcutplane.h"
 #include <assert.h>
 
-GLvlCutPlane::GLvlCutPlane(boost::shared_ptr<GLvlVolumeTex> volumeTex): SGL3DPlane(0,0, volumeTex)
+GLvlCutPlane::GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex): SGL3DPlane(0,0, volumeTex)
 {
 	useCenter=false;
 	IgnoreLight=true;;

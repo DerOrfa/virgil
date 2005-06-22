@@ -496,7 +496,7 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 void GLvlVolumeTex::loadTint(VImage i)
 {
 	SGLprintState("lade Aktivierungsmap");
-	boost::shared_ptr<GLvlVolumeTex> p(new GLvlVolumeTex());
+	SGLshPtr<GLvlVolumeTex> p(new GLvlVolumeTex());
 	p->renderMode=SGL_MTEX_MODE_TINT;
 	p->Load3DImage(i);
 	p->calcMatr();

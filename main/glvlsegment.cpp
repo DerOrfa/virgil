@@ -22,14 +22,14 @@ GLvlSegment::GLvlSegment(const GLvlSegment &)
 }
 
 
-GLvlSegment::GLvlSegment(boost::shared_ptr<GLvlMinima> img):isMinima(true)
+GLvlSegment::GLvlSegment(SGLshPtr<GLvlMinima> img):isMinima(true)
 {
 	push_back(img);
 }
 
 GLvlSegment::GLvlSegment(unsigned int index):isMinima(true)
 {
-	push_back(boost::shared_ptr<GLvlMinima>(new GLvlMinima(index)));
+	push_back(SGLshPtr<GLvlMinima>(new GLvlMinima(index)));
 }
 GLvlSegment::~GLvlSegment()
 {
@@ -42,7 +42,7 @@ bool GLvlSegment::display()
 		(*i)->show(*target3D,*this,*i);
 	
 	EVektor<unsigned short> pos;
-	myTex=boost::shared_ptr<GLvlVolumeTex>(new GLvlVolumeTex());
+	myTex=SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex());
 	myTex->renderMode=SGL_MTEX_MODE_COLORMASK;
 	
 	myTex->loadSegment(*this);
@@ -61,12 +61,12 @@ bool GLvlSegment::display()
 void GLvlSegment::undisplay()
 {
 	if(myTex)targetTex->delMTex(myTex,true);
-	myTex=boost::shared_ptr<GLvlVolumeTex>();
+	myTex=SGLshPtr<GLvlVolumeTex>();
 	for(GLvlSegment::iterator i=begin();i!=end();i++)
 		(*i)->unshow(*target3D,*this,*i);
 }
 
-void GLvlSegment::setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex)
+void GLvlSegment::setup(SGLqtSpace *_target3D,SGLshPtr<GLvlVolumeTex> _targetTex)
 {
 	target3D=_target3D;
 	targetTex=_targetTex;
@@ -109,7 +109,7 @@ void GLvlSegment::getDim(dim &X,dim &Y, dim &Z)
 
 
 
-boost::shared_ptr<GLvlVolumeTex> GLvlSegment::targetTex;
+SGLshPtr<GLvlVolumeTex> GLvlSegment::targetTex;
 SGLqtSpace *GLvlSegment::target3D;
 
 void GLvlSegment::redisplay()

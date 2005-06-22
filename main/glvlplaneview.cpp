@@ -45,7 +45,7 @@ using namespace efc;
 
 GLvlPlaneView::GLvlPlaneView(
 	SGLqtSpace* mw, 
-	shared_ptr<GLvlVolumeTex> tex,
+	SGLshPtr<GLvlVolumeTex> tex,
 	EWndRegistry *myReg
 ):
 GLvlView(mw, tex,myReg),
@@ -105,7 +105,7 @@ bool GLvlPlaneView::saveCfg()
 
 void GLvlPlaneView::showInOthers(bool toggle)
 {
-	boost::shared_ptr<GLvlPlaneCam> cam=dynamic_pointer_cast<GLvlPlaneCam>(glview->Camera);
+	SGLshPtr<GLvlPlaneCam> cam=dynamic_pointer_cast<GLvlPlaneCam>(glview->Camera);
 	if(!cam){SGLprintError("Die aktuelle Camera ist keine PLaneCam");return;}
 	if(toggle)
 	{
@@ -125,7 +125,7 @@ void GLvlPlaneView::lostView()
 	close();
 }
 
-GLvlView::GLvlView(SGLqtSpace* mw, shared_ptr<GLvlVolumeTex> tex,EWndRegistry *myReg):
+GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex,EWndRegistry *myReg):
 GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0),//Das MasterWnd darf erst durch die app gelöscht werden
 onGotFocus(myCam)
 {
@@ -351,7 +351,7 @@ SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVe
 GLvlSegmentDialog* GLvlView::wshed=NULL;
 GLvlPinsDlg* GLvlView::pinsDlg=NULL;
 ConfigDlg* GLvlView::configDlg=NULL;
-boost::shared_ptr<SGLBaseCam> GLvlView::activeCam;
+SGLshPtr<SGLBaseCam> GLvlView::activeCam;
 
 
 /*!
@@ -396,7 +396,7 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 
 void GLvlPlaneView::init()
 {
-	boost::shared_ptr<GLvlPlaneCam> cam(new GLvlPlaneCam(tex));
+	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam(tex));
 	show();
 	glview->defaultCam(cam);
 	

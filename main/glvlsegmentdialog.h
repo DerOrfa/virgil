@@ -13,7 +13,6 @@
 #ifndef GLVLSEGMENTDIALOG_H
 #define GLVLSEGMENTDIALOG_H
 
-#include <boost/shared_ptr.hpp>
 #include "glvlsegment.h"
 #include "glvlminima.h"
 #include <vista/VImage.h>
@@ -27,33 +26,33 @@ class GLvlSegmentDialog : public SegmentDialog
   Q_OBJECT
 
 	void displayMinimaData(const GLvlMinima &m);
-	boost::shared_ptr<vincent::transform> v_transform;
+	SGLshPtr<vincent::transform> v_transform;
 public:
-	class MinimaItem:public QListViewItem, public boost::shared_ptr<GLvlMinima>
+	class MinimaItem:public QListViewItem, public SGLshPtr<GLvlMinima>
 	{
 	public:
-		MinimaItem(QListViewItem *parent,boost::shared_ptr<GLvlMinima> min);
+		MinimaItem(QListViewItem *parent,SGLshPtr<GLvlMinima> min);
 		void showInf();
 	};
 	class SegmentItem:public QListViewItem,public GLvlSegment
 	{
 	public:
-		SegmentItem(QListView *parent,boost::shared_ptr<GLvlMinima> min);
-		void addMinima(boost::shared_ptr<GLvlMinima> min);
+		SegmentItem(QListView *parent,SGLshPtr<GLvlMinima> min);
+		void addMinima(SGLshPtr<GLvlMinima> min);
 		void showInf();
 		
 	};
 	GLvlSegmentDialog(QWidget* parent,VImage &Img);
 	~GLvlSegmentDialog();
 	/*$PUBLIC_FUNCTIONS$*/
-	void registerSegment(boost::shared_ptr<GLvlSegment> seg);
-	void selectMinima(boost::shared_ptr<GLvlSegment> min);
-	bool isMinimaInSegm(const boost::shared_ptr<GLvlSegment> &min);
+	void registerSegment(SGLshPtr<GLvlSegment> seg);
+	void selectMinima(SGLshPtr<GLvlSegment> min);
+	bool isMinimaInSegm(const SGLshPtr<GLvlSegment> &min);
 
 	VImage Img;
 
-	map<vincent::lab_value,boost::shared_ptr<GLvlSegment> > objs;
-	boost::shared_ptr<GLvlSegment> aktMinima;
+	map<vincent::lab_value,SGLshPtr<GLvlSegment> > objs;
+	SGLshPtr<GLvlSegment> aktMinima;
 	SegmentItem* aktSegment;
 	
 

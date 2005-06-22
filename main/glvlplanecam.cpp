@@ -36,7 +36,7 @@
 #include <qslider.h> 
 
 
-GLvlPlaneCam::GLvlPlaneCam(boost::shared_ptr<GLvlVolumeTex> tex): 
+GLvlPlaneCam::GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex): 
 SGLBaseCam(0,0,150),
 myPlane(new GLvlCutPlane(tex))
 {

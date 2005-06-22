@@ -26,7 +26,7 @@
 #include <libsgl/sglmisc.h>
 #include <math.h>
 #include <typeinfo>
-#include <boost/shared_ptr.hpp>
+#include <libsgl/sglshptr.h>
 #include <limits>
 
 class dim
@@ -132,8 +132,8 @@ template <class T> class Bild_vimage : public Bild<T>
 				SGLprintError("Datentyp nicht zulässig");abort();
 		}
 	}
-	static boost::shared_ptr<Bild_vimage<T> > genBild(VImage _img){
-		return boost::shared_ptr<Bild_vimage<T> >(new Bild_vimage<T>(_img));
+	static SGLshPtr<Bild_vimage<T> > genBild(VImage _img){
+		return SGLshPtr<Bild_vimage<T> >(new Bild_vimage<T>(_img));
 	} 
 	inline void reset(T value){
 		for(int i=this->size()-1;i>=0;i--)at(i)=value;

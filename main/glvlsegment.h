@@ -12,7 +12,6 @@
 #ifndef GLVLSEGMENT_H
 #define GLVLSEGMENT_H
 
-#include <boost/shared_ptr.hpp>
 #include <libsgl/sglsignal.h>
 #include <list>
 #include "bild.h"
@@ -24,27 +23,27 @@ class GLvlMinima;
 @author Enrico Reimer,,,
 */
 
-class GLvlSegment: public std::list< boost::shared_ptr<GLvlMinima> >
+class GLvlSegment: public std::list< SGLshPtr<GLvlMinima> >
 {
 protected:
 	union EdgeData{
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	boost::shared_ptr<GLvlVolumeTex> myTex;
+	SGLshPtr<GLvlVolumeTex> myTex;
 public:
 	GLvlSegment(const GLvlSegment &);
 	GLvlSegment(unsigned int index);
-	GLvlSegment(boost::shared_ptr<GLvlMinima> img);
+	GLvlSegment(SGLshPtr<GLvlMinima> img);
 	virtual ~GLvlSegment();
-	static void setup(SGLqtSpace *_target3D,boost::shared_ptr<GLvlVolumeTex> _targetTex);
+	static void setup(SGLqtSpace *_target3D,SGLshPtr<GLvlVolumeTex> _targetTex);
 	bool display();
 	void undisplay();
 	void redisplay();
 	void getDim(dim &X,dim &Y, dim &Z);
 	void getOffset(unsigned short offset[3],GLvlSegment::iterator i);
 
-	static boost::shared_ptr<GLvlVolumeTex> targetTex;
+	static SGLshPtr<GLvlVolumeTex> targetTex;
 	static SGLqtSpace *target3D;
 	
 	bool isMinima;
