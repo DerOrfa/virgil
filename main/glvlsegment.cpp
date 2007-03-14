@@ -11,7 +11,7 @@
 //
 #include <libsgl/sglsignal.h>
 #include "glvlsegment.h"
-#include <libsgl/sglqtspace.h>
+#include <qt_glue/sglqtspace.h>
 #include "glvlvolumetex.h"
 #include "glvlminima.h"
 

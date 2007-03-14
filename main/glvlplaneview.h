@@ -22,7 +22,7 @@
 #define GLVLPLANEVIEW_H
 
 #include <libsgl/sglsignal.h>
-#include <libsgl/sglqtspace.h>
+#include <qt_glue/sglqtspace.h>
 #include "glvlsegmentdialog.h"
 #include "glvlplanecam.h"
 #include "PlaneView.h"

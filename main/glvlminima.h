@@ -18,7 +18,7 @@
 #include "../wshed/vincent_punkt.h"
 #include <GL/glu.h>
 
-#include <libsgl/sglqtspace.h>
+#include <qt_glue/sglqtspace.h>
 
 #define MAX_MINIMA_SIZE 500000
 

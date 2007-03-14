@@ -21,7 +21,7 @@
 #define GLVLMASTERVIEW_H
 
 #include "glvlplaneview.h"
-#include <libsgl/sglqtmultispacemgr.h>
+#include <qt_glue/sglqtmultispacemgr.h>
 #include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>

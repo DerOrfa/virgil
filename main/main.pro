@@ -10,7 +10,10 @@ LIBS += ../wshed/libwshed.a \
         -lvista \
         -lsgl \
         -lboost_signals 
-QMAKE_LIBDIR = ../wshed 
+INCLUDEPATH += /SCR/simpleGL 
+QMAKE_LIBDIR = /SCR/simpleGL/libsgl \
+               /SCR/simpleGL/qt_glue \
+               ../wshed 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
 CONFIG += debug \

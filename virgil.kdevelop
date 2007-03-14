@@ -15,7 +15,6 @@
       <part>kdevbookmarks</part>
       <part>kdevctags2</part>
       <part>kdevsnippet</part>
-      <part>kdevdebugger</part>
       <part>kdevdocumentation</part>
       <part>kdevdoxygen</part>
       <part>kdevkonsoleview</part>
@@ -39,7 +38,7 @@
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -97,14 +96,14 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
-      <programargs>~/cgtbsmMK3T_gauss.v</programargs>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <dbgshell></dbgshell>
+      <programargs>~/ana_3d_pl.v</programargs>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>false</separatetty>
+      <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
@@ -116,13 +115,14 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs> ~/cgtbsmMK3T.v</programargs>
+      <programargs>~/ana_3d_pl.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="/opt/intel_cc_80/lib/" name="LD_LIBRARY_PATH" />
+        <envvar value="10" name="DEBUG" />
+        <envvar value="/SCR/simpleGL/libsgl/:/SCR/simpleGL/qt_glue/" name="LD_LIBRARY_PATH" />
       </envvars>
     </run>
     <general>
@@ -132,7 +132,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
     </make>
@@ -192,7 +192,7 @@
       <qtdesigner/>
     </designerintegration>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>

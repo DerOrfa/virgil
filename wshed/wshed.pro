@@ -3,6 +3,7 @@
 # Subdir relative project main directory: ./wshed
 # Target is a library:  
 
+INCLUDEPATH += /SCR/simpleGL 
 CONFIG += release \
           warn_on \
           thread \

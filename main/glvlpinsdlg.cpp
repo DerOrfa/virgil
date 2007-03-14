@@ -14,7 +14,7 @@
 #include "glvlpinsdlg.h"
 #include "glvlrule.h"
 #include "glvlplaneview.h"
-#include <libsgl/sglqtspace.h>
+#include <qt_glue/sglqtspace.h>
 
 GLvlPinsDlg::GLvlPinsDlg(QWidget* parent,SGLqtSpace *masterSpace) : pins(parent,0),space(masterSpace)
 {}
