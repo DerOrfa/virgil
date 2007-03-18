@@ -10,35 +10,32 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>kdevopenwith</part>
       <part>kdevabbrev</part>
-      <part>kdevbookmarks</part>
-      <part>kdevctags2</part>
-      <part>kdevsnippet</part>
-      <part>kdevdocumentation</part>
-      <part>kdevdoxygen</part>
-      <part>kdevkonsoleview</part>
-      <part>kdevfilegroups</part>
-      <part>kdevfileselector</part>
       <part>kdevfileview</part>
+      <part>kdevfilegroups</part>
       <part>kdevfilelist</part>
-      <part>kdevdistpart</part>
-      <part>kdevpartexplorer</part>
-      <part>kdevquickopen</part>
-      <part>kdevregexptest</part>
+      <part>kdevfileselector</part>
+      <part>kdevdocumentation</part>
+      <part>kdevkonsoleview</part>
       <part>kdevreplace</part>
-      <part>kdevrbdebugger</part>
-      <part>kdevscripting</part>
       <part>kdevfilter</part>
-      <part>kdevastyle</part>
-      <part>kdevtexttools</part>
-      <part>kdevtools</part>
+      <part>kdevopenwith</part>
       <part>kdevvalgrind</part>
-      <part>kdevvisualboyadvance</part>
+      <part>kdevastyle</part>
+      <part>kdevsnippet</part>
+      <part>kdevregexptest</part>
+      <part>kdevquickopen</part>
+      <part>kdevscripting</part>
+      <part>kdevtexttools</part>
+      <part>kdevctags2</part>
+      <part>kdevdoxygen</part>
+      <part>kdevbookmarks</part>
+      <part>kdevdistpart</part>
+      <part>kdevtools</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -96,12 +93,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
-      <programargs>~/ana_3d_pl.v</programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <dbgshell/>
+      <programargs>/home/enni/simpleGL/virgil/brain.v</programargs>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -115,14 +112,13 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>~/ana_3d_pl.v</programargs>
+      <programargs>/home/enni/simpleGL/virgil/brain.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="10" name="DEBUG" />
-        <envvar value="/SCR/simpleGL/libsgl/:/SCR/simpleGL/qt_glue/" name="LD_LIBRARY_PATH" />
+        <envvar value="/home/enni/simpleGL/libsgl/:/home/enni/simpleGL/qt_glue/" name="LD_LIBRARY_PATH" />
       </envvars>
     </run>
     <general>
@@ -132,9 +128,10 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
       <prio>0</prio>
       <envvars/>
+      <runmultiplejobs>false</runmultiplejobs>
     </make>
     <subclassing>
       <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.cpp" />
@@ -192,13 +189,18 @@
       <qtdesigner/>
     </designerintegration>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
+    <qt>
+      <used>false</used>
+      <version>3</version>
+      <root/>
+    </qt>
   </kdevcppsupport>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>

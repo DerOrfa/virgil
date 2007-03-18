@@ -50,8 +50,8 @@ public:
 		struct {unsigned short x,y,z;};
 		unsigned short koord[3];
 	}minEdge,maxEdge;
-	inline VUByte GLvlMinima::bottomBorder()const{return (*org)[(*plist)[start]];};
-	inline VUByte GLvlMinima::topBorder()const{return (*org)[(*plist)[end-1]];};
+	inline VUByte bottomBorder()const{return (*org)[(*plist)[start]];};
+	inline VUByte topBorder()const{return (*org)[(*plist)[end-1]];};
 
 	static SGLshPtr< vincent::Bild_vimage<vincent::lab_value> > img;
 	static SGLshPtr< vincent::Bild_vimage<VUByte> > org;
