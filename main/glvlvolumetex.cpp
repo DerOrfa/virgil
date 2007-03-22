@@ -22,7 +22,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	#define zsize	size[2]
 	xsize=Info.X.getCnt('X')+2;
 	ysize=Info.Y.getCnt('Y')+2;
-	zsize=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	zsize=Info.Z.getCnt('Z')+2;//"+2" ist fÃ¼r den Rand (border tut irgendwie nich)
 	
 	GLenum gl_type;
 	if(sizeof(T)==sizeof(GLubyte))gl_type=GL_UNSIGNED_BYTE;
@@ -31,7 +31,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	else return false;
 
 	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
-	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	//@todo nÃ¼tzt nicht viel - er glaubt er bekÃ¤me die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!xsize)return false;
 	
 	T *pixels_=(T*)calloc(xsize*ysize*zsize,sizeof(T));
@@ -44,10 +44,10 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 		for(int y=0;y<Info.Y.getCnt('Y');y++)
 		{
 			pixels++;//ersten pixel leer lassen
-			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groÃŸ");}
 			pixels=src.copy_line(y,z,pixels);
-			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
-			//@todo müsste das nich "0" gesetzt werden (hinterer Rand wurde ja überschrieben)
+			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groÃŸ is, geht der Zeiger wieder zurÃ¼ck (addition neg. werte) und Ã¼berschreibt nÃ¤chtes mal, das was falsch war
+			//@todo mÃ¼sste das nich "0" gesetzt werden (hinterer Rand wurde ja Ã¼berschrieben)
 		}
 		pixels+=xsize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
@@ -62,9 +62,9 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	}
 	else
 	{
-		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schlieÃŸlich habe ich grad Daten reingelesen - nur weiÃŸ sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher fÃ¼r eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
@@ -89,14 +89,14 @@ bool GLvlVolumeTex::loadSegment(GLvlSegment &src)
 
 	size[0]=Info.X.getCnt('X')+2;
 	size[1]=Info.Y.getCnt('Y')+2;
-	size[2]=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
+	size[2]=Info.Z.getCnt('Z')+2;//"+2" ist fÃ¼r den Rand (border tut irgendwie nich)
 	
 	//Textur initialisieren
 	glGenTextures(1, &ID);
 	glBindTexture(TexType, ID);
-	//und prüfen	
+	//und prÃ¼fen	
 	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
-	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	//@todo nÃ¼tzt nicht viel - er glaubt er bekÃ¤me die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!size[0])return false;
 	
 	//Pufferbild anlegen, wenn tex vorraussichtlich passt
@@ -106,7 +106,7 @@ bool GLvlVolumeTex::loadSegment(GLvlSegment &src)
 	for(GLvlSegment::iterator i=src.begin();i!=src.end();i++)
 	{
 //		if((*i)->volume() <= MAX_MINIMA_SIZE)
-		//@todo wenn ich zu große tex nicht schreibe, brauch ich sie auch nicht anlegen
+		//@todo wenn ich zu groÃŸe tex nicht schreibe, brauch ich sie auch nicht anlegen
 		{
 			unsigned short offset[3]={1,1,1};
 			src.getOffset(offset,i);
@@ -144,7 +144,7 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	else if(typeid(T)==typeid(GLint))gl_type=GL_INT;
 	else return false;
 	
-	sglChkExt("GL_EXT_paletted_texture","Die Voxelwerte können nicht indiziert werden.",1);
+	sglChkExt("GL_EXT_paletted_texture","Die Voxelwerte kÃ¶nnen nicht indiziert werden.",1);
 	
 	GLint size[3];
 	#define xsize	size[0]
@@ -152,9 +152,9 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	#define zsize	size[2]
 	xsize=Info.X.getCnt('X')+2;
 	ysize=Info.Y.getCnt('Y')+2;
-	zsize=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
-	if(!genValidSize(GL_COLOR_INDEX8_EXT,size,3, GL_COLOR_INDEX,gl_type,false))return false;
-	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	zsize=Info.Z.getCnt('Z')+2;//"+2" ist fÃ¼r den Rand (border tut irgendwie nich)
+	if(!genValidSize(1,size,3, GL_COLOR_INDEX,gl_type,false))return false;
+	//@todo nÃ¼tzt nicht viel - er glaubt er bekÃ¤me die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!xsize)return false;
 
 	T min=numeric_limits<T>::max(),max=numeric_limits<T>::min();
@@ -169,7 +169,7 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 		for(int y=0;y<Info.Y.getCnt('Y');y++)
 		{
 			pixels++;//ersten pixel leer lassen
-			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groÃŸ");}
 			for(int x=0;x<Info.X.getCnt('X');x++)
 			{
 				T pix=src.at(index);
@@ -178,8 +178,8 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 				(*pixels)=pix;
 				pixels++;index++;
 			}
-			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
-			//@todo müsste das nich "0" gesetzt werden
+			pixels+=(xsize-Info.X.getCnt('X')-1);//Wenn das Bild zu groÃŸ is, geht der Zeiger wieder zurÃ¼ck (addition neg. werte) und Ã¼berschreibt nÃ¤chtes mal, das was falsch war
+			//@todo mÃ¼sste das nich "0" gesetzt werden
 		}
 		pixels+=xsize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
@@ -188,7 +188,7 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	if(palsize){SGLprintInfo("%d-Farb-Palette initialisiert",palsize);}
 	else {SGLprintError("Palette konnte nicht initialisiert werden");}
 	
-	glTexImage3DEXT(TexType,0,GL_COLOR_INDEX8_EXT,xsize,ysize,zsize,0,GL_COLOR_INDEX,gl_type,pixels_);
+	glTexImage3D(TexType,0,1,xsize,ysize,zsize,0,GL_COLOR_INDEX,gl_type,pixels_);
 	free(pixels_);
 	if(gluerr = glGetError())
 	{
@@ -197,9 +197,9 @@ template<class T> bool GLvlVolumeTex::loadPaletted(Bild<T> &src)
 	}
 	else
 	{
-		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schlieÃŸlich habe ich grad Daten reingelesen - nur weiÃŸ sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher fÃ¼r eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
@@ -231,7 +231,7 @@ template<class T,class DT> inline bool copyXline(DT *&dst,T &src,int xcnt)
 }
 
 
-//"Mapt" den übergebenen Farbvektor über den übergebenen Wert in den Zeiger 
+//"Mapt" den Ã¼bergebenen Farbvektor Ã¼ber den Ã¼bergebenen Wert in den Zeiger 
 template<class T,class DT> inline bool mapXline(DT *&dst,T &src,int xcnt,EVektor<DT> mapPosVektor,EVektor<DT> mapNegVektor)
 {
 	if(xcnt<=0)
@@ -272,7 +272,7 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 		case 1:	voxelElemSize=1;
 				intFormat=GL_INTENSITY;
 				break;
-		case 2:SGLprintError("Ungültiger Farbvektor");break;
+		case 2:SGLprintError("UngÃ¼ltiger Farbvektor");break;
 		case 3:	voxelElemSize=3;
 				intFormat=GL_RGB;
 				break;
@@ -283,13 +283,13 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 				voxelElemSize=2;
 				break;
 	}
-	//Größe der Textur ("+2" ist für den Rand)
+	//GrÃ¶ÃŸe der Textur ("+2" ist fÃ¼r den Rand)
 	GLint size[3];
 	xsize=Info.X.getCnt('X')+2;
 	ysize=Info.Y.getCnt('Y')+2;
 	zsize=Info.Z.getCnt('Z')+2;
 	if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
-	//@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	//@todo nÃ¼tzt nichts - er glaubt er bekÃ¤me die Tex rein bekommt aber unten trotzem "out of memory"
 	
 	T *pixels=(T*)calloc(xsize*ysize*zsize*voxelElemSize,sizeof(T));
 	T *pixels_=pixels;
@@ -310,8 +310,8 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 				copyXline(pixels,pix,Info.X.getCnt('X'));
 			else 
 				mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
-			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
-			pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groÃŸ");}
+			pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groÃŸ is, geht der Zeiger wieder zurÃ¼ck (addition neg. werte) und Ã¼berschreibt nÃ¤chtes mal, das was falsch war
 		}
 		pixels+=xsize*voxelElemSize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
@@ -325,9 +325,9 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 	}
 	else
 	{
-		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schlieÃŸlich habe ich grad Daten reingelesen - nur weiÃŸ sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher fÃ¼r eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(T)/float(1024*1024),MBSize,xsize,ysize,zsize);}
 		loaded=false;
 	}
 	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
@@ -348,8 +348,8 @@ GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
 template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 {
 	if(ID!=0)freeTexture();
-	sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
-	sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0);
+	sglChkExt("GL_EXT_texture3D","HÃ¶chstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
+	sglChkExt("GL_ARB_texture_non_power_of_two","Es kÃ¶nnen keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0);
 	
 	loadImageInfo(img);
 	
@@ -357,7 +357,7 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 	glBindTexture(TexType, ID);
 	
 	
-	if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadMask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
+	if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadMask(img);//@todo wenn loadMask fehlschlÃ¤gt (warum auch immer) muss das behandelt werden
 	else valid=loadPaletted(img);
 	
 	if(!valid)//Fallback wenn Palette nich tut
@@ -420,6 +420,8 @@ bool GLvlVolumeTex::Load3DImage(VImage src)
 	return valid;
 }
 
+
+
 template<class T> void GLvlVolumeTex::loadImageInfo(Bild<T> &src)
 {
 	(*static_cast<dim*>(&Info.X))=src.xsize;
@@ -447,7 +449,7 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short yindex=Info.Y.TexKoord2Index(koord.SGLV_Y);
 	const unsigned short zindex=Info.Z.TexKoord2Index(koord.SGLV_Z);
 	
-	//Ungültige Koord werden numeric_limits<unsigned short>::max(), was ja auch gößer als Info.X.getCnt('X') is
+	//UngÃ¼ltige Koord werden numeric_limits<unsigned short>::max(), was ja auch gÃ¶ÃŸer als Info.X.getCnt('X') is
 	//@todo hab ich jetzt beschlossen ...
 	if(	xindex >= Info.X.getCnt('X') ||
 		yindex >= Info.Y.getCnt('Y') ||
@@ -478,7 +480,7 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 	offset =
 		SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
 		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden 
-		//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
+		//eig mÃ¼sste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
 		-offset-GLvlVolumeTex::masteroffset;
 	
 	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size();
@@ -512,20 +514,25 @@ void GLvlVolumeTex::loadTint(VImage i)
 unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,bool scale)
 {
 	GLuint gluerr;
-	struct d_byte{GLfloat lum;GLfloat alpha;};
 	unsigned short size=1;
 	while(size<(end+1))size<<=1;
 	if(start==0){
 		SGLprintWarning("Ignoriere Paletteneintrag 0");start=1;
 	}
-	d_byte *palette= (d_byte*)calloc(size,sizeof(d_byte));
+	GLfloat *paletteL= (GLfloat*)calloc(size,sizeof(GLfloat));
+	GLfloat *paletteA= (GLfloat*)calloc(size,sizeof(GLfloat));
 	for(unsigned short i=start;i<=end;i++)
 	{
-		palette[i].lum=scale ? (i-start)/float(end-start):i/float(end);
-		palette[i].alpha=1;
+		paletteL[i]=scale ? (i-start)/float(end-start):i/float(end);
+		paletteA[i]=1;
 	}
-	glColorTable(TexType,GL_LUMINANCE_ALPHA,size,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
-	free(palette);
+	glPixelTransferi(GL_MAP_COLOR,true);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_R,size,paletteL);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_G,size,paletteL);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_B,size,paletteL);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_A,size,paletteA);
+//	glColorTable(TexType,GL_LUMINANCE_ALPHA,size,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
+	free(paletteL);free(paletteA);
 	if(gluerr = glGetError())
 	{
 		SGLprintError("%s beim Laden der Palette [GLerror]",gluErrorString(gluerr));

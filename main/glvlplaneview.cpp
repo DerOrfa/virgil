@@ -57,7 +57,7 @@ AimZStatus((QWidget*)statusBar())
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
 	
-	fileExitAction->setMenuText("Sicht schließen");
+	fileExitAction->setMenuText("Sicht schlieÃŸen");
 	myReg->Suicide=true;
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
 	connect(glview,SIGNAL(mouseMoved(QMouseEvent *,SGLVektor )),SLOT(mouseMovedInGL(QMouseEvent *,SGLVektor )));
@@ -89,7 +89,7 @@ bool GLvlPlaneView::loadCfg()
 {
 	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setOn(myReg->getbVal("Andere anzeigen",true));
 	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setOn(myReg->getbVal("In anderen anzeigen",true));
-	GLvlView::loadCfg();
+	return GLvlView::loadCfg();
 }
 
 bool GLvlPlaneView::saveCfg()
@@ -126,7 +126,7 @@ void GLvlPlaneView::lostView()
 }
 
 GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex,EWndRegistry *myReg):
-GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0),//Das MasterWnd darf erst durch die app gelöscht werden
+GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0),//Das MasterWnd darf erst durch die app gelÃ¶scht werden
 onGotFocus(myCam)
 {
 	selfChange=false;
@@ -140,7 +140,7 @@ void GLvlView::setupSpace(SGLqtSpace *space)
 	glview->registerDynamicTex(*tex);
 	glview->gotFocus.connect(onGotFocus);
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
-	assert(glViewContainer->layout());//eigentlich sollte SGLqtSpace sicherstellen, daß sein Parent ein layout hat ..
+	assert(glViewContainer->layout());//eigentlich sollte SGLqtSpace sicherstellen, daÃŸ sein Parent ein layout hat ..
 	glViewContainer->layout()->setMargin(1);
 	myReg->setWindow(this);
 }
@@ -290,6 +290,7 @@ bool GLvlView::loadCfg()
 	for(mode=scaleMode->count()-1;mode>=0 && sMode!=scaleMode->text(mode);mode--);
 	scaleMode->setCurrentItem(mode);
 	selectViewMode(mode);
+	return true;
 }
 
 
@@ -299,24 +300,26 @@ bool GLvlView::loadCfg()
 bool GLvlView::saveCfg()
 {
 	ERegistry CamReg("Camera",myReg);
+	bool ret;
 	if(!myCam)
 	{
-		SGLprintWarning("Kopie der Kamera fahlt, versuche aktuelle Kamera zu ermitteln");
+		SGLprintWarning("Kopie der Kamera fehlt, versuche aktuelle Kamera zu ermitteln");
 		myCam=glview->Camera;
 	}
-	CamReg.setdVal("Pos.x",myCam->Pos.SGLV_X);
-	CamReg.setdVal("Pos.y",myCam->Pos.SGLV_Y);
-	CamReg.setdVal("Pos.z",myCam->Pos.SGLV_Z);
+	ret=CamReg.setdVal("Pos.x",myCam->Pos.SGLV_X);
+	ret&=CamReg.setdVal("Pos.y",myCam->Pos.SGLV_Y);
+	ret&=CamReg.setdVal("Pos.z",myCam->Pos.SGLV_Z);
 
-	CamReg.setdVal("Aim.x",myCam->LookAt.SGLV_X);
-	CamReg.setdVal("Aim.y",myCam->LookAt.SGLV_Y);
-	CamReg.setdVal("Aim.z",myCam->LookAt.SGLV_Z);
+	ret&=CamReg.setdVal("Aim.x",myCam->LookAt.SGLV_X);
+	ret&=CamReg.setdVal("Aim.y",myCam->LookAt.SGLV_Y);
+	ret&=CamReg.setdVal("Aim.z",myCam->LookAt.SGLV_Z);
 
-	CamReg.setdVal("Up.x",myCam->UpVect.SGLV_X);
-	CamReg.setdVal("Up.y",myCam->UpVect.SGLV_Y);
-	CamReg.setdVal("Up.z",myCam->UpVect.SGLV_Z);
+	ret&=CamReg.setdVal("Up.x",myCam->UpVect.SGLV_X);
+	ret&=CamReg.setdVal("Up.y",myCam->UpVect.SGLV_Y);
+	ret&=CamReg.setdVal("Up.z",myCam->UpVect.SGLV_Z);
 	
-	myReg->setsVal("ResizeMode",scaleMode->currentText());
+	ret&=myReg->setsVal("ResizeMode",scaleMode->currentText());
+	return ret; 
 }
 
 void GLvlView::showOthersHere(bool toggle)
@@ -389,8 +392,8 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 		}*/
 		if(followSegments->isEnabled() && followSegments->isOn())
 			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
-		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
-		//besser prüfen, ob sich das Voxel geändert hat
+		//@todo Wenn fang aus is, wird das oft unnÃ¶tig ausgelÃ¶st
+		//besser prÃ¼fen, ob sich das Voxel geÃ¤ndert hat
 	}
 }
 

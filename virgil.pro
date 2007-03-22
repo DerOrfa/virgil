@@ -1,7 +1,7 @@
 # Diese Datei wurde mit dem qmake-Manager von KDevelop erstellt. 
 # ------------------------------------------- 
-# Unterverzeichnis relativ zum Projektverzeichnis: .
-# Das Target ist Projekt im Unterverzeichnis 
+# Unterordner relativ zum Projektordner: .
+# Das Target ist Projekt im Unterordner 
 
 CONFIG += release \
           warn_on \

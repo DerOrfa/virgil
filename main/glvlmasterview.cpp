@@ -73,9 +73,9 @@ rahmen(new SGLCube())
 	//Lichtabnahme komplett aus
 	glview->StdLight->Abnahme.Linear=0;
 	glview->StdLight->Abnahme.Quadratisch=0;
-	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
+	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die mÃ¼ssen nie neu generiert werden => Ã¤nderungen werden nur duch reinit wirksam
 
-	glview->setGridsSize((tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*.6);
+	glview->setGridsSize(int(tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*.6);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 
@@ -88,14 +88,14 @@ rahmen(new SGLCube())
 	EArray<EString> Regs=masterReg->findSubKeyStr(QRegExp("planeview"));
 	
 	SGLprintState("Lade %d %s",Regs.size(), (Regs.size()==1 ? " Schnitt":" Schnitte"));
-	for(int i=0;i<Regs.size();i++)
+	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
 		
 	GLvlSegment::setup(glview,tex);
 	
 	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
-	setCaption("Übersicht");
+	setCaption("Ãœbersicht");
 
 	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
@@ -120,7 +120,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 {
 	if(!tex->valid)
 	{
-		SGLprintError("Es lassen sich keine Planes erzeugen, da die Textur ungültig ist");
+		SGLprintError("Es lassen sich keine Planes erzeugen, da die Textur ungÃ¼ltig ist");
 		return;
 	}
 	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg);
@@ -220,7 +220,7 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 // }
 // void GLvlMasterView::MemDeleteNotify::operator()(const MemConsumer &newob) const
 // {
-// 	cout << "Ob " << &newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
+// 	cout << "Ob " << &newob << " gelÃ¶scht " << MemConsumer::list.size() << " Consumer registriert" << endl;
 // }
 
 VImage GLvlMasterView::MasterImg=NULL;

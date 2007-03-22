@@ -45,7 +45,7 @@ public:
 	}
 	inline unsigned short getCnt(char dir){
 		if(cnt==0)
-		{SGLprintError("Der Datensatz hat keine Dimension in %c-Richtung. Darstellung ist nicht möglich.",dir);abort();}
+		{SGLprintError("Der Datensatz hat keine Dimension in %c-Richtung. Darstellung ist nicht mÃ¶glich.",dir);abort();}
 		else return cnt;
 	}
 	inline unsigned short setCnt(unsigned short c){return cnt=c;}
@@ -74,6 +74,7 @@ public:
 		ysize.setElsize(0);
 		zsize.setElsize(0);
 	}
+	virtual ~Bild(){}
 	inline virtual T &at(const unsigned int index)=0;
 	inline T &at(const short x,const unsigned short y,const unsigned short z){
 		return at(x+(y*xsize)+(z*xsize*ysize));
@@ -114,7 +115,7 @@ public:
 
 template <class T> class Bild_vimage : public Bild<T>
 {
-	VImage img;//@todo was is, wenn die Umgebung das Img löscht
+	VImage img;//@todo was is, wenn die Umgebung das Img lÃ¶scht
 	VPointer data;
 	int lastBand;
 	public:
@@ -129,7 +130,7 @@ template <class T> class Bild_vimage : public Bild<T>
 			case VShortRepn:	return typeid(VShort);break;
 			case VLongRepn:		return typeid(VLong);break;
 			default:
-				SGLprintError("Datentyp nicht zulässig");abort();
+				SGLprintError("Datentyp nicht zulÃ¤ssig");abort();
 		}
 	}
 	static SGLshPtr<Bild_vimage<T> > genBild(VImage _img){
@@ -146,7 +147,7 @@ template <class T> class Bild_vimage : public Bild<T>
 		char *AttrStr;
 		if(typeid(T)!=getType(_img))
 		{
-			SGLprintWarning("Quelldaten für Bild_vimage - Konstruktor haben falschen Typ");
+			SGLprintWarning("Quelldaten fÃ¼r Bild_vimage - Konstruktor haben falschen Typ");
 		}
 		if(VGetAttr(VImageAttrList(_img),"voxel",NULL,VStringRepn,(VPointer)&AttrStr)==VAttrFound)
 			sscanf(AttrStr,"%f %f %f",&this->Columns.ElsizeRef(),&this->Rows.ElsizeRef(),&this->Bands.ElsizeRef());//@todo  stimmt das so ? wert1 breite der Spalten wert2 dicke der Zeilen wert3 dicke der schichten
@@ -158,4 +159,6 @@ template <class T> class Bild_vimage : public Bild<T>
 	VImage src()const{return img;}
 	VImage &src(){return img;}
 };
+
+
 #endif

@@ -10,28 +10,28 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>kdevopenwith</part>
       <part>kdevabbrev</part>
-      <part>kdevbookmarks</part>
-      <part>kdevctags2</part>
-      <part>kdevsnippet</part>
-      <part>kdevdocumentation</part>
-      <part>kdevdoxygen</part>
-      <part>kdevkonsoleview</part>
-      <part>kdevfilegroups</part>
-      <part>kdevfileselector</part>
       <part>kdevfileview</part>
+      <part>kdevfilegroups</part>
       <part>kdevfilelist</part>
-      <part>kdevdistpart</part>
-      <part>kdevquickopen</part>
-      <part>kdevregexptest</part>
+      <part>kdevfileselector</part>
+      <part>kdevdocumentation</part>
+      <part>kdevkonsoleview</part>
       <part>kdevreplace</part>
-      <part>kdevscripting</part>
       <part>kdevfilter</part>
-      <part>kdevastyle</part>
-      <part>kdevtexttools</part>
-      <part>kdevtools</part>
+      <part>kdevopenwith</part>
       <part>kdevvalgrind</part>
+      <part>kdevastyle</part>
+      <part>kdevsnippet</part>
+      <part>kdevregexptest</part>
+      <part>kdevquickopen</part>
+      <part>kdevscripting</part>
+      <part>kdevtexttools</part>
+      <part>kdevctags2</part>
+      <part>kdevdoxygen</part>
+      <part>kdevbookmarks</part>
+      <part>kdevdistpart</part>
+      <part>kdevtools</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -199,13 +199,13 @@
     <qt>
       <used>false</used>
       <version>3</version>
-      <root/>
+      <root></root>
     </qt>
   </kdevcppsupport>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>
-    <binary></binary>
-    <addOptions></addOptions>
+    <binary/>
+    <addOptions/>
     <terminal>false</terminal>
     <fullscreen>false</fullscreen>
     <graphicFilter>-f0</graphicFilter>

@@ -4,7 +4,7 @@
 # Das Target ist eine Bibliothek:  
 
 INCLUDEPATH += ../../ 
-CONFIG += release \
+CONFIG += debug \
           warn_on \
           thread \
           staticlib 

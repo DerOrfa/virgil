@@ -54,4 +54,5 @@ SOURCES += main.cpp \
            glvlsegmentdialog.cpp \
            glvlpinsdlg.cpp \
            glvlrule.cpp \
-           glvlposlistener.cpp 
+           glvlposlistener.cpp \
+           bild.cpp 

@@ -2,17 +2,23 @@
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
  <DocsAndViews NumberOfDocuments="1" >
-  <Doc0 NumberOfViews="1" URL="file:/usr/include/eclasses/EWorkOnCfgDlg.h" >
-   <View0 line="0" Type="Source" />
+  <Doc0 NumberOfViews="1" URL="file:///home/enni/simpleGL/virgil/main/glvlvolumetex.cpp" >
+   <View0 line="533" Type="Source" />
   </Doc0>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
-   <breakpointList/>
+   <breakpointList>
+    <breakpoint0 location="/home/enni/simpleGL/virgil/main/glvlvolumetex.cpp:156" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint0>
+    <breakpoint1 location="/home/enni/simpleGL/virgil/main/glvlvolumetex.cpp:134" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint1>
+    <breakpoint2 location="/home/enni/simpleGL/virgil/main/glvlvolumetex.cpp:531" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint2>
+   </breakpointList>
   </kdevdebugger>
-  <kdevrbdebugger>
-   <breakpointList/>
-   <watchExpressions/>
-  </kdevrbdebugger>
  </pluginList>
 </KDevPrjSession>
