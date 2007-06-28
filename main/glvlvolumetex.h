@@ -82,7 +82,6 @@ public:
 	void loadColorMask(GLvlMinima &img,EVektor<unsigned short> pos,GLfloat color[3]);*/
 	static SGLVektor masteroffset;
 private:
-	template<class T> bool loadPaletted(Bild<T> &src);
 	template<class T,class ST> bool loadCommon(GLenum gl_type,Bild<T> &src,EVektor<T> PosColor=EVektor<T>(),EVektor<T> NegColor=EVektor<T>());
 	template<class T> bool loadMask(Bild<T> &src);
 };

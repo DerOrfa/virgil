@@ -10,32 +10,32 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>kdevabbrev</part>
-      <part>kdevfileview</part>
-      <part>kdevfilegroups</part>
-      <part>kdevfilelist</part>
-      <part>kdevfileselector</part>
-      <part>kdevdocumentation</part>
-      <part>kdevkonsoleview</part>
-      <part>kdevreplace</part>
-      <part>kdevfilter</part>
       <part>kdevopenwith</part>
-      <part>kdevvalgrind</part>
-      <part>kdevastyle</part>
-      <part>kdevsnippet</part>
-      <part>kdevregexptest</part>
-      <part>kdevquickopen</part>
-      <part>kdevscripting</part>
-      <part>kdevtexttools</part>
-      <part>kdevctags2</part>
-      <part>kdevdoxygen</part>
+      <part>kdevabbrev</part>
       <part>kdevbookmarks</part>
+      <part>kdevctags2</part>
+      <part>kdevsnippet</part>
+      <part>kdevdocumentation</part>
+      <part>kdevdoxygen</part>
+      <part>kdevkonsoleview</part>
+      <part>kdevfilegroups</part>
+      <part>kdevfileselector</part>
+      <part>kdevfileview</part>
+      <part>kdevfilelist</part>
       <part>kdevdistpart</part>
+      <part>kdevquickopen</part>
+      <part>kdevregexptest</part>
+      <part>kdevreplace</part>
+      <part>kdevscripting</part>
+      <part>kdevfilter</part>
+      <part>kdevastyle</part>
+      <part>kdevtexttools</part>
       <part>kdevtools</part>
+      <part>kdevvalgrind</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -93,12 +93,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <programargs>/home/enni/simpleGL/virgil/brain.v</programargs>
-      <gdbpath/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -112,13 +112,13 @@
   <kdevtrollproject>
     <run>
       <mainprogram>main/virgil</mainprogram>
-      <programargs>brain.v</programargs>
+      <programargs>/home/newbdb/188/mr188_t1_pl.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="../libsgl/:../qt_glue/" name="LD_LIBRARY_PATH" />
+        <envvar value="/usr/local/lib" name="LD_LIBRARY_PATH" />
       </envvars>
     </run>
     <general>
@@ -128,7 +128,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <envvars/>
       <runmultiplejobs>false</runmultiplejobs>
@@ -189,7 +189,7 @@
       <qtdesigner/>
     </designerintegration>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -199,7 +199,7 @@
     <qt>
       <used>false</used>
       <version>3</version>
-      <root/>
+      <root></root>
     </qt>
   </kdevcppsupport>
   <kdevvisualadvance>
