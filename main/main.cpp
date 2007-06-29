@@ -21,6 +21,7 @@
 
 #include <qapplication.h>
 #include <list>
+#include "bild_dcm.h"
 
 //<vista-zeuch>
 
@@ -37,50 +38,59 @@
 
 int main( int argc, char ** argv ) 
 {
-//<vista-zeuch>
-	FILE *in_file;
-
-	VAttrList list=NULL;
-	VLong bench=0;
-	VUByte verbose=2;
-	VAttrListPosn posn;
-	std::list<VImage> src;
-	static VOptionDescRec  options[] = {
-		{"benchmark",VLongRepn,1,(VPointer) &bench,VOptionalOpt,NULL,"f¸hrt beim Start einen Benchmark aus (in sec.)"},
-		{"v",VUByteRepn,1,(VPointer) &verbose,VOptionalOpt,NULL,"verbosity"},
-	};
-
-	VParseFilterCmd (VNumber (options),options,argc,argv,&in_file,NULL);
-	
-	switch(verbose)
+	QRegExp regexp(".*\\.dcm");
+	if(argc>1 && regexp.exactMatch(argv[1]))
 	{
-	case 0:SGLshowState=false;
-	case 1:SGLshowWarnings=false;
-	case 2:SGLshowInfos=false;
+		SGLprintState("Lese DICOM Daten von %s",argv[1]);
+		Bild_dcm<Uint8> dcm(argv[1]);
 	}
-	
-	SGLprintState("Lese Daten ein ...");
-	if (! (list = VReadFile (in_file, NULL))) exit (1);
-	fclose(in_file);
-	
-	for (VFirstAttr (list, & posn); VAttrExists (& posn); VNextAttr (& posn)) 
+	else
 	{
-		switch(VGetAttrRepn (& posn))
+	//<vista-zeuch>
+		FILE *in_file;
+	
+		VAttrList list=NULL;
+		VLong bench=0;
+		VUByte verbose=2;
+		VAttrListPosn posn;
+		std::list<VImage> src;
+		static VOptionDescRec  options[] = {
+			{"benchmark",VLongRepn,1,(VPointer) &bench,VOptionalOpt,NULL,"f√ºhrt beim Start einen Benchmark aus (in sec.)"},
+			{"v",VUByteRepn,1,(VPointer) &verbose,VOptionalOpt,NULL,"verbosity"},
+		};
+	
+		VParseFilterCmd (VNumber (options),options,argc,argv,&in_file,NULL);
+		
+		switch(verbose)
 		{
-		case VImageRepn:
-			VImage tImage;
-			VGetAttrValue (& posn, NULL,VImageRepn, & tImage);
-			src.push_back(tImage);
-			break;
-		default:break;
+		case 0:SGLshowState=false;
+		case 1:SGLshowWarnings=false;
+		case 2:SGLshowInfos=false;
 		}
+		
+		SGLprintState("Lese Daten ein ...");
+		if (! (list = VReadFile (in_file, NULL))) exit (1);
+		fclose(in_file);
+		
+		for (VFirstAttr (list, & posn); VAttrExists (& posn); VNextAttr (& posn)) 
+		{
+			switch(VGetAttrRepn (& posn))
+			{
+			case VImageRepn:
+				VImage tImage;
+				VGetAttrValue (& posn, NULL,VImageRepn, & tImage);
+				src.push_back(tImage);
+				break;
+			default:break;
+			}
+		}
+		if (src.empty()) 
+		{
+			VError(" no input image found");
+			exit(1);
+		}
+	//</vista-zeuch>
 	}
-	if (src.empty()) 
-	{
-		VError(" no input image found");
-		exit(1);
-	}
-//</vista-zeuch>
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLshowInfos=false;

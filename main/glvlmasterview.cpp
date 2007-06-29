@@ -95,7 +95,7 @@ rahmen(new SGLCube())
 	
 	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
-	setCaption("Übersicht");
+	setCaption(QString::fromUtf8("Übersicht"));
 
 	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);

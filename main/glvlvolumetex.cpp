@@ -235,6 +235,7 @@ template<class T,class DT> bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<T>
 				mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
 			if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
 			pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+			//@todo aber nicht den ersten voxel
 		}
 		pixels+=xsize*voxelElemSize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
@@ -272,8 +273,9 @@ template<class T> bool GLvlVolumeTex::Load3DImage(Bild<T> &img)
 {
 	if(ID!=0)freeTexture();
 	sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
-	sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0);
-	//@todo GL_ARB_texture_non_power_of_two implementieren
+	if(sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
+		printf("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, jetzt müsste ich es nur noch implementieren ...\n");
+		//@todo GL_ARB_texture_non_power_of_two implementieren
 	
 	loadImageInfo(img);
 	

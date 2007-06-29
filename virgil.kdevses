@@ -1,22 +1,25 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="5" >
+ <DocsAndViews NumberOfDocuments="6" >
   <Doc0 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlvolumetex.cpp" >
-   <View0 line="286" Type="Source" />
+   <View0 line="0" Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlvolumetex.h" >
-   <View0 line="84" Type="Source" />
+   <View0 line="0" Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:///SCR/virgil/main/bild.h" >
-   <View0 line="57" Type="Source" />
+   <View0 line="84" Type="Source" />
   </Doc2>
   <Doc3 NumberOfViews="1" URL="file:///SCR/virgil/main/main.cpp" >
-   <View0 line="88" Type="Source" />
+   <View0 line="47" Type="Source" />
   </Doc3>
   <Doc4 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlmasterview.cpp" >
-   <View0 line="66" Type="Source" />
+   <View0 line="36" Type="Source" />
   </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:///SCR/virgil/main/bild_dcm_impl.h" >
+   <View0 line="22" Type="Source" />
+  </Doc5>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -30,6 +33,9 @@
     <breakpoint2 location="/home/enni/simpleGL/virgil/main/glvlvolumetex.cpp:531" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint2>
+    <breakpoint3 location="/SCR/virgil/main/main.cpp:45" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint3>
    </breakpointList>
   </kdevdebugger>
  </pluginList>

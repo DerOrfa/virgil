@@ -10,28 +10,27 @@
       <keyword>Qt</keyword>
     </keywords>
     <ignoreparts>
-      <part>kdevopenwith</part>
       <part>kdevabbrev</part>
-      <part>kdevbookmarks</part>
-      <part>kdevctags2</part>
-      <part>kdevsnippet</part>
-      <part>kdevdocumentation</part>
-      <part>kdevdoxygen</part>
-      <part>kdevkonsoleview</part>
-      <part>kdevfilegroups</part>
-      <part>kdevfileselector</part>
       <part>kdevfileview</part>
+      <part>kdevfilegroups</part>
       <part>kdevfilelist</part>
-      <part>kdevdistpart</part>
-      <part>kdevquickopen</part>
-      <part>kdevregexptest</part>
+      <part>kdevfileselector</part>
+      <part>kdevkonsoleview</part>
       <part>kdevreplace</part>
-      <part>kdevscripting</part>
       <part>kdevfilter</part>
-      <part>kdevastyle</part>
-      <part>kdevtexttools</part>
-      <part>kdevtools</part>
+      <part>kdevopenwith</part>
       <part>kdevvalgrind</part>
+      <part>kdevastyle</part>
+      <part>kdevsnippet</part>
+      <part>kdevregexptest</part>
+      <part>kdevquickopen</part>
+      <part>kdevscripting</part>
+      <part>kdevtexttools</part>
+      <part>kdevctags2</part>
+      <part>kdevdoxygen</part>
+      <part>kdevbookmarks</part>
+      <part>kdevdistpart</part>
+      <part>kdevtools</part>
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -94,13 +93,13 @@
   <kdevdebugger>
     <general>
       <dbgshell></dbgshell>
-      <programargs>/home/enni/simpleGL/virgil/brain.v</programargs>
+      <programargs>/SCR/MR-MONO2-8-16x-heart.dcm</programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
       <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>true</separatetty>
+      <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
