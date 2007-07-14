@@ -21,15 +21,19 @@
 #define GLVLMASTERVIEW_H
 
 #include "glvlplaneview.h"
-#include <qt_glue/sglqtmultispacemgr.h>
-#include "../wshed/vincent_transform.h"
+#include <libsgl/qt_glue/sglqtmultispacemgr.h>
+//#include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
-#include "glvlminima.h"
+//#include "glvlminima.h"
 #include <libsgl/sglsignal.h>
+
+#include <odindata/fileio.h>
+#include "bild.h"
 
 using namespace efc;
 using namespace boost;
+
 /**
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
@@ -40,15 +44,15 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
 public:
-	GLvlMasterView(std::list<VImage> src);
+	GLvlMasterView(FileIO::ProtocolDataMap data);
 	~GLvlMasterView();
-	static VImage MasterImg;
+	static SGLshPtr<Bild<float> > MasterImg;
 	static list<GLvlPlaneView *> views;
 	void newPlane();
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
-	 void loadWShedDlg();
+//	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{

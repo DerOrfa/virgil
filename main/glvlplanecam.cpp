@@ -17,8 +17,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "glvlplanecam.h"
-
 //
 // C++ Implementation: glvlplanecam
 //
@@ -33,7 +31,7 @@
 #include "glvlplanecam.h"
 #include "glvlplaneview.h"
 
-#include <qslider.h> 
+#include <qslider.h>
 
 
 GLvlPlaneCam::GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex): 
@@ -95,7 +93,7 @@ void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 	{
 		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01*GLvlView::configDlg->plane_transfer_speed->value());
 		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
-		//movecam ist nicht nötig, da move_cam_with_aim true ist
+		//movecam ist nicht nÃ¶tig, da move_cam_with_aim true ist
 		compileNextTime();
 		camChanged();
 	}

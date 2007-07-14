@@ -93,13 +93,14 @@
   <kdevdebugger>
     <general>
       <dbgshell></dbgshell>
-      <programargs>/SCR/MR-MONO2-8-16x-heart.dcm</programargs>
+      <programargs>-dir -rf dcm /media/usbdisk/07111504
+</programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
       <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>false</separatetty>
+      <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
@@ -133,7 +134,6 @@
       <runmultiplejobs>false</runmultiplejobs>
     </make>
     <subclassing>
-      <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.cpp" />
       <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.h" />
     </subclassing>
   </kdevtrollproject>

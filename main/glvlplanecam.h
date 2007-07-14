@@ -22,9 +22,9 @@
 
 #include <libsgl/helper/sglcamera.h>
 #include <libsgl/primitives/sglvieleck.h>
+#include <qobject.h>
 #include "glvlvolumetex.h"
 #include "glvlcutplane.h"
-#include <qobject.h>
 
 /**
 @author Enrico Reimer,,,

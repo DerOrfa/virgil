@@ -3,18 +3,12 @@
 # Unterordner relativ zum Projektordner: ./main
 # Das Target ist eine Anwendung:  virgil
 
-TARGETDEPS += ../wshed/libwshed.a 
-LIBS += ../wshed/libwshed.a \
-        -ldcmdata \
-        -lofstd \
-        -ldcmimgle \
+LIBS += -lodindata \
         -lqt_glue \
         -leclasses2 \
-        -lvista \
         -lsgl \
         -lboost_signals 
-INCLUDEPATH += /usr/include/dcmtk/config \
-               /usr/include/dcmtk/dcmimgle 
+INCLUDEPATH += /usr/local/include 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
 CONFIG += debug \
@@ -36,15 +30,13 @@ HEADERS += glvlcutplane.h \
            glvlplanecursor.h \
            glvlplaneview.h \
            glvlvolumetex.h \
-           glvlminima.h \
            bild.h \
            glvlsegment.h \
            glvlsegmentdialog.h \
            glvlpinsdlg.h \
            glvlrule.h \
            glvlposlistener.h \
-           bild_dcm.h \
-           bild_dcm_impl.h 
+           bild_odin.h 
 SOURCES += main.cpp \
            glvlcutplane.cpp \
            glvlmasterview.cpp \
@@ -53,9 +45,6 @@ SOURCES += main.cpp \
            glvlplanecursor.cpp \
            glvlplaneview.cpp \
            glvlvolumetex.cpp \
-           glvlminima.cpp \
-           glvlsegment.cpp \
-           glvlsegmentdialog.cpp \
            glvlpinsdlg.cpp \
            glvlrule.cpp \
            glvlposlistener.cpp 

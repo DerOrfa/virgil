@@ -34,7 +34,7 @@
 using namespace boost;
 using namespace efc;
 
-GLvlMasterView::GLvlMasterView(std::list<VImage> src):
+GLvlMasterView::GLvlMasterView(FileIO::ProtocolDataMap img_lst):
 GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
 rahmen(new SGLCube())
 {
@@ -56,15 +56,15 @@ rahmen(new SGLCube())
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
-	MasterImg=*src.begin();
-	tex->Load3DImage(MasterImg);//Master-Textur
+	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(*img_lst.begin()));
+	tex->Load3DImage(*MasterImg);//Master-Textur
 	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
 	tex->calcMatr();
 	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
 
-	std::list<VImage>::iterator i=++src.begin();
+/*	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
-		tex->loadTint(*i);
+		tex->loadTint(*i);*/
 	
 	viewsNeue_SichtAction->setEnabled(tex->valid);
 	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
@@ -91,7 +91,7 @@ rahmen(new SGLCube())
 	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
 		
-	GLvlSegment::setup(glview,tex);
+// 	GLvlSegment::setup(glview,tex);
 	
 	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
@@ -189,7 +189,7 @@ void GLvlMasterView::doBenchmark(time_t benchLen)
 void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 
 
-void  GLvlMasterView::loadWShedDlg()
+/*void  GLvlMasterView::loadWShedDlg()
 {
 	if(!wshed)
 	{
@@ -202,7 +202,7 @@ void  GLvlMasterView::loadWShedDlg()
 		}
 	}
 	wshed->show();
-}
+}*/
 	
 
 void GLvlMasterView::onMsg(QString msg,bool canskip)
@@ -223,5 +223,5 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 // 	cout << "Ob " << &newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
 // }
 
-VImage GLvlMasterView::MasterImg=NULL;
 list<GLvlPlaneView *> GLvlMasterView::views;
+SGLshPtr<Bild<float> > GLvlMasterView::MasterImg;

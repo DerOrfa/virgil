@@ -351,7 +351,7 @@ SGLVektor GLvlView::default_hinten[3]={SGLVektor(200,0,0),SGLVektor(0,0,0),SGLVe
 SGLVektor GLvlView::default_rechts[3]={SGLVektor(0,200,0),SGLVektor(0,0,0),SGLVektor(0,0,-1)};
 SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
 
-GLvlSegmentDialog* GLvlView::wshed=NULL;
+//GLvlSegmentDialog* GLvlView::wshed=NULL;
 GLvlPinsDlg* GLvlView::pinsDlg=NULL;
 ConfigDlg* GLvlView::configDlg=NULL;
 SGLshPtr<SGLBaseCam> GLvlView::activeCam;

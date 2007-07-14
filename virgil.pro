@@ -3,12 +3,11 @@
 # Unterordner relativ zum Projektordner: .
 # Das Target ist Projekt im Unterordner 
 
+SUBDIRS += main 
 CONFIG += release \
-          warn_on \
-          qt \
-          opengl \
-          thread \
-          x11 
-TEMPLATE = subdirs 
-SUBDIRS += wshed \
-           main 
+warn_on \
+qt \
+opengl \
+thread \
+x11
+TEMPLATE = subdirs

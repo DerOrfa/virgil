@@ -22,13 +22,13 @@
 #define GLVLPLANEVIEW_H
 
 #include <libsgl/sglsignal.h>
-#include <qt_glue/sglqtspace.h>
-#include "glvlsegmentdialog.h"
+#include <libsgl/qt_glue/sglqtspace.h>
+//#include "glvlsegmentdialog.h"
 #include "glvlplanecam.h"
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
 #include <libsgl/primitives/sglquader.h>
-#include "../wshed/vincent_transform.h"
+//#include "../wshed/vincent_transform.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
 #include "config.h"
@@ -58,7 +58,7 @@ public:
 	void showOthersHere(bool toggle);
 	void showObjList();
 	SGLshPtr<GLvlVolumeTex> tex;
-	static GLvlSegmentDialog* wshed;
+//	static GLvlSegmentDialog* wshed;
 	static GLvlPinsDlg* pinsDlg;
 	static ConfigDlg* configDlg;
 	static SGLshPtr<SGLBaseCam> activeCam;

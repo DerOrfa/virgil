@@ -21,7 +21,6 @@
 
 #include <qapplication.h>
 #include <list>
-#include "bild_dcm.h"
 
 //<vista-zeuch>
 
@@ -36,73 +35,75 @@
 
 #include <exception>
 
+#include <odindata/fileio.h>
+
 int main( int argc, char ** argv ) 
 {
-	QRegExp regexp(".*\\.dcm");
-	if(argc>1 && regexp.exactMatch(argv[1]))
+	FileIO::ProtocolDataMap data;
+	unsigned short verbose = 2;
+	switch(verbose)
 	{
-		SGLprintState("Lese DICOM Daten von %s",argv[1]);
-		Bild_dcm<Uint8> dcm(argv[1]);
+	case 0:SGLshowState=false;
+	case 1:SGLshowWarnings=false;
+	case 2:SGLshowInfos=false;
 	}
-	else
+	
+	SGLprintState("Lese Daten ein ...");
+	
 	{
-	//<vista-zeuch>
-		FILE *in_file;
+		Protocol prot;
+	// 	FileIO::set_trace_status(true);
+		char lastarg[ODIN_MAXCHAR];
+		char parname[ODIN_MAXCHAR];
+		STD_string parstring;
+		parname[0]='\0';
 	
-		VAttrList list=NULL;
-		VLong bench=0;
-		VUByte verbose=2;
-		VAttrListPosn posn;
-		std::list<VImage> src;
-		static VOptionDescRec  options[] = {
-			{"benchmark",VLongRepn,1,(VPointer) &bench,VOptionalOpt,NULL,"führt beim Start einen Benchmark aus (in sec.)"},
-			{"v",VUByteRepn,1,(VPointer) &verbose,VOptionalOpt,NULL,"verbosity"},
-		};
+		getLastArgument(argc,argv,lastarg,ODIN_MAXCHAR,false);
+		if(getCommandlineOption(argc,argv,"-jdx",parname,ODIN_MAXCHAR,false)) {
+			parstring=STD_string("::")+parname;
+		}
 	
-		VParseFilterCmd (VNumber (options),options,argc,argv,&in_file,NULL);
+		prot.seqpars.set_MatrixSize(readChannel,1);
+		prot.seqpars.set_MatrixSize(phaseChannel,1);
+		prot.seqpars.set_MatrixSize(sliceChannel,1);
+		prot.set_parmode(noedit);
+		prot.parse_cmdline_options(argc,argv);
 		
-		switch(verbose)
-		{
-		case 0:SGLshowState=false;
-		case 1:SGLshowWarnings=false;
-		case 2:SGLshowInfos=false;
-		}
+		FileReadOpts ropts;
+		ropts.parse_cmdline_options(argc,argv);
 		
-		SGLprintState("Lese Daten ein ...");
-		if (! (list = VReadFile (in_file, NULL))) exit (1);
-		fclose(in_file);
+	// 	mopts.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
+		// 	
+	// 	fmri.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
+	
+		JDXfileName fname;
+		char optval[ODIN_MAXCHAR];
+	
+		if(getLastArgument(argc,argv,optval,ODIN_MAXCHAR)) {
+			fname=optval;
+		} else exit(0);
+		if(fname=="")exit(0);
 		
-		for (VFirstAttr (list, & posn); VAttrExists (& posn); VNextAttr (& posn)) 
-		{
-			switch(VGetAttrRepn (& posn))
-			{
-			case VImageRepn:
-				VImage tImage;
-				VGetAttrValue (& posn, NULL,VImageRepn, & tImage);
-				src.push_back(tImage);
-				break;
-			default:break;
-			}
-		}
-		if (src.empty()) 
-		{
-			VError(" no input image found");
-			exit(1);
-		}
-	//</vista-zeuch>
+		if(FileIO::autoread(data,fname,ropts,prot)<0) exit(-1);
+	}
+	
+	if (data.empty()) 
+	{
+		SGLprintError(" no input image found");
+		exit(1);
 	}
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLshowInfos=false;
-    QApplication a(argc,argv);
+  QApplication a(argc,argv);
 	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView *w =new GLvlMasterView(src);
+	GLvlMasterView *w =new GLvlMasterView(data);
 	w->show();
-	if(bench)
+/*	if(bench)
 	{
 		SGLprintState("Starte automatischen Bechmark ...");
 		w->doBenchmark(bench);
-	}
+	}*/
 	SGLprintState("fertsch");
     a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
     return a.exec();
