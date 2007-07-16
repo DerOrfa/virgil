@@ -1,25 +1,28 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="6" >
-  <Doc0 NumberOfViews="1" URL="file:///opt/prog/sgl/virgil/main/glvlvolumetex.h" >
-   <View0 line="17" Type="Source" />
+ <DocsAndViews NumberOfDocuments="7" >
+  <Doc0 NumberOfViews="1" URL="file:///SCR/virgil/main/bild.h" >
+   <View0 line="69" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///opt/prog/sgl/virgil/main/glvlvolumetex.cpp" >
-   <View0 line="132" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///SCR/virgil/main/bild_odin.h" >
+   <View0 line="64" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///opt/prog/sgl/virgil/main/glvlmasterview.cpp" >
-   <View0 line="59" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlplaneview.h" >
+   <View0 line="80" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///opt/prog/sgl/virgil/main/main.cpp" >
-   <View0 line="99" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///SCR/virgil/main/main.cpp" >
+   <View0 line="39" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///opt/prog/sgl/virgil/main/bild_odin.h" >
-   <View0 line="42" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlvolumetex.h" >
+   <View0 line="286" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///usr/local/include/odindata/data.h" >
-   <View0 line="121" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///SCR/odin/miview/miviewview.cpp" >
+   <View0 line="40" Type="Source" />
   </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:///SCR/virgil/main/glvlmasterview.cpp" >
+   <View0 line="59" Type="Source" />
+  </Doc6>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -27,6 +30,9 @@
     <breakpoint0 location="/opt/prog/sgl/virgil/main/main.cpp:90" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint0>
+    <breakpoint1 location="/SCR/virgil/main/main.cpp:90" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint1>
    </breakpointList>
   </kdevdebugger>
  </pluginList>
