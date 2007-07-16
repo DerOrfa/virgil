@@ -56,7 +56,9 @@ rahmen(new SGLCube())
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
-	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(*img_lst.begin()));
+	FileIO::ProtocolDataMap::iterator i=img_lst.begin();
+	i++;i++;i++;i++;i++;i++;i++;//@todo
+	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(*i));
 	tex->Load3DImage(*MasterImg);//Master-Textur
 	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
 	tex->calcMatr();

@@ -28,7 +28,7 @@
 #include "PlaneView.h"
 #include "glvlvolumetex.h"
 #include <libsgl/primitives/sglquader.h>
-//#include "../wshed/vincent_transform.h"
+//#include "../wshed/.h"
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
 #include "config.h"
@@ -78,7 +78,7 @@ private:
 		void operator()(int reason){
 			if(GLvlView::activeCam!=myCam)
 			{
-				cout << "aktiveCam:" << GLvlView::activeCam << endl << GLvlView::activeCam->Pos << endl;
+//				cout << "aktiveCam:" << GLvlView::activeCam << endl << GLvlView::activeCam->Pos << endl;
 				GLvlView::activeCam=myCam;
 			}
 			
