@@ -35,7 +35,6 @@ class dim
 	float Elsize;
 public:
 	inline operator unsigned short()const{return cnt;}
-		
 	inline double mm_size(const unsigned short div){return (idx2mm(cnt/div));}
 	inline double minus_mm_size(const unsigned short div){return (idx2mm(cnt/div-cnt));}
 	inline double idx2mm(const unsigned short tex_koord){return Elsize*tex_koord;}
@@ -64,7 +63,27 @@ public:
 	union {dim xsize;dim Columns;};
 	union {dim ysize;dim Rows;};
 	union {dim zsize;dim Bands;dim layer;};
-	inline unsigned int size()const{return xsize*ysize*zsize;} 
+	inline unsigned int size()const{return xsize*ysize*zsize;}
+	struct ValRange{T min,max;};
+private:
+	ValRange range;
+public:
+	ValRange getValRange()
+	{
+		std::less<T> l;
+		if(l(range.max, range.min))
+		{
+			SGLprintState("Scanning %s data",typeid(T).name());
+			for(unsigned int i=0;i<this->size();i++)
+			{
+				const T& dummy=at(i);
+				if(dummy>range.max)range.max=dummy;
+				if(dummy<range.min)range.min=dummy;
+			}
+			SGLprintState("max: %f, min %f",range.max,range.min);
+		}
+		return range;
+	}
 	Bild(unsigned short x,unsigned short y,unsigned short z)
 	{
 		xsize.setCnt(x);
@@ -73,6 +92,8 @@ public:
 		xsize.setElsize(0);
 		ysize.setElsize(0);
 		zsize.setElsize(0);
+		range.max=numeric_limits<T>::min();
+		range.min=numeric_limits<T>::max();
 	}
 	virtual ~Bild(){}
 	inline virtual T &at(const unsigned int index)=0;

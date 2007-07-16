@@ -73,7 +73,7 @@ int main( int argc, char ** argv )
 		ropts.parse_cmdline_options(argc,argv);
 		
 	// 	mopts.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
-		// 	
+	//
 	// 	fmri.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
 	
 		JDXfileName fname;
@@ -95,7 +95,7 @@ int main( int argc, char ** argv )
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLshowInfos=false;
-  QApplication a(argc,argv);
+	QApplication a(argc,argv);
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w =new GLvlMasterView(data);
 	w->show();

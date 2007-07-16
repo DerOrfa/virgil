@@ -202,38 +202,4 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 // 	multitex=p;
 // }
 
-
-/*!
-    \fn GLvlVolumeTex::setupPal(unsigned short start,unsigned short end)
- */
-unsigned short GLvlVolumeTex::setupPal(unsigned short start,unsigned short end,bool scale)
-{
-	GLuint gluerr;
-	unsigned short size=1;
-	while(size<(end+1))size<<=1;
-	if(start==0){
-		SGLprintWarning("Ignoriere Paletteneintrag 0");start=1;
-	}
-	GLfloat *paletteL= (GLfloat*)calloc(size,sizeof(GLfloat));
-	GLfloat *paletteA= (GLfloat*)calloc(size,sizeof(GLfloat));
-	for(unsigned short i=start;i<=end;i++)
-	{
-		paletteL[i]=scale ? (i-start)/float(end-start):i/float(end);
-		paletteA[i]=1;
-	}
-	glPixelTransferi(GL_MAP_COLOR,true);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_R,size,paletteL);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_G,size,paletteL);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_B,size,paletteL);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_A,size,paletteA);
-//	glColorTable(TexType,GL_LUMINANCE_ALPHA,size,GL_LUMINANCE_ALPHA,GL_FLOAT,palette);
-	free(paletteL);free(paletteA);
-	if(gluerr = glGetError())
-	{
-		SGLprintError("%s beim Laden der Palette [GLerror]",gluErrorString(gluerr));
-		return 0;
-	}
-	return size;
-}
-
 SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

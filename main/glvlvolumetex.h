@@ -202,9 +202,21 @@ public:
 	
 		Info.size=SGLVektor(
 				Info.X.mm_size(1),
-		Info.Y.mm_size(1),
-		Info.Z.mm_size(1)
-						   );
+			Info.Y.mm_size(1),
+			Info.Z.mm_size(1)
+		);
+		
+		struct Bild<T>::ValRange r=src.getValRange();
+		const GLfloat scale=1./(r.max-r.min);
+		glPixelTransferf(GL_RED_SCALE,scale);
+		glPixelTransferf(GL_GREEN_SCALE,scale);
+		glPixelTransferf(GL_BLUE_SCALE,scale);
+		glPixelTransferf(GL_ALPHA_SCALE,scale);
+		
+		glPixelTransferf(GL_RED_BIAS,-r.min);
+		glPixelTransferf(GL_GREEN_BIAS,-r.min);
+		glPixelTransferf(GL_BLUE_BIAS,-r.min);
+		glPixelTransferf(GL_ALPHA_BIAS,-r.min);
 	}
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);

@@ -29,17 +29,13 @@ public:
 						data_pair.second.shape()[2], 
 						data_pair.second.shape()[1]>1 ? data_pair.second.shape()[1]:data_pair.second.shape()[0]),
 		prot(data_pair.first),data(data_pair.second)
-	{
-		normalize();
-	}
+	{}
 
 	Bild_odin(Protocol prot, Data<T,4> data):Bild<T>(
 			data.shape()[3], 
 			data.shape()[2], 
 			data.shape()[1]>1 ? data.shape()[1]:data.shape()[0])
-	{
-		normalize();
-	}
+	{}
 	~Bild_odin(){
 	}
 	
@@ -58,25 +54,6 @@ public:
 	T& at(const unsigned int index)
 	{
 		return *(data.c_array()+index);
-	}
-	void normalize()
-	{
-		SGLprintState("Normalizing float data");
-		T max=numeric_limits<T>::min(),min=numeric_limits<T>::max();
-		for(unsigned int i=0;i<this->size();i++)
-		{
-			const T& dummy=at(i);
-			if(dummy>max)max=dummy;
-			if(dummy<min)min=dummy;
-		}
-		const T range=max-min;
-		const T offset=-min;
-		SGLprintState("max: %f, min %f",max,min);
-		
-		for(unsigned int i=0;i<this->size();i++)
-		{
-			at(i)=(at(i)+offset)/range;
-		}
 	}
 };
 
