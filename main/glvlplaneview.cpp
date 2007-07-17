@@ -61,6 +61,7 @@ AimZStatus((QWidget*)statusBar())
 	myReg->Suicide=true;
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
 	connect(glview,SIGNAL(mouseMoved(QMouseEvent *,SGLVektor )),SLOT(mouseMovedInGL(QMouseEvent *,SGLVektor )));
+
 	setCaption("Schnitt");
 	
 	AimXStatus.setMinimumSize(80,5);
@@ -132,6 +133,7 @@ onGotFocus(myCam)
 	selfChange=false;
 	this->myReg=myReg;
 	this->tex=tex;
+	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
 }
 
 void GLvlView::setupSpace(SGLqtSpace *space)
@@ -500,6 +502,12 @@ void GLvlView::showConfigDlg(bool toggle)
 	assert(configDlg);
 	if(toggle)configDlg->show();
 	else configDlg->hide();
+}
+
+void GLvlView::selectDataDlg()
+{
+	assert(GLvlMasterView::dataDialog);
+	GLvlMasterView::dataDialog->show();
 }
 
 void GLvlView::showPinsDlg(bool toggle)

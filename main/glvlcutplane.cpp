@@ -12,7 +12,8 @@
 #include "glvlcutplane.h"
 #include <assert.h>
 
-GLvlCutPlane::GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex): SGL3DPlane(0,0, volumeTex)
+GLvlCutPlane::GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex): 
+		SGL3DPlane(0,0, volumeTex),onDataSelect(this)
 {
 	useCenter=false;
 	IgnoreLight=true;;
@@ -35,3 +36,9 @@ void GLvlCutPlane::resetTexKoord()
 	compileNextTime();
 }
 
+GLvlCutPlane::SelectSlot::SelectSlot(GLvlCutPlane* p):plane(p)
+{}
+
+void GLvlCutPlane::SelectSlot::operator()(Protocol,Data<float,4>)
+{	
+}

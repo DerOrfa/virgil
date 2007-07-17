@@ -34,9 +34,9 @@
 using namespace boost;
 using namespace efc;
 
-GLvlMasterView::GLvlMasterView(FileIO::ProtocolDataMap img_lst):
+GLvlMasterView::GLvlMasterView():
 GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
-rahmen(new SGLCube())
+rahmen(new SGLCube()),onDataSelect(this)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 	followSegments->setVisible(false);
@@ -56,14 +56,8 @@ rahmen(new SGLCube())
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
 	
-	FileIO::ProtocolDataMap::iterator i=img_lst.begin();
-	i++;i++;i++;i++;i++;i++;i++;//@todo
-	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(*i));
-	tex->Load3DImage(*MasterImg);//Master-Textur
-	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
-	tex->calcMatr();
-	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
-
+	loadData(GLvlMasterView::dataDialog->getSelected());
+	
 /*	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
 		tex->loadTint(*i);*/
@@ -101,6 +95,8 @@ rahmen(new SGLCube())
 
 	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
+	
+	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
 }
 
 
@@ -216,14 +212,30 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 	qApp->processEvents();
 }
 
-// void GLvlMasterView::MemCreateNotify::operator()(const MemConsumer &newob) const
-// {
-// 	cout << "Ob " << &newob << " erzeugt " << MemConsumer::list.size() << " Consumer registriert" << endl;
-// }
-// void GLvlMasterView::MemDeleteNotify::operator()(const MemConsumer &newob) const
-// {
-// 	cout << "Ob " << &newob << " gelöscht " << MemConsumer::list.size() << " Consumer registriert" << endl;
-// }
-
 list<GLvlPlaneView *> GLvlMasterView::views;
 SGLshPtr<Bild<float> > GLvlMasterView::MasterImg;
+OdinDataSelector* GLvlMasterView::dataDialog=NULL;
+
+
+/*!
+    \fn GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator)
+ */
+bool GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator i)
+{
+	loadData(i->first,i->second);
+}
+bool GLvlMasterView::loadData(Protocol prot,Data<float,4> dat)
+{
+	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(prot,dat));
+	tex->Load3DImage(*MasterImg);//Master-Textur
+	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
+	tex->calcMatr();
+	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
+	if(tex->valid)tex->changed();
+}
+
+GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}
+void GLvlMasterView::SelectSlot::operator()(Protocol prot,Data<float,4> dat)
+{
+	master->loadData(prot,dat);
+}

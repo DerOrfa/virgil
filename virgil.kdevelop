@@ -11,10 +11,10 @@
     </keywords>
     <ignoreparts>
       <part>kdevabbrev</part>
+      <part>kdevfileselector</part>
       <part>kdevfileview</part>
       <part>kdevfilegroups</part>
       <part>kdevfilelist</part>
-      <part>kdevfileselector</part>
       <part>kdevkonsoleview</part>
       <part>kdevreplace</part>
       <part>kdevfilter</part>
@@ -93,8 +93,7 @@
   <kdevdebugger>
     <general>
       <dbgshell/>
-      <programargs>-dir -rf dcm /media/usbdisk/07111504
-</programargs>
+      <programargs>/home/newbdb/188/mr188_t1_pl.v</programargs>
       <gdbpath/>
       <configGdbScript/>
       <runShellScript/>
@@ -126,12 +125,12 @@
     </general>
     <make>
       <abortonerror>false</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>2</numberofjobs>
       <dontact>false</dontact>
       <makebin/>
       <prio>0</prio>
       <envvars/>
-      <runmultiplejobs>false</runmultiplejobs>
+      <runmultiplejobs>true</runmultiplejobs>
     </make>
     <subclassing>
       <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.h" />
@@ -185,7 +184,9 @@
     </codecompletion>
     <references/>
     <designerintegration>
-      <qtdesigner/>
+      <qtdesigner>
+        <implementation class="OdinDataSelector" path="main/odindataselectorbase.ui" implementationpath="main/odindataselector.h" />
+      </qtdesigner>
     </designerintegration>
     <creategettersetter>
       <prefixGet/>

@@ -97,7 +97,8 @@ int main( int argc, char ** argv )
 	SGLshowInfos=false;
 	QApplication a(argc,argv);
 	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView *w =new GLvlMasterView(data);
+	GLvlMasterView::dataDialog=new OdinDataSelector(NULL,data);
+	GLvlMasterView *w =new GLvlMasterView;
 	w->show();
 /*	if(bench)
 	{

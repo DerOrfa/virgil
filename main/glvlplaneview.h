@@ -108,6 +108,8 @@ public slots:
 	virtual void onMsg(QString msg,bool canskip);
 	virtual void showPinsDlg(bool);
 	virtual void showConfigDlg(bool toggle);
+private slots:
+	void selectDataDlg();
 };
 
 class GLvlPlaneView: public GLvlView
@@ -140,13 +142,13 @@ private:
 public slots:
 	void	lostView();
 private slots:
-    void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
+	void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent *e);
 	virtual void wheelEvent ( QWheelEvent * e );
 	virtual void mouseReleaseEvent(QMouseEvent * e );
 signals:
-    void onVoxel(unsigned int index);
+	void onVoxel(unsigned int index);
 	void onResizeSegment(signed char ,signed char );
 	void selectSegment();
 };

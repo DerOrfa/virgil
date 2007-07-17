@@ -205,7 +205,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Blickpu&amp;nkt</string>
+                    <string>B&amp;lickpunkt</string>
                 </attribute>
                 <hbox>
                     <property name="name">
@@ -553,6 +553,7 @@
         <action name="fileSegmentierungAction"/>
         <action name="dialogePinsAction"/>
         <action name="dialogeOptionenAction"/>
+        <action name="dialogeselect_DatasetAction"/>
     </item>
     <item text="Standart&amp;ansichten" name="Standartansichten">
         <action name="sicht_von_obenAction"/>
@@ -579,7 +580,7 @@
             <string>E&amp;xit</string>
         </property>
         <property name="accel">
-            <string>Ctrl+Q</string>
+            <string>Strg+Q</string>
         </property>
     </action>
     <action>
@@ -604,7 +605,7 @@
             <string>neuer Schnitt</string>
         </property>
         <property name="accel">
-            <string>Ctrl+N</string>
+            <string>Strg+N</string>
         </property>
     </action>
     <action>
@@ -629,7 +630,7 @@
             <string>Benchmark</string>
         </property>
         <property name="accel">
-            <string>Ctrl+B</string>
+            <string>Strg+B</string>
         </property>
     </action>
     <action>
@@ -867,6 +868,17 @@
         </property>
         <property name="menuText">
             <string>Optionen</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>dialogeselect_DatasetAction</cstring>
+        </property>
+        <property name="text">
+            <string>select Dataset</string>
+        </property>
+        <property name="menuText">
+            <string>select Dataset</string>
         </property>
     </action>
 </actions>

@@ -27,7 +27,7 @@
 #include <time.h>
 //#include "glvlminima.h"
 #include <libsgl/sglsignal.h>
-
+#include "odindataselector.h"
 #include <odindata/fileio.h>
 #include "bild.h"
 
@@ -43,17 +43,27 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 	ERegistry *masterReg;
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
+	class SelectSlot:public SGLSlot
+	{
+		GLvlMasterView *master;
+		public:
+			void operator()(Protocol,Data<float,4>);
+			SelectSlot(GLvlMasterView* p);
+	}onDataSelect;
 public:
-	GLvlMasterView(FileIO::ProtocolDataMap data);
+	GLvlMasterView();
 	~GLvlMasterView();
 	static SGLshPtr<Bild<float> > MasterImg;
 	static list<GLvlPlaneView *> views;
+	static OdinDataSelector* dataDialog;
 	void newPlane();
 	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
+	bool loadData(Protocol prot,Data<float,4> dat);
+	bool loadData(FileIO::ProtocolDataMap::iterator);
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{
 		public:
@@ -66,7 +76,7 @@ public:
 	}TexDelete;*/
 
 protected:
-    void doBenchmark();
+	void doBenchmark();
 	void closeEvent(QCloseEvent *e);
 };
 

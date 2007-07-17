@@ -29,13 +29,21 @@ public:
 						data_pair.second.shape()[2], 
 						data_pair.second.shape()[1]>1 ? data_pair.second.shape()[1]:data_pair.second.shape()[0]),
 		prot(data_pair.first),data(data_pair.second)
-	{}
+	{init();}
 
-	Bild_odin(Protocol prot, Data<T,4> data):Bild<T>(
-			data.shape()[3], 
-			data.shape()[2], 
-			data.shape()[1]>1 ? data.shape()[1]:data.shape()[0])
-	{}
+	Bild_odin(Protocol _prot, Data<T,4> _data):Bild<T>(
+			_data.shape()[3], 
+			_data.shape()[2], 
+			_data.shape()[1]>1 ? _data.shape()[1]:_data.shape()[0]),
+			prot(_prot),data(_data)
+	{init();}
+	void init()
+	{
+		Geometry &geo=prot.geometry;
+		this->xsize.setElsize(geo.get_FOV(readChannel)/this->xsize.getCnt('X'));
+		this->ysize.setElsize(geo.get_FOV(phaseChannel)/this->ysize.getCnt('Y'));
+		this->zsize.setElsize(geo.get_FOV(sliceChannel)/this->zsize.getCnt('Z'));
+	}
 	~Bild_odin(){
 	}
 	
