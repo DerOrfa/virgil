@@ -81,7 +81,7 @@ public:
 //	bool loadSegment(GLvlSegment &src);
 	template<class T> bool Load3DImage(Protocol prot, Data<T,4> dat)
 	{
-		Bild_odin<T> i(prot,dat);valid=Load3DImage(i);
+		valid=Load3DImage(Bild_odin<T>(prot,dat));
 	}
 	class dimData:public dim{
 	public:

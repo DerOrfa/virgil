@@ -422,8 +422,9 @@ void GLvlPlaneView::init()
 	loadCfg();
 }
 
-void GLvlPlaneView::mouseDoubleClickEvent(QMouseEvent *e)
+void GLvlPlaneView::onMouseDblClick(QMouseEvent *e)
 {
+	printf("Double click\n");
 	VUByte  top_resize=0,bottom_resize=0;
 	bool done=false;
 		newPinDlg dlg;

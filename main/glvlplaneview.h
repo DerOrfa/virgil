@@ -136,7 +136,8 @@ public:
 
 	SGLshPtr<GLvlPlaneCursor> cursor;
 	list<GLvlPlaneView *>::iterator it;
-private:
+	virtual void onMouseDblClick(QMouseEvent *e);
+	private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
 
 public slots:
@@ -144,7 +145,6 @@ public slots:
 private slots:
 	void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:
-	virtual void mouseDoubleClickEvent(QMouseEvent *e);
 	virtual void wheelEvent ( QWheelEvent * e );
 	virtual void mouseReleaseEvent(QMouseEvent * e );
 signals:
