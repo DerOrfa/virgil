@@ -10,6 +10,12 @@ LIBS += -lodinqt \
         -lsgl \
         -lboost_signals 
 INCLUDEPATH += /usr/local/include 
+QMAKE_CXXFLAGS_RELEASE += -march=pentium4 \
+                          -ftree-vectorize \
+                          -ffast-math \
+                          -O3 
+QMAKE_CXXFLAGS_DEBUG += -g3 \
+                        -O0 
 DEFINES = GL_GLEXT_PROTOTYPES 
 TARGET = virgil 
 CONFIG += debug \

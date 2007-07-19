@@ -49,7 +49,7 @@ public:
 	
 	T& at(const short x, const unsigned short y, const unsigned short z)
 	{
-		data(0,z,y,x);
+		return data(0,z,y,x);
 	}
 
 	T* copy_line(const unsigned short y, const unsigned short z, void* dst)
