@@ -37,9 +37,10 @@
 
 #include <odindata/fileio.h>
 
-int main( int argc, char ** argv ) 
+int main( int argc, char ** argv )
 {
 	FileIO::ProtocolDataMap data;
+	QApplication a(argc,argv);
 	unsigned short verbose = 2;
 	switch(verbose)
 	{
@@ -47,9 +48,9 @@ int main( int argc, char ** argv )
 	case 1:SGLshowWarnings=false;
 	case 2:SGLshowInfos=false;
 	}
-	
+
 	SGLprintState("Lese Daten ein ...");
-	
+
 	{
 		Protocol prot;
 	// 	FileIO::set_trace_status(true);
@@ -57,47 +58,39 @@ int main( int argc, char ** argv )
 		char parname[ODIN_MAXCHAR];
 		STD_string parstring;
 		parname[0]='\0';
-	
+
 		getLastArgument(argc,argv,lastarg,ODIN_MAXCHAR,false);
 		if(getCommandlineOption(argc,argv,"-jdx",parname,ODIN_MAXCHAR,false)) {
 			parstring=STD_string("::")+parname;
 		}
-	
+
 		prot.seqpars.set_MatrixSize(readChannel,1);
 		prot.seqpars.set_MatrixSize(phaseChannel,1);
 		prot.seqpars.set_MatrixSize(sliceChannel,1);
 		prot.set_parmode(noedit);
 		prot.parse_cmdline_options(argc,argv);
-		
+
 		FileReadOpts ropts;
 		ropts.parse_cmdline_options(argc,argv);
-		
+
 	// 	mopts.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
 	//
 	// 	fmri.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
-	
+
 		JDXfileName fname;
 		char optval[ODIN_MAXCHAR];
-	
+
 		if(getLastArgument(argc,argv,optval,ODIN_MAXCHAR)) {
 			fname=optval;
 		} else exit(0);
 		if(fname=="")exit(0);
-		
-		if(FileIO::autoread(data,fname,ropts,prot)<0) exit(-1);
+		GLvlMasterView::dataDialog=new OdinDataSelector(QString(fname),ropts,prot);
 	}
-	
-	if (data.empty()) 
-	{
-		SGLprintError(" no input image found");
-		exit(1);
-	}
+
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLshowInfos=false;
-	QApplication a(argc,argv);
 	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView::dataDialog=new OdinDataSelector(NULL,data);
 	GLvlMasterView *w =new GLvlMasterView;
 	w->show();
 /*	if(bench)

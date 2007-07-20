@@ -1,7 +1,7 @@
 //
-// C++ Implementation: 
+// C++ Implementation:
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <reimer@cbs.mpg.de>, (C) 2007
@@ -13,11 +13,12 @@
 #include "odindataselector.h"
 #include <odinqt/jdxwidget.h>
 #include <qcombobox.h>
+#include <qfiledialog.h>
 
-OdinDataSelector::OdinDataSelector(QWidget* parent, FileIO::ProtocolDataMap _data):
-		OdinDataSelectorBase(parent),data(_data)
+OdinDataSelector::OdinDataSelector(QFileInfo file,FileReadOpts ropts,Protocol prot,QWidget* parent):OdinDataSelectorBase(parent)
 {
 	bool selected=false;
+	open( file,ropts,prot);
 	for(FileIO::ProtocolDataMap::iterator i=data.begin();i!=data.end();i++)
 	{
 		Protocol prot=i->first;
@@ -32,7 +33,7 @@ OdinDataSelector::OdinDataSelector(QWidget* parent, FileIO::ProtocolDataMap _dat
 		const float rX=prot.geometry.get_FOV(readChannel);
 		const float rY=prot.geometry.get_FOV(phaseChannel);
 		const float rZ=prot.geometry.get_FOV(sliceChannel);
-		
+
 		const QString rDim=
 				QString::number(rX)+"mm x "+
 				QString::number(rY)+"mm x "+
@@ -42,12 +43,12 @@ OdinDataSelector::OdinDataSelector(QWidget* parent, FileIO::ProtocolDataMap _dat
 				QString::number(rY/iY,'f',2)+"x"+
 				QString::number(rZ/iZ,'f',2);
 		prot.study.get_Patient(id,full_name,birth_date,sex,weight);
-		
+
 		DataCombo->insertItem(id+" "+full_name+": "+rDim+" Voxelsize:"+res);
 		if(!selected && i->second.shape()[1]>1)
 		{
 			DataCombo->setCurrentItem(DataCombo->count()-1);
-			JDXwidget *w=new JDXwidget(prot.geometry,1,this);
+//			JDXwidget *w=new JDXwidget(prot.geometry,1,this);
 			selected=true;
 		}
 	}
@@ -72,3 +73,23 @@ FileIO::ProtocolDataMap::iterator OdinDataSelector::getAt(int index)
 }
 FileIO::ProtocolDataMap::iterator OdinDataSelector::getSelected()
 {return getAt(DataCombo->currentItem());}
+
+void OdinDataSelector::save()
+{
+	QFileDialog dlg(this,"Save Dataset to");
+	dlg.addFilter ( "Vista (*.v)" );
+	if(dlg.exec()==QDialog::Accepted)save(getAt(DataCombo->currentItem()),dlg.selectedFile());
+}
+
+bool OdinDataSelector::save(FileIO::ProtocolDataMap::iterator i, QString target)
+{
+	FileIO::ProtocolDataMap smap;smap.insert(*i);
+	FileWriteOpts wopts;
+	FileIO::autowrite(smap,target.latin1(),wopts);
+}
+
+unsigned short OdinDataSelector::open(QFileInfo file,FileReadOpts ropts,Protocol prot)
+{
+	if(FileIO::autoread(data,file.absFilePath(),ropts,prot)<0) exit(-1);
+	return data.size();
+}

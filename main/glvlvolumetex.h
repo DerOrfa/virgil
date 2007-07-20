@@ -1,7 +1,7 @@
 //
 // C++ Interface: glvlvolumetex
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <enni@Akira>, (C) 2004
@@ -35,7 +35,7 @@ template<class T,class DT> inline bool copyXline(DT *&dst,T &src,int xcnt)
 			*(dst++)=*(src++); // - ihn setzen
 			*(dst++)=MAX; // - und ihn anzeigen
 		}
-		else 
+		else
 		{
 			src++;
 			dst+=2;
@@ -44,7 +44,7 @@ template<class T,class DT> inline bool copyXline(DT *&dst,T &src,int xcnt)
 	return true;
 }
 
-//"Mapt" den übergebenen Farbvektor über den übergebenen Wert in den Zeiger 
+//"Mapt" den übergebenen Farbvektor über den übergebenen Wert in den Zeiger
 template<class T,class DT> inline bool mapXline(DT *&dst,T &src,int xcnt,EVektor<DT> mapPosVektor,EVektor<DT> mapNegVektor)
 {
 	if(xcnt<=0)
@@ -59,7 +59,7 @@ template<class T,class DT> inline bool mapXline(DT *&dst,T &src,int xcnt,EVektor
 			ergVekt= mapNegVektor* -*(src++);
 		for(int i=0;i<ergVekt.size();i++)
 			*(dst++)=ergVekt[i];
-		
+
 	}
 	return true;
 }
@@ -86,17 +86,17 @@ public:
 	class dimData:public dim{
 	public:
 		float inner_mm_size;
-		
+
 		unsigned short startgap_cnt,endgap_cnt;
 		float startgap_mm,endgap_mm;
 		inline void calcGap(int start,int end,char dir)
 		{
 			startgap_cnt=start;
 			startgap_mm=idx2mm(startgap_cnt);
-			
+
 			endgap_cnt=end;
 			endgap_mm=idx2mm(endgap_cnt);
-			
+
 			inner_mm_size=idx2mm(getCnt(dir));
 		}
 		inline float outer_mm_size()const{return startgap_mm + inner_mm_size + endgap_mm;}
@@ -132,15 +132,15 @@ public:
 		if(sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
 			SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, jetzt müsste ich es nur noch implementieren ...\n");
 		//@todo GL_ARB_texture_non_power_of_two implementieren
-	
+
 		loadImageInfo(img);
-	
+
 		glGenTextures(1, &ID);
 		glBindTexture(TexType, ID);
-	
-	
+
+
 //		if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadMask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
-	
+
 		if(!valid)//Fallback wenn Palette nich tut
 	//@todo tut garantiert nicht - GL2 kennt paletted textures nicht mehr :-((
 		{
@@ -176,13 +176,13 @@ public:
 				valid=loadCommon<T,GLint>(GL_INT,img,PosColor,NegColor);
 			else if(typeid(T)==typeid(GLfloat))
 				valid=loadCommon<T,GLfloat>(GL_FLOAT,img,PosColor,NegColor);
-			else 
+			else
 			{
 				SGLprintWarning("Rechne %s auf %s um",typeid(T).name(),typeid(GLfloat).name());
 				valid=loadCommon<T,GLfloat>(GL_FLOAT,img,PosColor,NegColor);
 			}
 		}
-	
+
 		return valid;
 	}
 
@@ -191,39 +191,39 @@ public:
 		(*static_cast<dim*>(&Info.X))=src.xsize;
 		(*static_cast<dim*>(&Info.Y))=src.ysize;
 		(*static_cast<dim*>(&Info.Z))=src.zsize;
-	
+
 		Info.X.getCnt('X');
 		Info.Y.getCnt('Y');
 		Info.Z.getCnt('Z');
-	
+
 		Info.X.getElsize('X');
 		Info.Y.getElsize('Y');
 		Info.Z.getElsize('Z');
-	
+
 		Info.size=SGLVektor(
 				Info.X.mm_size(1),
 			Info.Y.mm_size(1),
 			Info.Z.mm_size(1)
 		);
-		
+
 		struct Bild<T>::ValRange r=src.getValRange();
 		const GLfloat scale=1./(r.max-r.min);
 		glPixelTransferf(GL_RED_SCALE,scale);
 		glPixelTransferf(GL_GREEN_SCALE,scale);
 		glPixelTransferf(GL_BLUE_SCALE,scale);
 		glPixelTransferf(GL_ALPHA_SCALE,scale);
-		
-		glPixelTransferf(GL_RED_BIAS,-r.min);
-		glPixelTransferf(GL_GREEN_BIAS,-r.min);
-		glPixelTransferf(GL_BLUE_BIAS,-r.min);
-		glPixelTransferf(GL_ALPHA_BIAS,-r.min);
+
+		glPixelTransferf(GL_RED_BIAS,-r.min*scale);
+		glPixelTransferf(GL_GREEN_BIAS,-r.min*scale);
+		glPixelTransferf(GL_BLUE_BIAS,-r.min*scale);
+		glPixelTransferf(GL_ALPHA_BIAS,-r.min*scale);
 	}
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
     void calcMatr(SGLVektor offset=SGLVektor(0,0,0));
 //     void loadTint(VImage i);
     GLdouble mm2tex_Matrix[4][4];
-    
+
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 /*    void loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
 	void loadColorMask(GLvlMinima &img,EVektor<unsigned short> pos,GLfloat color[3]);*/
@@ -234,7 +234,7 @@ private:
 #define xsize	size[0]
 #define ysize	size[1]
 #define zsize	size[2]
-	
+
 		unsigned short voxelElemSize;
 		GLint intFormat;
 		switch(PosColor.size())
@@ -260,25 +260,25 @@ private:
 		zsize=Info.Z.getCnt('Z')+2;
 		if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
 	//@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
-	
+
 		T *pixels=(T*)calloc(xsize*ysize*zsize*voxelElemSize,sizeof(T));
 		T *pixels_=pixels;
 		pixels+=xsize*voxelElemSize*ysize;//die erste Ebene
-	
+
 		int z=0;
-	
+
 		for(;z<Info.Z.getCnt('Z') ;z++)
 		{
 			T *pix= &src.at(0,0,z);
-		
+
 			pixels+=xsize*voxelElemSize;//erste Zeile leer lassen
 			for(int y=0;y<Info.Y.getCnt('Y');y++)
 			{
 				pixels+=voxelElemSize;//ersten Voxel (und seinen alpha) leer lassen
-			
+
 				if(intFormat== GL_LUMINANCE_ALPHA)
 					copyXline(pixels,pix,Info.X.getCnt('X'));
-				else 
+				else
 					mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
 				if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
 				pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war

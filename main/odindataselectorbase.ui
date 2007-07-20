@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>500</width>
-            <height>48</height>
+            <width>565</width>
+            <height>65</height>
         </rect>
     </property>
     <property name="caption">
@@ -23,6 +23,25 @@
             <property name="name">
                 <cstring>DataCombo</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1</cstring>
+            </property>
+            <property name="text">
+                <string>sa&amp;ve</string>
+            </property>
+            <property name="accel">
+                <string>Alt+V</string>
+            </property>
         </widget>
     </hbox>
 </widget>
@@ -33,9 +52,16 @@
         <receiver>OdinDataSelectorBase</receiver>
         <slot>selected(int)</slot>
     </connection>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>OdinDataSelectorBase</receiver>
+        <slot>save()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>selected(int)</slot>
+    <slot>save()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
