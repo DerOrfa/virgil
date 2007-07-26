@@ -3,8 +3,7 @@
 # Unterordner relativ zum Projektordner: ./main
 # Das Target ist eine Anwendung:  virgil
 
-LIBS += -lodinqt \
-        -lodindata \
+LIBS += -lfreki \
         -lqt_glue \
         -leclasses2 \
         -lsgl \

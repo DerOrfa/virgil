@@ -77,7 +77,22 @@ FileIO::ProtocolDataMap::iterator OdinDataSelector::getSelected()
 void OdinDataSelector::save()
 {
 	QFileDialog dlg(this,"Save Dataset to");
-	dlg.addFilter ( "Vista (*.v)" );
+	dlg.setMode(QFileDialog::AnyFile);
+	svector formats=FileIO::autoformats(); //fills the list of supportet formats @todo bad hack - ask thies
+	for(svector::const_iterator n=formats.begin();n!=formats.end();n++)
+	{
+/*		const FileFormat* ff=FileFormat::get_format("",*n);
+		assert(ff);
+		QString const desc(ff->description());*/
+		dlg.addFilter (  "(*."+ *n + ")"  );
+	}
+/*	for(STD_map<STD_string,FileFormat*>::iterator i=FileFormat::formats.begin(); i!=FileFormat::formats.end();i++)
+	{
+		QString const desc(i->second->description());
+		const svector &suff=i->second->suffix();
+		for(svector::const_iterator n=suff.begin();n!=suff.end();n++)
+			dlg.addFilter ( desc+" (*."+ *n + ")" );
+	}*/
 	if(dlg.exec()==QDialog::Accepted)save(getAt(DataCombo->currentItem()),dlg.selectedFile());
 }
 
