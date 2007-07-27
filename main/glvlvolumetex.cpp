@@ -1,7 +1,7 @@
 //
 // C++ Implementation: glvlvolumetex
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <enni@Akira>, (C) 2004
@@ -23,7 +23,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	xsize=Info.X.getCnt('X')+2;
 	ysize=Info.Y.getCnt('Y')+2;
 	zsize=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
-	
+
 	GLenum gl_type;
 	if(sizeof(T)==sizeof(GLubyte))gl_type=GL_UNSIGNED_BYTE;
 	else if(sizeof(T)==sizeof(GLushort))gl_type=GL_UNSIGNED_SHORT;
@@ -33,7 +33,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
 	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
 	if(!xsize)return false;
-	
+
 	T *pixels_=(T*)calloc(xsize*ysize*zsize,sizeof(T));
 	register T *pixels=pixels_;
 
@@ -51,7 +51,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 		}
 		pixels+=xsize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
 	}
-	
+
 	glTexImage3DEXT(TexType,0,GL_ALPHA4,xsize,ysize,zsize,0,GL_ALPHA,gl_type,pixels_);
 	free(pixels_);
 	GLenum gluerr;
@@ -78,30 +78,30 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 // {
 // 	if(ID!=0)freeTexture();
 // 	assert(TexType==GL_TEXTURE_3D);//Textype muss 3D sein
-// 	
+//
 // 	const GLenum gl_type=GL_UNSIGNED_BYTE; //gl_type is hier auch fest
 // 	GLint size[3];
-// 	
+//
 // 	//Dim dieser Tex werden direkt ermittelt
 // 	src.getDim(*static_cast<dim*>(&Info.X),*static_cast<dim*>(&Info.Y),*static_cast<dim*>(&Info.Z));
-// 	
+//
 // 	Info.size=SGLVektor(Info.X.mm_size(1),Info.Y.mm_size(1),Info.Z.mm_size(1));
-// 
+//
 // 	size[0]=Info.X.getCnt('X')+2;
 // 	size[1]=Info.Y.getCnt('Y')+2;
 // 	size[2]=Info.Z.getCnt('Z')+2;//"+2" ist für den Rand (border tut irgendwie nich)
-// 	
+//
 // 	//Textur initialisieren
 // 	glGenTextures(1, &ID);
 // 	glBindTexture(TexType, ID);
-// 	//und prüfen	
+// 	//und prüfen
 // 	if(!genValidSize(GL_ALPHA4,size,3, GL_ALPHA,gl_type,false))return false;
 // 	//@todo nützt nicht viel - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
 // 	if(!size[0])return false;
-// 	
+//
 // 	//Pufferbild anlegen, wenn tex vorraussichtlich passt
 // 	Bild_mem<GLubyte> pixels(size[0],size[1],size[2],0);
-// 	
+//
 // 	//Pufferbild schreibem
 // 	for(GLvlSegment::iterator i=src.begin();i!=src.end();i++)
 // 	{
@@ -113,9 +113,9 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 // 			(*i)->writeTex(offset,pixels);
 // 		}
 // 	}
-// 
+//
 // 	glTexImage3DEXT(TexType,0,GL_ALPHA4,size[0],size[1],size[2],0,GL_ALPHA,gl_type,&pixels.at(0));
-// 	
+//
 // 	GLenum gluerr;
 // 	if(gluerr = glGetError())
 // 	{
@@ -125,12 +125,14 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 // 	assert(size[0]>Info.X.getCnt('X')-1);
 // 	assert(size[1]>Info.Y.getCnt('Y')-1);
 // 	assert(size[2]>Info.Z.getCnt('Z')-1);
-// 	
+//
 // 	Info.calcGaps(1,size[0]-Info.X.getCnt('X')-1,1,size[1]-Info.Y.getCnt('Y')-1,1,size[2]-Info.Z.getCnt('Z')-1);
 // 	return true;
 // }
 
-GLvlVolumeTex::GLvlVolumeTex(): SGLBaseTex()
+GLvlVolumeTex::GLvlVolumeTex():
+		SGLBaseTex(),
+		npot(sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
 {
 	weich=true;
 	repeat=MipMap=false;
@@ -143,7 +145,7 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short xindex=Info.X.TexKoord2Index(koord.SGLV_X);
 	const unsigned short yindex=Info.Y.TexKoord2Index(koord.SGLV_Y);
 	const unsigned short zindex=Info.Z.TexKoord2Index(koord.SGLV_Z);
-	
+
 	//Ungültige Koord werden numeric_limits<unsigned short>::max(), was ja auch gößer als Info.X.getCnt('X') is
 	//@todo hab ich jetzt beschlossen ...
 	if(	xindex >= Info.X.getCnt('X') ||
@@ -151,7 +153,7 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 		zindex >= Info.Z.getCnt('Z'))
 		return std::numeric_limits<unsigned int>::max();
 	else return xindex+
-		yindex*Info.X.getCnt('X')+ 
+		yindex*Info.X.getCnt('X')+
 		zindex*Info.X.getCnt('X')*Info.Y.getCnt('Y');
 }
 
@@ -174,14 +176,14 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 
 	offset =
 		SGLVektor(Info.X.startgap_mm,Info.Y.startgap_mm,Info.Z.startgap_mm)
-		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden 
+		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden
 		//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
 		-offset-GLvlVolumeTex::masteroffset;
-	
+
 	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size();
 	mm2tex_Matrix[1][1]=1/Info.Y.outer_mm_size();
 	mm2tex_Matrix[2][2]=1/Info.Z.outer_mm_size();
-	
+
 	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*offset.SGLV_X;
 	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;

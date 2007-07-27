@@ -129,8 +129,7 @@ public:
 	{
 		if(ID!=0)freeTexture();
 		sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
-		if(sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
-			SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, jetzt müsste ich es nur noch implementieren ...\n");
+		if(npot)SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, jetzt müsste ich es nur noch implementieren ...\n");
 		//@todo GL_ARB_texture_non_power_of_two implementieren
 
 		loadImageInfo(img);
@@ -309,6 +308,8 @@ private:
 	}
 
 	template<class T> bool loadMask(Bild<T> &src);
+protected:
+    bool npot;
 };
 
 #endif

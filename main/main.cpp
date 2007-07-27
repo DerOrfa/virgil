@@ -41,12 +41,13 @@ int main( int argc, char ** argv )
 {
 	FileIO::ProtocolDataMap data;
 	QApplication a(argc,argv);
-	unsigned short verbose = 2;
+	unsigned short verbose = 3;
 	switch(verbose)
 	{
 	case 0:SGLshowState=false;
 	case 1:SGLshowWarnings=false;
 	case 2:SGLshowInfos=false;
+	default:SGLshowInfos=SGLshowWarnings=SGLshowState=true;
 	}
 
 	SGLprintState("Lese Daten ein ...");
