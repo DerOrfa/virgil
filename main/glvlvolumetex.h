@@ -81,7 +81,7 @@ public:
 //	bool loadSegment(GLvlSegment &src);
 	template<class T> bool Load3DImage(Protocol prot, Data<T,4> dat)
 	{
-		valid=Load3DImage(Bild_odin<T>(prot,dat));
+		return valid=Load3DImage(Bild_odin<T>(prot,dat));
 	}
 	class dimData:public dim{
 	public:
@@ -129,16 +129,10 @@ public:
 	{
 		if(ID!=0)freeTexture();
 		sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
-		if(npot)SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, jetzt müsste ich es nur noch implementieren ...\n");
-		//@todo GL_ARB_texture_non_power_of_two implementieren
-
 		loadImageInfo(img);
 
 		glGenTextures(1, &ID);
 		glBindTexture(TexType, ID);
-
-
-//		if(this->renderMode==SGL_MTEX_MODE_COLORMASK)valid=loadMask(img);//@todo wenn loadMask fehlschlägt (warum auch immer) muss das behandelt werden
 
 		if(!valid)//Fallback wenn Palette nich tut
 	//@todo tut garantiert nicht - GL2 kennt paletted textures nicht mehr :-((
@@ -257,8 +251,13 @@ private:
 		xsize=Info.X.getCnt('X')+2;
 		ysize=Info.Y.getCnt('Y')+2;
 		zsize=Info.Z.getCnt('Z')+2;
-		if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
-	//@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+    
+    if(!sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
+    {
+      if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
+      //@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+    }
+    else SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, schaun 'mer mal \n");
 
 		T *pixels=(T*)calloc(xsize*ysize*zsize*voxelElemSize,sizeof(T));
 		T *pixels_=pixels;

@@ -130,9 +130,7 @@ template<class T> bool GLvlVolumeTex::loadMask(Bild<T> &src)
 // 	return true;
 // }
 
-GLvlVolumeTex::GLvlVolumeTex():
-		SGLBaseTex(),
-		npot(sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
+GLvlVolumeTex::GLvlVolumeTex():SGLBaseTex()
 {
 	weich=true;
 	repeat=MipMap=false;
@@ -188,20 +186,5 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
 }
-
-/*!
-    \fn GLvlVolumeTex::loadTint(VImage i)
- */
-// void GLvlVolumeTex::loadTint(VImage i)
-// {
-// 	SGLprintState("lade Aktivierungsmap");
-// 	SGLshPtr<GLvlVolumeTex> p(new GLvlVolumeTex());
-// 	p->renderMode=SGL_MTEX_MODE_TINT;
-// 	p->Load3DImage(i);
-// 	p->calcMatr();
-// 	p->ResetTransformMatrix((const GLdouble*)p->mm2tex_Matrix);
-// 	p->weich=true;
-// 	multitex=p;
-// }
 
 SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

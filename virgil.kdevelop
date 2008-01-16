@@ -36,6 +36,8 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description></description>
     <secondaryLanguages/>
+    <projectname>virgil</projectname>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevfileview>
     <groups>
@@ -93,7 +95,7 @@
   <kdevdebugger>
     <general>
       <dbgshell></dbgshell>
-      <programargs>-dir -rf dcm /SCR/7T/rt/</programargs>
+      <programargs>-dir /scr/incoming7t/fruits/</programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
@@ -101,6 +103,7 @@
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
+      <raiseGDBOnStart>false</raiseGDBOnStart>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -110,15 +113,29 @@
   </kdevdebugger>
   <kdevtrollproject>
     <run>
-      <mainprogram>main/virgil</mainprogram>
-      <programargs>/home/newbdb/188/mr188_t1_pl.v</programargs>
+      <mainprogram>/SCR/virgil/main/virgil</mainprogram>
+      <programargs>/home/newbdb/188/mr188_t1_np.v</programargs>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars>
-        <envvar value="/usr/local/lib" name="LD_LIBRARY_PATH" />
+        <envvar value="/SCR/odin_rel" name="LD_LIBRARY_PATH" />
       </envvars>
+      <runarguments>
+        <virgil></virgil>
+      </runarguments>
+      <cwd>
+        <virgil>/SCR/virgil</virgil>
+      </cwd>
+      <debugarguments>
+        <virgil></virgil>
+      </debugarguments>
+      <globaldebugarguments>/home/newbdb/188/mr188_t1_np.v</globaldebugarguments>
+      <globalcwd>/SCR/virgil</globalcwd>
+      <useglobalprogram>true</useglobalprogram>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
     </run>
     <general>
       <activedir>main</activedir>
@@ -135,6 +152,12 @@
     <subclassing>
       <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.h" />
     </subclassing>
+    <qmake>
+      <savebehaviour>2</savebehaviour>
+      <replacePaths>false</replacePaths>
+      <disableDefaultOpts>true</disableDefaultOpts>
+      <enableFilenamesOnly>false</enableFilenamesOnly>
+    </qmake>
   </kdevtrollproject>
   <kdevfilecreate>
     <filetypes/>
@@ -147,7 +170,7 @@
   </kdevfilecreate>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docsystem>Doxygen-Dokumentation</docsystem>
       <docurl>${APPNAMELC}.tag</docurl>
       <usermanualurl/>
     </projectdoc>
@@ -181,6 +204,21 @@
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>false</preProcessAllHeaders>
+      <parseMissingHeadersExperimental>false</parseMissingHeadersExperimental>
+      <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;</includePaths>
     </codecompletion>
     <references/>
     <designerintegration>
@@ -199,8 +237,18 @@
     <qt>
       <used>false</used>
       <version>3</version>
-      <root></root>
+      <root>/usr/share/qt3</root>
+      <includestyle>3</includestyle>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <qmake>/usr/bin/qmake-qt3</qmake>
+      <designer>/usr/bin/designer-qt3</designer>
+      <designerpluginpaths/>
     </qt>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevvisualadvance>
     <emulator>VisualBoyAdvance</emulator>

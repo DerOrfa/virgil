@@ -22,17 +22,6 @@
 #include <qapplication.h>
 #include <list>
 
-//<vista-zeuch>
-
-//#include <vista/Vlib.h>
-#include <vista/VImage.h>
-#include <vista/mu.h>
-#include <vista/option.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-//</vista-zeuch>
-
 #include <exception>
 
 #include <odindata/fileio.h>
@@ -54,7 +43,6 @@ int main( int argc, char ** argv )
 
 	{
 		Protocol prot;
-	// 	FileIO::set_trace_status(true);
 		char lastarg[ODIN_MAXCHAR];
 		char parname[ODIN_MAXCHAR];
 		STD_string parstring;
@@ -74,10 +62,6 @@ int main( int argc, char ** argv )
 		FileReadOpts ropts;
 		ropts.parse_cmdline_options(argc,argv);
 
-	// 	mopts.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
-	//
-	// 	fmri.parse_cmdline_options(GuiApplication::argc(),GuiApplication::argv());
-
 		JDXfileName fname;
 		char optval[ODIN_MAXCHAR];
 
@@ -90,18 +74,13 @@ int main( int argc, char ** argv )
 
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
-	SGLshowInfos=false;
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w =new GLvlMasterView;
 	w->show();
-/*	if(bench)
-	{
-		SGLprintState("Starte automatischen Bechmark ...");
-		w->doBenchmark(bench);
-	}*/
-	SGLprintState("fertsch");
+	
+  SGLprintState("fertsch");
     a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
-    return a.exec();
+  return a.exec();
 }
 
 

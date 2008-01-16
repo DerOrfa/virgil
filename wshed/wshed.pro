@@ -5,7 +5,6 @@
 
 INCLUDEPATH += ../../ 
 CONFIG += debug \
-          warn_on \
           thread \
           staticlib 
 TEMPLATE = lib 

@@ -3,26 +3,14 @@
 # Unterordner relativ zum Projektordner: ./main
 # Das Target ist eine Anwendung:  virgil
 
-LIBS += -lfreki \
-        -lqt_glue \
-        -leclasses2 \
-        -lsgl \
-        -lboost_signals 
-INCLUDEPATH += /usr/local/include 
 QMAKE_CXXFLAGS_RELEASE += -march=pentium4 \
                           -ftree-vectorize \
                           -ffast-math \
                           -O3 
-QMAKE_CXXFLAGS_DEBUG += -g3 \
-                        -O0 
-DEFINES = GL_GLEXT_PROTOTYPES 
+QMAKE_CXXFLAGS_DEBUG += -g3 -O0 
+DEFINES = GL_GLEXT_PROTOTYPES
 TARGET = virgil 
-CONFIG += debug \
-          warn_off \
-          qt \
-          opengl \
-          thread \
-          x11 
+CONFIG += debug qt opengl thread x11 
 TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui \
@@ -55,3 +43,17 @@ SOURCES += main.cpp \
            glvlrule.cpp \
            glvlposlistener.cpp \
            odindataselector.cpp 
+
+LIBS += -L/SCR/odin_rel \
+  -lblitz \
+  -lfreki \
+  -lqt_glue \
+  -leclasses2 \
+  -lsgl \
+  -lboost_signals
+
+INCLUDEPATH += /usr/local/include \
+  /SCR/odin
+
+CONFIG -= release
+
