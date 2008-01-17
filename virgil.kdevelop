@@ -34,10 +34,10 @@
     </ignoreparts>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <secondaryLanguages/>
     <projectname>virgil</projectname>
-    <defaultencoding></defaultencoding>
+    <defaultencoding/>
   </general>
   <kdevfileview>
     <groups>
@@ -94,12 +94,12 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
+      <dbgshell/>
       <programargs>-dir /scr/incoming7t/fruits/</programargs>
-      <gdbpath></gdbpath>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <gdbpath/>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -123,13 +123,13 @@
         <envvar value="/SCR/odin_rel" name="LD_LIBRARY_PATH" />
       </envvars>
       <runarguments>
-        <virgil></virgil>
+        <virgil/>
       </runarguments>
       <cwd>
         <virgil>/SCR/virgil</virgil>
       </cwd>
       <debugarguments>
-        <virgil></virgil>
+        <virgil/>
       </debugarguments>
       <globaldebugarguments>/home/newbdb/188/mr188_t1_np.v</globaldebugarguments>
       <globalcwd>/SCR/virgil</globalcwd>
@@ -144,7 +144,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>2</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
       <prio>0</prio>
       <envvars/>
       <runmultiplejobs>true</runmultiplejobs>
@@ -153,7 +153,7 @@
       <subclass uifile="/main/segments.ui" sourcefile="/main/glvlsegmentdialog.h" />
     </subclassing>
     <qmake>
-      <savebehaviour>2</savebehaviour>
+      <savebehaviour>0</savebehaviour>
       <replacePaths>false</replacePaths>
       <disableDefaultOpts>true</disableDefaultOpts>
       <enableFilenamesOnly>false</enableFilenamesOnly>
@@ -227,7 +227,7 @@
       </qtdesigner>
     </designerintegration>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>

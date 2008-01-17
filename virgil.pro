@@ -4,5 +4,5 @@
 # Das Target ist Projekt im Unterordner 
 
 SUBDIRS += main 
-CONFIG += debug qt opengl thread x11
+CONFIG += warn_off debug qt opengl thread x11
 TEMPLATE = subdirs

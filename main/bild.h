@@ -65,10 +65,10 @@ public:
 	union {dim zsize;dim Bands;dim layer;};
 	inline unsigned int size()const{return xsize*ysize*zsize;}
 	struct ValRange{T min,max;};
-private:
-	ValRange range;
+/*private:
+	ValRange range;*/
 public:
-	ValRange getValRange()
+/*	ValRange getValRange()
 	{
 		std::less<T> l;
 		if(l(range.max, range.min))
@@ -83,7 +83,7 @@ public:
 			SGLprintState("max: %f, min %f",range.max,range.min);
 		}
 		return range;
-	}
+	}*/
 	Bild(unsigned short x,unsigned short y,unsigned short z)
 	{
 		xsize.setCnt(x);
@@ -92,8 +92,8 @@ public:
 		xsize.setElsize(0);
 		ysize.setElsize(0);
 		zsize.setElsize(0);
-		range.max=numeric_limits<T>::min();
-		range.min=numeric_limits<T>::max();
+/*		range.max=numeric_limits<T>::min();
+		range.min=numeric_limits<T>::max();*/
 	}
 	virtual ~Bild(){}
 	inline virtual T &at(const unsigned int index)=0;

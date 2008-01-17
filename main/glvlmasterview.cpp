@@ -213,7 +213,7 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 }
 
 list<GLvlPlaneView *> GLvlMasterView::views;
-SGLshPtr<Bild<float> > GLvlMasterView::MasterImg;
+SGLshPtr<Bild<GLubyte> > GLvlMasterView::MasterImg;
 OdinDataSelector* GLvlMasterView::dataDialog=NULL;
 
 
@@ -222,11 +222,12 @@ OdinDataSelector* GLvlMasterView::dataDialog=NULL;
  */
 bool GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator i)
 {
-	loadData(i->first,i->second);
+  Data<GLubyte,4> dat;i->second.convert_to(dat);
+	loadData(i->first,dat);
 }
-bool GLvlMasterView::loadData(Protocol prot,Data<float,4> dat)
+bool GLvlMasterView::loadData(Protocol prot,Data<GLubyte,4> dat)
 {
-	MasterImg=SGLshPtr<Bild_odin<float> >(new Bild_odin<float>(prot,dat));
+	MasterImg=SGLshPtr<Bild_odin<GLubyte> >(new Bild_odin<GLubyte>(prot,dat));
 	tex->Load3DImage(*MasterImg);//Master-Textur
 	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
 	tex->calcMatr();
@@ -237,5 +238,6 @@ bool GLvlMasterView::loadData(Protocol prot,Data<float,4> dat)
 GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}
 void GLvlMasterView::SelectSlot::operator()(Protocol prot,Data<float,4> dat)
 {
-	master->loadData(prot,dat);
+  Data<GLubyte,4> data;dat.convert_to(dat);
+  master->loadData(prot,data);
 }

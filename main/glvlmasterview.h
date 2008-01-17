@@ -53,7 +53,7 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 public:
 	GLvlMasterView();
 	~GLvlMasterView();
-	static SGLshPtr<Bild<float> > MasterImg;
+	static SGLshPtr<Bild<GLubyte> > MasterImg;
 	static list<GLvlPlaneView *> views;
 	static OdinDataSelector* dataDialog;
 	void newPlane();
@@ -62,7 +62,7 @@ public:
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
-	bool loadData(Protocol prot,Data<float,4> dat);
+	bool loadData(Protocol prot,Data<GLubyte,4> dat);
 	bool loadData(FileIO::ProtocolDataMap::iterator);
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{

@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS_RELEASE += -march=pentium4 \
 QMAKE_CXXFLAGS_DEBUG += -g3 -O0 
 DEFINES = GL_GLEXT_PROTOTYPES
 TARGET = virgil 
-CONFIG += debug qt opengl thread x11 
+CONFIG += warn_off debug qt opengl thread x11 
 TEMPLATE = app 
 FORMS += newPinDlg.ui \
          PlaneView.ui \
