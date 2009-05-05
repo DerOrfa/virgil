@@ -13,7 +13,7 @@
 #define GLVLVOLUMETEX_H
 
 #include <libsgl/util/sgltextur.h>
-#include <vista/VImage.h>
+#include <viaio/VImage.h>
 #include <bild.h>
 #include <GL/glu.h>
 

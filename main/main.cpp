@@ -53,9 +53,9 @@ int main( int argc, char ** argv )
 			parstring=STD_string("::")+parname;
 		}
 
-		prot.seqpars.set_MatrixSize(readChannel,1);
-		prot.seqpars.set_MatrixSize(phaseChannel,1);
-		prot.seqpars.set_MatrixSize(sliceChannel,1);
+    prot.seqpars.set_MatrixSize(readDirection,1);
+    prot.seqpars.set_MatrixSize(phaseDirection,1);
+    prot.seqpars.set_MatrixSize(sliceDirection,1);
 		prot.set_parmode(noedit);
 		prot.parse_cmdline_options(argc,argv);
 
@@ -77,7 +77,7 @@ int main( int argc, char ** argv )
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w =new GLvlMasterView;
 	w->show();
-	
+
   SGLprintState("fertsch");
     a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
   return a.exec();

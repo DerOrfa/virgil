@@ -20,7 +20,7 @@
 #ifndef BILD_H
 #define BILD_H
 
-#include <vista/VImage.h>
+#include <viaio/VImage.h>
 #include <assert.h>
 #include <limits.h>
 #include <libsgl/sglmisc.h>
@@ -121,7 +121,7 @@ public:
 	void init(T initVal)
 	{
 		if(initVal==0)data=(T*)calloc(this->size(),sizeof(T));
-		else 
+		else
 		{
 			data=(T*)malloc(this->size()*sizeof(T));
 			for(int i=this->size()-1;i>=0;i--)data[i]=initVal;

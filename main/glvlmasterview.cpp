@@ -22,13 +22,13 @@
 #include "glvlpinsdlg.h"
 #include <eclasses/EWorkOnCfgDlg.h>
 
-#include <vista/VImage.h>
-#include <qstatusbar.h> 
-#include <qapplication.h> 
+#include <viaio/VImage.h>
+#include <qstatusbar.h>
+#include <qapplication.h>
 #include <qcheckbox.h>
-#include <qframe.h> 
+#include <qframe.h>
 #include <qpushbutton.h>
-#include <qaction.h> 
+#include <qaction.h>
 #include <qtabwidget.h>
 
 using namespace boost;
@@ -55,17 +55,17 @@ rahmen(new SGLCube()),onDataSelect(this)
 	line_black->hide();
 
 	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
-	
+
 	loadData(GLvlMasterView::dataDialog->getSelected());
-	
+
 /*	std::list<VImage>::iterator i=++src.begin();
 	if(i!=src.end())
 		tex->loadTint(*i);*/
-	
+
 	viewsNeue_SichtAction->setEnabled(tex->valid);
 	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
 	rahmen->DrahtGitter(true);
-	
+
 	//Lichtabnahme komplett aus
 	glview->StdLight->Abnahme.Linear=0;
 	glview->StdLight->Abnahme.Quadratisch=0;
@@ -82,20 +82,20 @@ rahmen(new SGLCube()),onDataSelect(this)
 	toolTabs->removePage(toolTabs->page(4));
 	loadCfg();
 	EArray<EString> Regs=masterReg->findSubKeyStr(QRegExp("planeview"));
-	
+
 	SGLprintState("Lade %d %s",Regs.size(), (Regs.size()==1 ? " Schnitt":" Schnitte"));
 	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
-		
+
 // 	GLvlSegment::setup(glview,tex);
-	
+
 	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
 	setCaption(QString::fromUtf8("Übersicht"));
 
 	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
-	
+
 	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
 }
 
@@ -122,7 +122,7 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 		return;
 	}
 	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg);
-	
+
 	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
@@ -201,7 +201,7 @@ void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 	}
 	wshed->show();
 }*/
-	
+
 
 void GLvlMasterView::onMsg(QString msg,bool canskip)
 {

@@ -32,11 +32,11 @@
 #include "glvlplanecursor.h"
 #include "glvlpin.h"
 #include "config.h"
-#include <vista/VImage.h>
+#include <viaio/VImage.h>
 
 #include <eclasses/EWndRegistry.h>
 
-#include <qlabel.h> 
+#include <qlabel.h>
 
 
 using namespace efc;
@@ -48,7 +48,7 @@ class GLvlView : public GLvlViewBase
 	Q_OBJECT
 public:
 	GLvlView(
-		SGLqtSpace* mw, 
+		SGLqtSpace* mw,
 		SGLshPtr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg
 	);
@@ -81,7 +81,7 @@ private:
 //				cout << "aktiveCam:" << GLvlView::activeCam << endl << GLvlView::activeCam->Pos << endl;
 				GLvlView::activeCam=myCam;
 			}
-			
+
 		}
 	}onGotFocus;
 
@@ -117,7 +117,7 @@ class GLvlPlaneView: public GLvlView
 	Q_OBJECT
 public:
 	GLvlPlaneView(
-		SGLqtSpace* mw, 
+		SGLqtSpace* mw,
 		SGLshPtr<GLvlVolumeTex> tex,
 		EWndRegistry *myReg
 		);

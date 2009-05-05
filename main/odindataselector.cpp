@@ -24,15 +24,15 @@ OdinDataSelector::OdinDataSelector(QFileInfo file,FileReadOpts ropts,Protocol pr
 		Protocol prot=i->first;
 		STD_string id;
 		STD_string full_name;
-		char  	birth_date[ODIN_DATE_LENGTH];
+    STD_string birth_date;
 		char   	sex;
 		float  	weight;
 		const short iX=i->second.shape()[3];
 		const short iY=i->second.shape()[2];
 		const short iZ=i->second.shape()[1];
-		const float rX=prot.geometry.get_FOV(readChannel);
-		const float rY=prot.geometry.get_FOV(phaseChannel);
-		const float rZ=prot.geometry.get_FOV(sliceChannel);
+    const float rX=prot.geometry.get_FOV(readDirection);
+    const float rY=prot.geometry.get_FOV(phaseDirection);
+    const float rZ=prot.geometry.get_FOV(sliceDirection);
 
 		const QString rDim=
 				QString::number(rX)+"mm x "+
