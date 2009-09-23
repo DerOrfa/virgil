@@ -71,7 +71,9 @@ rahmen(new SGLCube()),onDataSelect(this)
 	glview->StdLight->Abnahme.Quadratisch=0;
 	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
 
-	glview->setGridsSize(int(tex->Info.size.SGLV_X >? tex->Info.size.SGLV_Y >? tex->Info.size.SGLV_Z)*.6);
+	glview->setGridsSize(
+	    int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
+	    *.6);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 
