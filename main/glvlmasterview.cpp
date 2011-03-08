@@ -40,19 +40,14 @@ rahmen(new SGLCube()),onDataSelect(this)
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
 	actionNewPlane->setEnabled(tex->valid);
-	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
-	rahmen->DrahtGitter(true);
 
 	//Lichtabnahme komplett aus
-	glview->StdLight->Abnahme.Linear=0;
-	glview->StdLight->Abnahme.Quadratisch=0;
-	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
+	if(glview->StdLight){
+		glview->StdLight->Abnahme.Linear=0;
+		glview->StdLight->Abnahme.Quadratisch=0;
+		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
+	}
 
-	glview->setGridsSize(
-		int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
-		*.6);
-	glview->resizeMode=SGLBaseCam::scaleView;
-	glview->registerObj(rahmen);
 
 	mw = glview;
 	onNewSpace(mw);
@@ -115,6 +110,14 @@ void GLvlMasterView::closeEvent(QCloseEvent *e)
 void GLvlMasterView::doConfig()
 {
 #warning "Implement me";
+	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
+	rahmen->DrahtGitter(true);
+	glview->setGridsSize(
+		int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
+		*.6);
+	glview->resizeMode=SGLBaseCam::scaleView;
+	glview->registerObj(rahmen);
+
 }
 
 

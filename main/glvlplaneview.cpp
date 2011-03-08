@@ -52,7 +52,6 @@ AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
 {
-	setupUi(this);
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
 
@@ -128,6 +127,7 @@ void GLvlPlaneView::lostView()
 GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex):QMainWindow(NULL),//Das MasterWnd darf erst durch die app gelöscht werden
 onGotFocus(myCam)
 {
+	setupUi(this);
 	selfChange=false;
 	this->tex=tex;
 //	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
