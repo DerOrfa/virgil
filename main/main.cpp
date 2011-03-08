@@ -24,11 +24,8 @@
 
 #include <exception>
 
-#include <odindata/fileio.h>
-
 int main( int argc, char ** argv )
 {
-	FileIO::ProtocolDataMap data;
 	QApplication a(argc,argv);
 	unsigned short verbose = 3;
 	switch(verbose)
@@ -41,46 +38,15 @@ int main( int argc, char ** argv )
 
 	SGLprintState("Lese Daten ein ...");
 
-	{
-		Protocol prot;
-		char lastarg[ODIN_MAXCHAR];
-		char parname[ODIN_MAXCHAR];
-		STD_string parstring;
-		parname[0]='\0';
-
-		getLastArgument(argc,argv,lastarg,ODIN_MAXCHAR,false);
-		if(getCommandlineOption(argc,argv,"-jdx",parname,ODIN_MAXCHAR,false)) {
-			parstring=STD_string("::")+parname;
-		}
-
-    prot.seqpars.set_MatrixSize(readDirection,1);
-    prot.seqpars.set_MatrixSize(phaseDirection,1);
-    prot.seqpars.set_MatrixSize(sliceDirection,1);
-		prot.set_parmode(noedit);
-		prot.parse_cmdline_options(argc,argv);
-
-		FileReadOpts ropts;
-		ropts.parse_cmdline_options(argc,argv);
-
-		JDXfileName fname;
-		char optval[ODIN_MAXCHAR];
-
-		if(getLastArgument(argc,argv,optval,ODIN_MAXCHAR)) {
-			fname=optval;
-		} else exit(0);
-		if(fname=="")exit(0);
-		GLvlMasterView::dataDialog=new OdinDataSelector(QString(fname),ropts,prot);
-	}
-
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w =new GLvlMasterView;
 	w->show();
 
-  SGLprintState("fertsch");
-    a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
-  return a.exec();
+	SGLprintState("fertsch");
+	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
+	return a.exec();
 }
 
 

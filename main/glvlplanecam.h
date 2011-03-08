@@ -23,6 +23,7 @@
 #include <libsgl/helper/sglcamera.h>
 #include <libsgl/primitives/sglvieleck.h>
 #include <qobject.h>
+#include <QMouseEvent>
 #include "glvlvolumetex.h"
 #include "glvlcutplane.h"
 
@@ -37,10 +38,10 @@ public:
 	void generate();
 	SGLshPtr<GLvlCutPlane> myPlane;
 	GLfloat farbe[3];
-signals:
+Q_SIGNALS:
 	void camChanged();
-public slots:
-    void schieben(QMouseEvent * e,float relMoveX,float relMoveY);
+public Q_SLOTS:
+	void schieben(QMouseEvent * e,float relMoveX,float relMoveY);
 };
 
 #endif

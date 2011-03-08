@@ -19,10 +19,7 @@
  ***************************************************************************/
 #include "glvlmasterview.h"
 #include "glvlplanecam.h"
-#include "glvlpinsdlg.h"
-#include <eclasses/EWorkOnCfgDlg.h>
 
-#include <viaio/VImage.h>
 #include <qstatusbar.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
@@ -32,37 +29,17 @@
 #include <qtabwidget.h>
 
 using namespace boost;
-using namespace efc;
 
 GLvlMasterView::GLvlMasterView():
-GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ,new EWndRegistry("overview",new ERegistry("GLvl"))),//uuuhh dirty :-D
+GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ),
 rahmen(new SGLCube()),onDataSelect(this)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
-	followSegments->setVisible(false);
-	followSegments->setEnabled(false);
-	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setVisible(false);
-	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setVisible(false);
-	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setEnabled(false);
-	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setEnabled(false);
 
-	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
-	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
+//	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
+//	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
-	line_red->hide();
-	line_green->hide();
-	line_blue->hide();
-	line_black->hide();
-
-	masterReg=myReg->Parent;//MasterRegistry von oben wieder rausfischen
-
-	loadData(GLvlMasterView::dataDialog->getSelected());
-
-/*	std::list<VImage>::iterator i=++src.begin();
-	if(i!=src.end())
-		tex->loadTint(*i);*/
-
-	viewsNeue_SichtAction->setEnabled(tex->valid);
+	actionNewPlane->setEnabled(tex->valid);
 	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
 	rahmen->DrahtGitter(true);
 
@@ -72,66 +49,51 @@ rahmen(new SGLCube()),onDataSelect(this)
 	glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
 
 	glview->setGridsSize(
-	    int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
-	    *.6);
+		int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
+		*.6);
 	glview->resizeMode=SGLBaseCam::scaleView;
 	glview->registerObj(rahmen);
 
 	mw = glview;
 	onNewSpace(mw);
 
-	toolTabs->removePage(toolTabs->page(4));
-	toolTabs->removePage(toolTabs->page(4));
-	loadCfg();
-	EArray<EString> Regs=masterReg->findSubKeyStr(QRegExp("planeview"));
-
-	SGLprintState("Lade %d %s",Regs.size(), (Regs.size()==1 ? " Schnitt":" Schnitte"));
-	for(unsigned short i=0;i<Regs.size();i++)
+/*	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
-
+*/
 // 	GLvlSegment::setup(glview,tex);
 
 	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
-	setCaption(QString::fromUtf8("Übersicht"));
 
-	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
+/*	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
-
-	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
+*/
+//	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
 }
 
 
 GLvlMasterView::~GLvlMasterView()
 {
-	delete masterReg;
 }
 
 
 /*$SPECIALIZATION$*/
 void GLvlMasterView::newPlane()
 {
-	int i;
-	EArray<EString> Regs=masterReg->findSubKeyStr(QRegExp("planeview"));
-	for(i=1;Regs.findVal(EString("planeview "+EString(i)))>=0;i++);
-	newPlane(new EWndRegistry("planeview "+EString(i),masterReg));
-}
-void GLvlMasterView::newPlane(EWndRegistry *hisReg)
-{
 	if(!tex->valid)
 	{
-		SGLprintError("Es lassen sich keine Planes erzeugen, da die Textur ungültig ist");
+		SGLprintError("Cannot create Plane, do valid data available");
 		return;
 	}
-	GLvlPlaneView *view =new GLvlPlaneView (mw,tex,hisReg);
+	GLvlPlaneView *view =new GLvlPlaneView (mw,tex);
 
-	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
-	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
+//	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
+//	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
 	view->init();
 	onNewSpace(view->glview);
-	view->showInOthers(view->schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
-	view->showOthersHere(view->schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
+	view->showInOthers(view->actionShowThisInOthers->isChecked());
+	view->showOthersHere(view->actionShowOthersHere->isChecked());
 
 	SGLshPtr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
 	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
@@ -142,28 +104,27 @@ void GLvlMasterView::newPlane(EWndRegistry *hisReg)
 
 void GLvlMasterView::closeEvent(QCloseEvent *e)
 {
-	showPinsDlg(false);
 	removeAllChilds();
 	GLvlView::closeEvent(e);
 }
 
 
 /*!
-    \fn GLvlMasterView::doConfig()
+	\fn GLvlMasterView::doConfig()
  */
 void GLvlMasterView::doConfig()
 {
-	EWorkOnCfgDlg tDlg(masterReg);
-	tDlg.DoModal();
+#warning "Implement me";
 }
 
 
 /*!
-    \fn GLvlMasterView::doBenchmark()
+	\fn GLvlMasterView::doBenchmark()
  */
 void GLvlMasterView::doBenchmark(time_t benchLen)
 {
-	time_t t=time(NULL);
+#warning "Implement me"
+/*	time_t t=time(NULL);
 	bool contBenchm=true;
 	while(contBenchm)
 	{
@@ -184,7 +145,7 @@ void GLvlMasterView::doBenchmark(time_t benchLen)
 			else glview->updateGL();
 			it++;
 		}
-	}
+	}*/
 }
 void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 
@@ -207,39 +168,33 @@ void GLvlMasterView::doBenchmark(){	doBenchmark(5);}
 
 void GLvlMasterView::onMsg(QString msg,bool canskip)
 {
-	if(canskip){if(!qApp->tryLock())return;}
+#warning "fix me"
+/*	if(canskip){if(!qApp->tryLock())return;}
 	else qApp->lock();
 	statusBar()->message(msg);
 	qApp->unlock();
-	qApp->processEvents();
+	qApp->processEvents();*/
 }
 
 list<GLvlPlaneView *> GLvlMasterView::views;
 SGLshPtr<Bild<GLubyte> > GLvlMasterView::MasterImg;
-OdinDataSelector* GLvlMasterView::dataDialog=NULL;
+//OdinDataSelector* GLvlMasterView::dataDialog=NULL;
 
 
 /*!
-    \fn GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator)
+	\fn GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator)
  */
-bool GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator i)
+bool GLvlMasterView::loadData()
 {
-  Data<GLubyte,4> dat;i->second.convert_to(dat);
-	loadData(i->first,dat);
-}
-bool GLvlMasterView::loadData(Protocol prot,Data<GLubyte,4> dat)
-{
-	MasterImg=SGLshPtr<Bild_odin<GLubyte> >(new Bild_odin<GLubyte>(prot,dat));
-	tex->Load3DImage(*MasterImg);//Master-Textur
-	GLvlVolumeTex::masteroffset=SGLVektor(-tex->Info.X.inner_mm_size/2,-tex->Info.Y.inner_mm_size/2,-tex->Info.Z.inner_mm_size/2);
-	tex->calcMatr();
-	tex->ResetTransformMatrix((const GLdouble*)tex->mm2tex_Matrix);
-	if(tex->valid)tex->changed();
+#warning implement me
+/*  Data<GLubyte,4> dat;i->second.convert_to(dat);
+	loadData(i->first,dat);*/
 }
 
 GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}
-void GLvlMasterView::SelectSlot::operator()(Protocol prot,Data<float,4> dat)
+void GLvlMasterView::SelectSlot::operator()(/*Protocol prot,Data<float,4> dat*/)
 {
-  Data<GLubyte,4> data;dat.convert_to(dat);
-  master->loadData(prot,data);
+	qWarning("Implement me");
+ /* Data<GLubyte,4> data;dat.convert_to(dat);
+  master->loadData(prot,data);*/
 }

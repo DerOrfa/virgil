@@ -20,7 +20,7 @@
 //
 // C++ Implementation: glvlplanecam
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <enni@Akira>, (C) 2004
@@ -34,7 +34,7 @@
 #include <qslider.h>
 
 
-GLvlPlaneCam::GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex): 
+GLvlPlaneCam::GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex):
 SGLBaseCam(0,0,150),
 myPlane(new GLvlCutPlane(tex))
 {
@@ -59,25 +59,25 @@ void GLvlPlaneCam::generate()
 			Horiz[1].DrawPureVertex();Horiz[0].DrawPureVertex();
 		glEnd();
 	}
-	
+
 	recalcEcken();
 	myPlane->resetTexKoord();
 
 	glLineWidth(2);
 	glBegin(GL_LINES);
-		glColor3f(255,0,0); 
+		glColor3f(255,0,0);
 		Ecken[0]->DrawPureVertex();
 		Ecken[1]->DrawPureVertex();
-		
-		glColor3f(0,255,0); 
+
+		glColor3f(0,255,0);
 		Ecken[1]->DrawPureVertex();
 		Ecken[2]->DrawPureVertex();
-		
-		glColor3f(0,0,0); 
+
+		glColor3f(0,0,0);
 		Ecken[2]->DrawPureVertex();
 		Ecken[3]->DrawPureVertex();
-	
-		glColor3f(0,0,255); 
+
+		glColor3f(0,0,255);
 		Ecken[3]->DrawPureVertex();
 		Ecken[0]->DrawPureVertex();
 	glEnd();
@@ -85,13 +85,13 @@ void GLvlPlaneCam::generate()
 }
 
 /*!
-    \fn GLvlPlaneCam::schieben(float amount)
+	\fn GLvlPlaneCam::schieben(float amount)
  */
 void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 {
-	if(e->state()&Qt::MidButton)
+	if(e->buttons()&Qt::MidButton)
 	{
-		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01*GLvlView::configDlg->plane_transfer_speed->value());
+		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01);
 		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
 		//movecam ist nicht nötig, da move_cam_with_aim true ist
 		compileNextTime();

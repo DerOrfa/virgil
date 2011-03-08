@@ -10,7 +10,11 @@
 //
 //
 #include "glvlvolumetex.h"
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 #include <assert.h>
 //#include "glvlminima.h"
 
@@ -164,7 +168,7 @@ SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Tex
 }
 
 /*!
-    \fn GLvlVolumeTex::calcMatr()
+	\fn GLvlVolumeTex::calcMatr()
  */
 void GLvlVolumeTex::calcMatr(SGLVektor offset)
 {
@@ -197,30 +201,30 @@ bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<GLubyte> &src,EVektor<GLubyte
   GLint intFormat;
   switch(PosColor.size())
   {
-    case 1:	voxelElemSize=1;
-    intFormat=GL_INTENSITY;
-    break;
-    case 2:SGLprintError("Ungültiger Farbvektor");break;
-    case 3:	voxelElemSize=3;
-    intFormat=GL_RGB;
-    break;
-    case 4:	intFormat=GL_RGBA;
-    voxelElemSize=4;
-    break;
-    default:intFormat=GL_LUMINANCE_ALPHA;
-    voxelElemSize=2;
-    break;
+	case 1:	voxelElemSize=1;
+	intFormat=GL_INTENSITY;
+	break;
+	case 2:SGLprintError("Ungültiger Farbvektor");break;
+	case 3:	voxelElemSize=3;
+	intFormat=GL_RGB;
+	break;
+	case 4:	intFormat=GL_RGBA;
+	voxelElemSize=4;
+	break;
+	default:intFormat=GL_LUMINANCE_ALPHA;
+	voxelElemSize=2;
+	break;
   }
 	//Größe der Textur ("+2" ist für den Rand)
   GLint size[3];
   xsize=Info.X.getCnt('X')+2;
   ysize=Info.Y.getCnt('Y')+2;
   zsize=Info.Z.getCnt('Z')+2;
-    
+
   if(!sglChkExt("GL_ARB_texture_non_power_of_two","Es können keine NPOT-Texturen erzeugt werden, schade eigentlich :-(.",0))
   {
-    if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
-      //@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
+	if(!genValidSize(intFormat,size,3, intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,false))return false;
+	  //@todo nützt nichts - er glaubt er bekäme die Tex rein bekommt aber unten trotzem "out of memory"
   }
   else SGLprintInfo("Super, GL_ARB_texture_non_power_of_two ist unterstüzt, schaun 'mer mal \n");
 
@@ -232,37 +236,37 @@ bool GLvlVolumeTex::loadCommon(GLenum gl_type,Bild<GLubyte> &src,EVektor<GLubyte
 
   for(;z<Info.Z.getCnt('Z') ;z++)
   {
-    GLubyte *pix= &src.at(0,0,z);
+	GLubyte *pix= &src.at(0,0,z);
 
-    pixels+=xsize*voxelElemSize;//erste Zeile leer lassen
-    for(int y=0;y<Info.Y.getCnt('Y');y++)
-    {
-      pixels+=voxelElemSize;//ersten Voxel (und seinen alpha) leer lassen
+	pixels+=xsize*voxelElemSize;//erste Zeile leer lassen
+	for(int y=0;y<Info.Y.getCnt('Y');y++)
+	{
+	  pixels+=voxelElemSize;//ersten Voxel (und seinen alpha) leer lassen
 
-      if(intFormat== GL_LUMINANCE_ALPHA)
-        copyXline(pixels,pix,Info.X.getCnt('X'));
-      else
-        mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
-      if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
-      pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
+	  if(intFormat== GL_LUMINANCE_ALPHA)
+		copyXline(pixels,pix,Info.X.getCnt('X'));
+	  else
+		mapXline(pixels,pix,Info.X.getCnt('X'),PosColor,NegColor);
+	  if(xsize-Info.X.getCnt('X')-1 <= 0){SGLprintError("Das Bild ist zu groß");}
+	  pixels+=(xsize-Info.X.getCnt('X')-1)*voxelElemSize;//Wenn das Bild zu groß is, geht der Zeiger wieder zurück (addition neg. werte) und überschreibt nächtes mal, das was falsch war
 			//@todo aber nicht den ersten voxel
-    }
-    pixels+=xsize*voxelElemSize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
+	}
+	pixels+=xsize*voxelElemSize*(ysize-Info.Y.getCnt('Y')-1);//die restlichen y-Zeilen
   }
-  glTexImage3DEXT(TexType,0,intFormat,xsize,ysize,zsize,0,intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,pixels_);
+  glTexImage3D(TexType,0,intFormat,xsize,ysize,zsize,0,intFormat == GL_INTENSITY ? GL_LUMINANCE:intFormat,gl_type,pixels_);
   free(pixels_);
   GLuint gluerr = glGetError();
   if(gluerr)
   {
-    SGLprintError("%s beim Laden der Textur [GLerror]",gluErrorString(gluerr));
-    return GL_FALSE;
+	SGLprintError("%s beim Laden der Textur [GLerror]",gluErrorString(gluerr));
+	return GL_FALSE;
   }
   else
   {
-    loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
-    float MBSize=getTexByteSize()/float(1024*1024);
-    if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(GLubyte)/float(1024*1024),MBSize,xsize,ysize,zsize);}
-    loaded=false;
+	loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+	float MBSize=getTexByteSize()/float(1024*1024);
+	if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %dx%dx%d-Textur belegt",Info.X.getCnt('X')*Info.Y.getCnt('Y')*Info.Z.getCnt('Z')*sizeof(GLubyte)/float(1024*1024),MBSize,xsize,ysize,zsize);}
+	loaded=false;
   }
   Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
   return true;
@@ -283,24 +287,24 @@ bool GLvlVolumeTex::Load3DImage(Bild<GLubyte> &img)
   if(!valid)//Fallback wenn Palette nich tut
 	//@todo tut garantiert nicht - GL2 kennt paletted textures nicht mehr :-((
   {
-    EVektor<GLfloat> PosColor,NegColor;
-    switch(this->renderMode)
-    {
-      case SGL_MTEX_MODE_TINT:
-        PosColor.resize(3);
-        NegColor.resize(3);
-        PosColor[2]=PosColor[1]=.1;
-        NegColor[2]=NegColor[0]=.2;
-        break;
-      case SGL_MTEX_MODE_OVERLAY:
-        PosColor.resize(4);
-        NegColor.resize(4);
-        PosColor[0]=.25;
-        NegColor[1]=.25;
-        PosColor[3]=NegColor[3]=.25;
-        break;
-    }
-    valid=loadCommon(GL_UNSIGNED_BYTE,img,PosColor,NegColor);
+	EVektor<GLfloat> PosColor,NegColor;
+	switch(this->renderMode)
+	{
+	  case SGL_MTEX_MODE_TINT:
+		PosColor.resize(3);
+		NegColor.resize(3);
+		PosColor[2]=PosColor[1]=.1;
+		NegColor[2]=NegColor[0]=.2;
+		break;
+	  case SGL_MTEX_MODE_OVERLAY:
+		PosColor.resize(4);
+		NegColor.resize(4);
+		PosColor[0]=.25;
+		NegColor[1]=.25;
+		PosColor[3]=NegColor[3]=.25;
+		break;
+	}
+	valid=loadCommon(GL_UNSIGNED_BYTE,img,PosColor,NegColor);
   }
 
   return valid;

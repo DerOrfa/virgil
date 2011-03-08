@@ -20,7 +20,6 @@
 #ifndef BILD_H
 #define BILD_H
 
-#include <viaio/VImage.h>
 #include <assert.h>
 #include <limits.h>
 #include <libsgl/sglmisc.h>

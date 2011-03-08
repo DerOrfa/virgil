@@ -20,18 +20,17 @@
 #ifndef GLVLMASTERVIEW_H
 #define GLVLMASTERVIEW_H
 
+#include "ui_GLvlView.h"
 #include "glvlplaneview.h"
-#include <libsgl/qt_glue/sglqtmultispacemgr.h>
+#include <libsgl/qt4_glue/sglqtmultispacemgr.h>
 //#include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
 //#include "glvlminima.h"
 #include <libsgl/sglsignal.h>
-#include "odindataselector.h"
-#include <odindata/fileio.h>
 #include "bild.h"
 
-using namespace efc;
+
 using namespace boost;
 
 /**
@@ -40,14 +39,13 @@ using namespace boost;
 
 class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 	SGLqtSpace * mw;
-	ERegistry *masterReg;
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
 	class SelectSlot:public SGLSlot
 	{
 		GLvlMasterView *master;
 		public:
-			void operator()(Protocol,Data<float,4>);
+			void operator()();
 			SelectSlot(GLvlMasterView* p);
 	}onDataSelect;
 public:
@@ -55,15 +53,12 @@ public:
 	~GLvlMasterView();
 	static SGLshPtr<Bild<GLubyte> > MasterImg;
 	static list<GLvlPlaneView *> views;
-	static OdinDataSelector* dataDialog;
 	void newPlane();
-	void newPlane(EWndRegistry *hisReg);
 	void doConfig();
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
-	bool loadData(Protocol prot,Data<GLubyte,4> dat);
-	bool loadData(FileIO::ProtocolDataMap::iterator);
+	bool loadData();
 /*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
 	{
 		public:

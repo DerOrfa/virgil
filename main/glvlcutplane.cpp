@@ -1,7 +1,7 @@
 //
 // C++ Implementation: glvlcutplane
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <enni@Akira>, (C) 2004
@@ -12,7 +12,7 @@
 #include "glvlcutplane.h"
 #include <assert.h>
 
-GLvlCutPlane::GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex): 
+GLvlCutPlane::GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex):
 		SGL3DPlane(0,0, volumeTex),onDataSelect(this)
 {
 	useCenter=false;
@@ -39,6 +39,6 @@ void GLvlCutPlane::resetTexKoord()
 GLvlCutPlane::SelectSlot::SelectSlot(GLvlCutPlane* p):plane(p)
 {}
 
-void GLvlCutPlane::SelectSlot::operator()(Protocol,Data<float,4>)
-{	
+void GLvlCutPlane::SelectSlot::operator()()
+{
 }

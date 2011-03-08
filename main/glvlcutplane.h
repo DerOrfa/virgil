@@ -1,7 +1,7 @@
 //
 // C++ Interface: glvlcutplane
 //
-// Description: 
+// Description:
 //
 //
 // Author: Enrico Reimer,,, <enni@Akira>, (C) 2004
@@ -25,7 +25,7 @@ class GLvlCutPlane : public SGL3DPlane
 	{
 		GLvlCutPlane *plane;
 	public:
-		void operator()(Protocol,Data<float,4>);
+		void operator()();
 		SelectSlot(GLvlCutPlane* p);
 	}onDataSelect;
 public:

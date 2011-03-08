@@ -13,12 +13,15 @@
 #define GLVLVOLUMETEX_H
 
 #include <libsgl/util/sgltextur.h>
-#include <viaio/VImage.h>
 #include <bild.h>
+
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 // #include "glvlsegment.h"
-#include <bild_odin.h>
 
 /**
 @author Enrico Reimer,,,
@@ -79,11 +82,6 @@ class GLvlVolumeTex : public SGLBaseTex
 public:
 	GLvlVolumeTex();
 //	bool loadSegment(GLvlSegment &src);
-	template<class T> bool Load3DImage(Protocol prot, Data<T,4> dat)
-	{
-    Data<GLubyte,4> data;dat.convert_to(data);
-    return valid=Load3DImage(Bild_odin<GLubyte>(prot,data));
-	}
 	class dimData:public dim{
 	public:
 		float inner_mm_size;
@@ -161,9 +159,9 @@ public:
 	}
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
-    void calcMatr(SGLVektor offset=SGLVektor(0,0,0));
+	void calcMatr(SGLVektor offset=SGLVektor(0,0,0));
 //     void loadTint(VImage i);
-    GLdouble mm2tex_Matrix[4][4];
+	GLdouble mm2tex_Matrix[4][4];
 
 	unsigned short setupPal(unsigned short start,unsigned short end,bool scale=false);
 /*    void loadColorMask(Bild<VBit> &img,EVektor<unsigned short> pos,GLfloat color[3]);
@@ -173,7 +171,7 @@ private:
   bool loadCommon(GLenum gl_type,Bild<GLubyte> &src,EVektor<GLubyte> PosColor,EVektor<GLubyte> NegColor);
   template<class T> bool loadMask(Bild<T> &src);
 protected:
-    bool npot;
+	bool npot;
 };
 
 #endif

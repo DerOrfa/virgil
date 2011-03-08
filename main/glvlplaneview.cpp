@@ -20,10 +20,9 @@
 
 
 #include "glvlplaneview.h"
+#include "ui_GLvlView.h"
 #include "glvlplanecam.h"
-#include "newPinDlg.h"
 #include "glvlmasterview.h"
-#include "glvlpinsdlg.h"
 
 #include <qframe.h>
 #include <qlayout.h>
@@ -31,51 +30,47 @@
 #include <qcombobox.h>
 #include <assert.h>
 #include <qtabwidget.h>
-#include <qpushbutton.h> 
-#include <qstatusbar.h> 
-#include <qlayout.h> 
+#include <qpushbutton.h>
+#include <qstatusbar.h>
+#include <qlayout.h>
 #include <qcheckbox.h>
-#include <qmenubar.h> 
+#include <qmenubar.h>
 #include <qaction.h>
 #include <qlineedit.h>
+#include <QWheelEvent>
 
 
 using namespace boost;
-using namespace efc;
 
 GLvlPlaneView::GLvlPlaneView(
-	SGLqtSpace* mw, 
-	SGLshPtr<GLvlVolumeTex> tex,
-	EWndRegistry *myReg
+	SGLqtSpace* mw,
+	SGLshPtr<GLvlVolumeTex> tex
 ):
-GLvlView(mw, tex,myReg),
-cursor(new GLvlPlaneCursor()),
+GLvlView(mw, tex),
+cursor(new GLvlPlaneCursor())/*,
 AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
-AimZStatus((QWidget*)statusBar())
+AimZStatus((QWidget*)statusBar())*/
 {
+	setupUi(this);
 	setupSpace(new SGLqtSpace(mw,glViewContainer));
 	glview->resizeMode=SGLBaseCam::moveCam;
-	
-	fileExitAction->setMenuText("Sicht schließen");
-	myReg->Suicide=true;
+
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
 	connect(glview,SIGNAL(mouseMoved(QMouseEvent *,SGLVektor )),SLOT(mouseMovedInGL(QMouseEvent *,SGLVektor )));
 
-	setCaption("Schnitt");
-	
-	AimXStatus.setMinimumSize(80,5);
+/*	AimXStatus.setMinimumSize(80,5);
 	AimYStatus.setMinimumSize(80,5);
 	AimZStatus.setMinimumSize(80,5);
 
 	statusBar()->addWidget(&AimXStatus,10,true);
 	statusBar()->addWidget(&AimYStatus,10,true);
 	statusBar()->addWidget(&AimZStatus,10,true);
-	
+
 	AimXStatus.setText("0");
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
-	
+*/
 	GLvlMasterView::views.push_front(this);
 	it=GLvlMasterView::views.begin();
 
@@ -88,18 +83,22 @@ GLvlPlaneView::~GLvlPlaneView()
 
 bool GLvlPlaneView::loadCfg()
 {
-	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setOn(myReg->getbVal("Andere anzeigen",true));
+	qWarning("Implement me");
+/*	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setOn(myReg->getbVal("Andere anzeigen",true));
 	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setOn(myReg->getbVal("In anderen anzeigen",true));
+	*/
 	return GLvlView::loadCfg();
 }
 
 bool GLvlPlaneView::saveCfg()
 {
-	GLvlView::saveCfg();	
-	if(schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isVisible())
+	qWarning("Implement me");
+	GLvlView::saveCfg();
+/*	if(schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isVisible())
 		myReg->setbVal("Andere anzeigen",schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
 	if(schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isVisible())
 		myReg->setbVal("In Anderen anzeigen",schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
+		*/
 }
 
 
@@ -113,7 +112,7 @@ void GLvlPlaneView::showInOthers(bool toggle)
 		glview->sendShowObj(cam);
 		glview->sendShowObj(cam->myPlane);
 	}
-	else 
+	else
 	{
 		glview->sendUnshowObj(cam);
 		glview->sendUnshowObj(cam->myPlane);
@@ -122,18 +121,16 @@ void GLvlPlaneView::showInOthers(bool toggle)
 
 void GLvlPlaneView::lostView()
 {
-	myReg->Suicide=false;
+	qWarning("Implement me");
 	close();
 }
 
-GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex,EWndRegistry *myReg):
-GLvlViewBase(NULL,NULL,mw?Qt::WDestructiveClose:0),//Das MasterWnd darf erst durch die app gelöscht werden
+GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex):QMainWindow(NULL),//Das MasterWnd darf erst durch die app gelöscht werden
 onGotFocus(myCam)
 {
 	selfChange=false;
-	this->myReg=myReg;
 	this->tex=tex;
-	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
+//	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
 }
 
 void GLvlView::setupSpace(SGLqtSpace *space)
@@ -142,9 +139,6 @@ void GLvlView::setupSpace(SGLqtSpace *space)
 	glview->registerDynamicTex(*tex);
 	glview->gotFocus.connect(onGotFocus);
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
-	assert(glViewContainer->layout());//eigentlich sollte SGLqtSpace sicherstellen, daß sein Parent ein layout hat ..
-	glViewContainer->layout()->setMargin(1);
-	myReg->setWindow(this);
 }
 
 /*$SPECIALIZATION$*/
@@ -170,6 +164,7 @@ void GLvlView::setCoordAim()
 {
 	if(selfChange)return;
 	assert(glview && glview->Camera);
+
 	SGLVektor V=SGLVektor(xCoordAim->value(),yCoordAim->value(),zCoordAim->value());
 
 	glview->Camera->ViewMatr.outDated=true;
@@ -204,7 +199,7 @@ void GLvlView::setCoordCam()
 }
 
 /*!
-    \fn GLvlView::onCamChanged()
+	\fn GLvlView::onCamChanged()
  */
 void GLvlView::onCamChanged()
 {
@@ -212,22 +207,22 @@ void GLvlView::onCamChanged()
 	assert(glview && glview->Camera);
 	assert(tex->TexType==GL_TEXTURE_3D);
 	SGLBaseCam &cam=*(glview->Camera);
-	
+
 	const SGLVektor &Pos=cam.Pos;
 	const SGLVektor &LookAt=cam.LookAt;
-	
-	const SGLVektor senkr=(cam.Pos-cam.LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
-	const float winkel=cam.UpVect.SGLV_X<0 ? cam.UpVect.VektWink(senkr):-cam.UpVect.VektWink(senkr);
-	rollDeg->setValue((int)winkel);
+
+//	const SGLVektor senkr=(cam.Pos-cam.LookAt).kreuzprod(SGLVektor(1,0,0));//Senkrechte auf Pos in Y-Z-Ebene liegend
+//	const float winkel=cam.UpVect.SGLV_X<0 ? cam.UpVect.VektWink(senkr):-cam.UpVect.VektWink(senkr);
+//	rollDeg->setValue((int)winkel);
 
 	xCoordCam->setValue((int)Pos.SGLV_X);
 	yCoordCam->setValue((int)Pos.SGLV_Y);
 	zCoordCam->setValue((int)Pos.SGLV_Z);
-	
+
 	xCoordAim->setValue((int)LookAt.SGLV_X);
 	yCoordAim->setValue((int)LookAt.SGLV_Y);
 	zCoordAim->setValue((int)LookAt.SGLV_Z);
-	
+
 	selfChange=false;
 }
 
@@ -266,16 +261,17 @@ void	GLvlView::selectViewMode(int mode)
 }
 
 /*!
-    \fn GLvlView::loadCam()
+	\fn GLvlView::loadCam()
  */
 bool GLvlView::loadCfg()
 {
-	myCam=glview->Camera;
+#warning "Implement me, pleeease"
+/*	myCam=glview->Camera;
 	ERegistry CamReg("Camera",myReg);
 	myCam->Pos.SGLV_X=CamReg.getdVal("Pos.x",0);
 	myCam->Pos.SGLV_Y=CamReg.getdVal("Pos.y",0);
 	myCam->Pos.SGLV_Z=CamReg.getdVal("Pos.z",200);
-	
+
 	myCam->LookAt.SGLV_X=CamReg.getdVal("Aim.x",0);
 	myCam->LookAt.SGLV_Y=CamReg.getdVal("Aim.y",0);
 	myCam->LookAt.SGLV_Z=CamReg.getdVal("Aim.z",0);
@@ -283,25 +279,27 @@ bool GLvlView::loadCfg()
 	myCam->UpVect.SGLV_X=CamReg.getdVal("Up.x",0);
 	myCam->UpVect.SGLV_Y=CamReg.getdVal("Up.y",1);
 	myCam->UpVect.SGLV_Z=CamReg.getdVal("Up.z",0);
-	
+	*/
+
 	myCam->ViewMatr.outDated=true;
 	myCam->Compile();
-	
+
 	int mode;
-	QString sMode=myReg->getsVal("ResizeMode",scaleMode->text(glview->resizeMode));
+/*	QString sMode=myReg->getsVal("ResizeMode",scaleMode->text(glview->resizeMode));
 	for(mode=scaleMode->count()-1;mode>=0 && sMode!=scaleMode->text(mode);mode--);
 	scaleMode->setCurrentItem(mode);
-	selectViewMode(mode);
+	selectViewMode(mode);*/
 	return true;
 }
 
 
 /*!
-    \fn GLvlView::saveCam()
+	\fn GLvlView::saveCam()
  */
 bool GLvlView::saveCfg()
 {
-	ERegistry CamReg("Camera",myReg);
+#warning "implement me"
+/*	ERegistry CamReg("Camera",myReg);
 	bool ret;
 	if(!myCam)
 	{
@@ -319,9 +317,10 @@ bool GLvlView::saveCfg()
 	ret&=CamReg.setdVal("Up.x",myCam->UpVect.SGLV_X);
 	ret&=CamReg.setdVal("Up.y",myCam->UpVect.SGLV_Y);
 	ret&=CamReg.setdVal("Up.z",myCam->UpVect.SGLV_Z);
-	
+
 	ret&=myReg->setsVal("ResizeMode",scaleMode->currentText());
-	return ret; 
+	*/
+	return true;
 }
 
 void GLvlView::showOthersHere(bool toggle)
@@ -336,9 +335,9 @@ void GLvlView::showOthersHere(bool toggle)
 
 void GLvlView::closeEvent(QCloseEvent *e)
 {
-	if(!myReg->Suicide)
+/*	if(!myReg->Suicide)
 		saveCfg();
-	delete myReg;
+	delete myReg;*/
 	e->accept();
 }
 
@@ -354,23 +353,23 @@ SGLVektor GLvlView::default_rechts[3]={SGLVektor(0,200,0),SGLVektor(0,0,0),SGLVe
 SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
 
 //GLvlSegmentDialog* GLvlView::wshed=NULL;
-GLvlPinsDlg* GLvlView::pinsDlg=NULL;
-ConfigDlg* GLvlView::configDlg=NULL;
+//GLvlPinsDlg* GLvlView::pinsDlg=NULL;
+//ConfigDlg* GLvlView::configDlg=NULL;
 SGLshPtr<SGLBaseCam> GLvlView::activeCam;
 
 
 /*!
-    \fn GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
+	\fn GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
  */
 void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 {
 	if(cursor->goTo(weltKoord))
 	{
-		bool here=showCursHereBtn->isOn(),there=showCursThereBtn->isOn();
-		if(here && there)glview->sendRedraw();
+		bool here=showCursHereBtn->isChecked()/*,there=showCursThereBtn->isChecked()*/;
+		if(here /*&& there*/)glview->sendRedraw();
 		else if(here)glview->updateGL();
-		else if(there)glview->sendRedrawOther();
-		unsigned short stellen=fangToggle->isChecked() ? 0:2;
+//		else if(there)glview->sendRedrawOther();
+		unsigned short stellen=/*fangToggle->isChecked() ? 0:*/2;
 
 		if(stellen)
 		{
@@ -392,8 +391,8 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 				QString::number(int(len.Len()));
 			statusBar()->message("Entfernung zum letzen Pin: "+lenStr+"mm");
 		}*/
-		if(followSegments->isEnabled() && followSegments->isOn())
-			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));
+/*		if(followSegments->isEnabled() && followSegments->isOn())
+			onVoxel(tex->texKoord2texIndex(cursor->OldPos-GLvlVolumeTex::masteroffset));*/
 		//@todo Wenn fang aus is, wird das oft unnötig ausgelöst
 		//besser prüfen, ob sich das Voxel geändert hat
 	}
@@ -404,17 +403,17 @@ void GLvlPlaneView::init()
 	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam(tex));
 	show();
 	glview->defaultCam(cam);
-	
+
 	glview->registerObj(cursor);
 
 	cam->connect(glview,
 		SIGNAL(pressedMouseMoveRel(QMouseEvent *,float ,float )),
 		SLOT(schieben(QMouseEvent *,float ,float )));
-	cursor->connect( fangToggle, SIGNAL( toggled(bool) ),SLOT(setFang(bool)));
-	cursor->connect( spinCursorSize, SIGNAL( valueChanged(int) ),SLOT(setSize(int)));
-	
-	cursor->setFang(fangToggle->isOn());
-	cursor->setSize(spinCursorSize->value());
+//	cursor->connect( fangToggle, SIGNAL( toggled(bool) ),SLOT(setFang(bool)));
+//	cursor->connect( spinCursorSize, SIGNAL( valueChanged(int) ),SLOT(setSize(int)));
+
+//	cursor->setFang(fangToggle->isOn());
+//	cursor->setSize(spinCursorSize->value());
 
 	glview->registerObj(cam->myPlane);
 
@@ -424,8 +423,8 @@ void GLvlPlaneView::init()
 
 void GLvlPlaneView::onMouseDblClick(QMouseEvent *e)
 {
-	printf("Double click\n");
-	VUByte  top_resize=0,bottom_resize=0;
+/*	printf("Double click\n");
+	uint8_t  top_resize=0,bottom_resize=0;
 	bool done=false;
 		newPinDlg dlg;
 		dlg.koord_x_text->setText(QString::number(cursor->OldPos.SGLV_X));
@@ -433,7 +432,6 @@ void GLvlPlaneView::onMouseDblClick(QMouseEvent *e)
 		dlg.koord_z_text->setText(QString::number(cursor->OldPos.SGLV_Z));
 		if(dlg.exec()==QDialog::Accepted)
 		{
-			showPinsDlg(true);
 			new GLvlPinsDlg::pinItem(glview,SGLVektor(
 				dlg.koord_x_text->text().toFloat(),
 				dlg.koord_y_text->text().toFloat(),
@@ -441,11 +439,12 @@ void GLvlPlaneView::onMouseDblClick(QMouseEvent *e)
 				dlg.pinNameEdit->text()
 			);
 		}
+		*/
 }
 
 
 /*!
-    \fn GLvlPlaneView::showCursThere(bool toggle)
+	\fn GLvlPlaneView::showCursThere(bool toggle)
  */
 void GLvlPlaneView::showCursThere(bool toggle)
 {
@@ -455,7 +454,7 @@ void GLvlPlaneView::showCursThere(bool toggle)
 
 
 /*!
-    \fn GLvlPlaneView::showCursHere(bool toggle)
+	\fn GLvlPlaneView::showCursHere(bool toggle)
  */
 void GLvlPlaneView::showCursHere(bool toggle)
 {
@@ -470,12 +469,12 @@ void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 {
 	short top_resize=0,bottom_resize=0;
 	bool done=false;
-	if(e->state() & Qt::ControlButton)
+	if(e->buttons() & Qt::ControlModifier)
 	{
 		done=true;
 		top_resize=e->delta() > 0 ? -1:1;
 	}
-	if(e->state() & Qt::ShiftButton)
+	if(e->buttons() & Qt::ShiftModifier)
 	{
 		done=true;
 		bottom_resize=e->delta() > 0 ? -1:1;
@@ -489,35 +488,19 @@ void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 
 void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 {
-	if(e->state()==(Qt::LeftButton | ControlButton) && !glview->MouseInfo.MovedPastDownBtn)
+	if(e->buttons()==((unsigned int)Qt::LeftButton | (unsigned int)Qt::ControlModifier) && !glview->MouseInfo.MovedPastDownBtn)
 		jumpToCursor();
-	else if(e->state()==Qt::LeftButton && !glview->MouseInfo.MovedPastDownBtn)
+	else if(e->buttons()==Qt::LeftButton && !glview->MouseInfo.MovedPastDownBtn)
 	{
 		selectSegment();
 		e->accept();
 	}
 }
 
-void GLvlView::showConfigDlg(bool toggle)
-{
-	assert(configDlg);
-	if(toggle)configDlg->show();
-	else configDlg->hide();
-}
-
 void GLvlView::selectDataDlg()
 {
-	assert(GLvlMasterView::dataDialog);
-	GLvlMasterView::dataDialog->show();
+	qWarning("Implement me");
 }
-
-void GLvlView::showPinsDlg(bool toggle)
-{
-	assert(pinsDlg);
-	if(toggle)pinsDlg->show();
-	else pinsDlg->hide();
-}
-
 
 void GLvlPlaneView::jumpToCursor(){jumpTo(cursor->OldPos);}
 void GLvlPlaneView::jumpTo(const SGLVektor &to)

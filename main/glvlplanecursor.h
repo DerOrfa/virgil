@@ -33,7 +33,7 @@ class GLvlPlaneCursor : public QObject, public SGLMetaObj
 	Q_OBJECT
 public:
 	list<SGLCube> Cubes;
-	// es scheint, daß die smart-pointer einen Zeiger auf andere Referenzen halten, und sie bekommen große probs, 
+	// es scheint, daß die smart-pointer einen Zeiger auf andere Referenzen halten, und sie bekommen große probs,
 	// wenn sich diese in Folge von reallozierung verlagern => deshalb kein vector
 	void compileSubObjects();
 	virtual SGLVektor getCenter()const;
@@ -42,9 +42,9 @@ public:
 private:
 	bool fang;
 
-public slots:
-    void setFang(bool);
-    void setSize(int size);
+public Q_SLOTS:
+	void setFang(bool);
+	void setSize(int size);
 };
 
 #endif

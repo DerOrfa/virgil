@@ -22,35 +22,27 @@
 #define GLVLPLANEVIEW_H
 
 #include <libsgl/sglsignal.h>
-#include <libsgl/qt_glue/sglqtspace.h>
+#include <libsgl/qt4_glue/sglqtspace.h>
 //#include "glvlsegmentdialog.h"
 #include "glvlplanecam.h"
-#include "PlaneView.h"
+//#include "PlaneView.h"
 #include "glvlvolumetex.h"
 #include <libsgl/primitives/sglquader.h>
 //#include "../wshed/.h"
 #include "glvlplanecursor.h"
-#include "glvlpin.h"
-#include "config.h"
-#include <viaio/VImage.h>
 
-#include <eclasses/EWndRegistry.h>
+#include "ui_GLvlView.h"
 
 #include <qlabel.h>
 
 
-using namespace efc;
-
-class GLvlPinsDlg;
-
-class GLvlView : public GLvlViewBase
+class GLvlView : public QMainWindow,public Ui_GLvlView
 {
 	Q_OBJECT
 public:
 	GLvlView(
 		SGLqtSpace* mw,
-		SGLshPtr<GLvlVolumeTex> tex,
-		EWndRegistry *myReg
+		SGLshPtr<GLvlVolumeTex> tex
 	);
 	virtual bool loadCfg();
 	virtual bool saveCfg();
@@ -59,16 +51,14 @@ public:
 	void showObjList();
 	SGLshPtr<GLvlVolumeTex> tex;
 //	static GLvlSegmentDialog* wshed;
-	static GLvlPinsDlg* pinsDlg;
-	static ConfigDlg* configDlg;
 	static SGLshPtr<SGLBaseCam> activeCam;
 	void	selectView(const SGLVektor dir[3]);
 
 protected:
-	EWndRegistry *myReg;
 	void setupSpace(SGLqtSpace *space);
 	void closeEvent(QCloseEvent *e);
 	SGLshPtr<SGLBaseCam> myCam;
+
 private:
 	class SGLgotFocusSlot:public  SGLSlot
 	{
@@ -88,7 +78,7 @@ private:
 	bool selfChange;
 	static SGLVektor default_oben[3],default_unten[3],default_vorn[3],default_hinten[3],default_rechts[3],default_links[3];
 
-public slots:
+public Q_SLOTS:
 	/*$PUBLIC_SLOTS$*/
 	void	canRoll(bool toggle);
 	void	canGier(bool toggle);
@@ -106,9 +96,7 @@ public slots:
 	void sichtVonLinks();
 
 	virtual void onMsg(QString msg,bool canskip);
-	virtual void showPinsDlg(bool);
-	virtual void showConfigDlg(bool toggle);
-private slots:
+private Q_SLOTS:
 	void selectDataDlg();
 };
 
@@ -118,8 +106,7 @@ class GLvlPlaneView: public GLvlView
 public:
 	GLvlPlaneView(
 		SGLqtSpace* mw,
-		SGLshPtr<GLvlVolumeTex> tex,
-		EWndRegistry *myReg
+		SGLshPtr<GLvlVolumeTex> tex
 		);
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
@@ -140,14 +127,14 @@ public:
 	private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
 
-public slots:
+public Q_SLOTS:
 	void	lostView();
-private slots:
+private Q_SLOTS:
 	void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:
 	virtual void wheelEvent ( QWheelEvent * e );
 	virtual void mouseReleaseEvent(QMouseEvent * e );
-signals:
+Q_SIGNALS:
 	void onVoxel(unsigned int index);
 	void onResizeSegment(signed char ,signed char );
 	void selectSegment();
