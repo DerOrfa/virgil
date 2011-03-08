@@ -11,8 +11,7 @@ TEMPLATE = app
 QT += opengl
 CONFIG += debug no_keywords
 
-FORMS += \
-	GlvlView.ui
+FORMS += GLvlView.ui
 HEADERS += glvlcutplane.h \
 		   glvlmasterview.h \
 		   glvlplanecam.h \

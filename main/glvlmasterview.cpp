@@ -30,24 +30,20 @@
 
 using namespace boost;
 
-GLvlMasterView::GLvlMasterView():
-GLvlView( NULL, SGLshPtr<GLvlVolumeTex>(new GLvlVolumeTex) ),
-rahmen(new SGLCube()),onDataSelect(this)
+GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
-	actionNewPlane->setEnabled(tex->valid);
-
 	//Lichtabnahme komplett aus
-	if(glview->StdLight){
+/*	if(glview->StdLight){
 		glview->StdLight->Abnahme.Linear=0;
 		glview->StdLight->Abnahme.Quadratisch=0;
 		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => änderungen werden nur duch reinit wirksam
 	}
-
+*/
 
 	mw = glview;
 	onNewSpace(mw);
@@ -57,7 +53,6 @@ rahmen(new SGLCube()),onDataSelect(this)
 */
 // 	GLvlSegment::setup(glview,tex);
 
-	onCamChanged();
 	GLvlView::activeCam=glview->Camera;
 
 /*	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
@@ -80,7 +75,7 @@ void GLvlMasterView::newPlane()
 		SGLprintError("Cannot create Plane, do valid data available");
 		return;
 	}
-	GLvlPlaneView *view =new GLvlPlaneView (mw,tex);
+        GLvlPlaneView *view =new GLvlPlaneView (mw);
 
 //	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
@@ -110,13 +105,6 @@ void GLvlMasterView::closeEvent(QCloseEvent *e)
 void GLvlMasterView::doConfig()
 {
 #warning "Implement me";
-	rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
-	rahmen->DrahtGitter(true);
-	glview->setGridsSize(
-		int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
-		*.6);
-	glview->resizeMode=SGLBaseCam::scaleView;
-	glview->registerObj(rahmen);
 
 }
 
@@ -192,6 +180,17 @@ bool GLvlMasterView::loadData()
 #warning implement me
 /*  Data<GLubyte,4> dat;i->second.convert_to(dat);
 	loadData(i->first,dat);*/
+/*    glview->registerDynamicTex(*tex);
+        actionNewPlane->setEnabled(tex->valid);
+
+    rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
+    rahmen->DrahtGitter(true);
+    glview->setGridsSize(
+            int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
+            *.6);
+    glview->resizeMode=SGLBaseCam::scaleView;
+    glview->registerObj(rahmen);
+    */
 }
 
 GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}

@@ -40,10 +40,7 @@ class GLvlView : public QMainWindow,public Ui_GLvlView
 {
 	Q_OBJECT
 public:
-	GLvlView(
-		SGLqtSpace* mw,
-		SGLshPtr<GLvlVolumeTex> tex
-	);
+        GLvlView(SGLqtSpace* mw);
 	virtual bool loadCfg();
 	virtual bool saveCfg();
 	SGLqtSpace * glview;
@@ -104,10 +101,7 @@ class GLvlPlaneView: public GLvlView
 {
 	Q_OBJECT
 public:
-	GLvlPlaneView(
-		SGLqtSpace* mw,
-		SGLshPtr<GLvlVolumeTex> tex
-		);
+        GLvlPlaneView(SGLqtSpace* mw);
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();

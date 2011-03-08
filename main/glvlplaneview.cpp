@@ -42,12 +42,7 @@
 
 using namespace boost;
 
-GLvlPlaneView::GLvlPlaneView(
-	SGLqtSpace* mw,
-	SGLshPtr<GLvlVolumeTex> tex
-):
-GLvlView(mw, tex),
-cursor(new GLvlPlaneCursor())/*,
+GLvlPlaneView::GLvlPlaneView(SGLqtSpace* mw):GLvlView(mw),cursor(new GLvlPlaneCursor())/*,
 AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
@@ -124,19 +119,17 @@ void GLvlPlaneView::lostView()
 	close();
 }
 
-GLvlView::GLvlView(SGLqtSpace* mw, SGLshPtr<GLvlVolumeTex> tex):QMainWindow(NULL),//Das MasterWnd darf erst durch die app gelöscht werden
-onGotFocus(myCam)
+GLvlView::GLvlView(SGLqtSpace* mw):QMainWindow(NULL),//Das MasterWnd darf erst durch die app gelöscht werden
+onGotFocus(myCam),glview(NULL)
 {
 	setupUi(this);
 	selfChange=false;
-	this->tex=tex;
 //	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
 }
 
 void GLvlView::setupSpace(SGLqtSpace *space)
 {
 	glview = space;
-	glview->registerDynamicTex(*tex);
 	glview->gotFocus.connect(onGotFocus);
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
 }
@@ -205,7 +198,6 @@ void GLvlView::onCamChanged()
 {
 	selfChange=true;
 	assert(glview && glview->Camera);
-	assert(tex->TexType==GL_TEXTURE_3D);
 	SGLBaseCam &cam=*(glview->Camera);
 
 	const SGLVektor &Pos=cam.Pos;
