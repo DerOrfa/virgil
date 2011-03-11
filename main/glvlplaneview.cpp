@@ -131,6 +131,7 @@ void GLvlView::setupSpace(SGLqtSpace *space)
 {
 	glview = space;
 	glview->gotFocus.connect(onGotFocus);
+	glview->keyIgnore[Qt::Key_Escape]=true; // we want dont libsgl to close the widget when esc is pressed
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
 }
 

@@ -40,7 +40,7 @@ class GLvlView : public QMainWindow,public Ui_GLvlView
 {
 	Q_OBJECT
 public:
-        GLvlView(SGLqtSpace* mw);
+	GLvlView(SGLqtSpace* mw);
 	virtual bool loadCfg();
 	virtual bool saveCfg();
 	SGLqtSpace * glview;
@@ -65,7 +65,7 @@ private:
 		void operator()(int reason){
 			if(GLvlView::activeCam!=myCam)
 			{
-//				cout << "aktiveCam:" << GLvlView::activeCam << endl << GLvlView::activeCam->Pos << endl;
+				std::cout << "aktiveCam:" << GLvlView::activeCam << std::endl << GLvlView::activeCam->Pos << std::endl;
 				GLvlView::activeCam=myCam;
 			}
 
@@ -101,7 +101,7 @@ class GLvlPlaneView: public GLvlView
 {
 	Q_OBJECT
 public:
-        GLvlPlaneView(SGLqtSpace* mw);
+	GLvlPlaneView(SGLqtSpace* mw);
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();
