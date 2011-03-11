@@ -41,13 +41,34 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="xCoordAim"/>
+        <widget class="QSpinBox" name="xCoordAim">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="yCoordAim"/>
+        <widget class="QSpinBox" name="yCoordAim">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="zCoordAim"/>
+        <widget class="QSpinBox" name="zCoordAim">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer">
@@ -70,13 +91,34 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="xCoordCam"/>
+        <widget class="QSpinBox" name="xCoordCam">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="yCoordCam"/>
+        <widget class="QSpinBox" name="yCoordCam">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="zCoordCam"/>
+        <widget class="QSpinBox" name="zCoordCam">
+         <property name="minimum">
+          <number>-999</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="showCursHereBtn">
@@ -155,5 +197,106 @@
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>xCoordCam</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordCam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yCoordCam</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordCam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>67</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zCoordCam</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordCam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>524</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>132</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xCoordAim</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordAim()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>70</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yCoordAim</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordAim()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>122</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zCoordAim</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GLvlView</receiver>
+   <slot>setCoordAim()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setCoordCam()</slot>
+  <slot>setCoordAim()</slot>
+ </slots>
 </ui>
