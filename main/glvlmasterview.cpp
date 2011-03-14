@@ -20,6 +20,8 @@
 #include "glvlmasterview.h"
 #include "glvlplanecam.h"
 
+#include "glvlmultiviewmanager.h"
+
 #include <qstatusbar.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
@@ -27,6 +29,8 @@
 #include <qpushbutton.h>
 #include <qaction.h>
 #include <qtabwidget.h>
+
+#include <isis/CoreUtils/singletons.hpp>
 
 using namespace boost;
 
@@ -46,7 +50,7 @@ GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 */
 
 	mw = glview;
-	onNewSpace(mw);
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().onNewSpace(mw);
 
 /*	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
@@ -81,7 +85,7 @@ void GLvlMasterView::newPlane()
 //	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
 	view->init();
-	onNewSpace(view->glview);
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().onNewSpace(view->glview);
 	view->showInOthers(view->actionShowThisInOthers->isChecked());
 	view->showOthersHere(view->actionShowOthersHere->isChecked());
 
@@ -94,7 +98,7 @@ void GLvlMasterView::newPlane()
 
 void GLvlMasterView::closeEvent(QCloseEvent *e)
 {
-	removeAllChilds();
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().removeAllChilds();
 	GLvlView::closeEvent(e);
 }
 
@@ -166,10 +170,6 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 	qApp->unlock();
 	qApp->processEvents();*/
 }
-
-list<GLvlPlaneView *> GLvlMasterView::views;
-SGLshPtr<Bild<GLubyte> > GLvlMasterView::MasterImg;
-//OdinDataSelector* GLvlMasterView::dataDialog=NULL;
 
 
 /*!

@@ -4,7 +4,7 @@
 # Target is an application:  virgil
 LIBS += -lqt4_glue \
     -lsgl \
-    -lboost_signals-mt
+	-lboost_signals-mt -lisis_core
 QMAKE_CXXFLAGS_DEBUG += -g3 \
     -O0
 DEFINES = GL_GLEXT_PROTOTYPES
@@ -23,7 +23,8 @@ HEADERS += glvlcutplane.h \
     bild.h \
     glvlposlistener.h \
     bild_odin.h \
-    glvlview.h
+    glvlview.h \
+    glvlmultiviewmanager.h
 SOURCES += main.cpp \
     glvlcutplane.cpp \
     glvlmasterview.cpp \
@@ -32,4 +33,5 @@ SOURCES += main.cpp \
     glvlplaneview.cpp \
     glvlvolumetex.cpp \
     glvlposlistener.cpp \
-    glvlview.cpp
+    glvlview.cpp \
+    glvlmultiviewmanager.cpp

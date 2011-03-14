@@ -39,6 +39,9 @@
 #include <qlineedit.h>
 #include <QWheelEvent>
 
+#include <isis/CoreUtils/singletons.hpp>
+#include "glvlmultiviewmanager.h"
+
 
 using namespace boost;
 
@@ -65,14 +68,14 @@ AimZStatus((QWidget*)statusBar())*/
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
 */
-	GLvlMasterView::views.push_front(this);
-	it=GLvlMasterView::views.begin();
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this);
+	it=isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.begin();
 
 }
 
 GLvlPlaneView::~GLvlPlaneView()
 {
-	GLvlMasterView::views.erase(it);
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.erase(it);
 }
 
 bool GLvlPlaneView::loadCfg()

@@ -22,13 +22,12 @@
 
 #include "ui_GLvlView.h"
 #include "glvlplaneview.h"
-#include <libsgl/qt4_glue/sglqtmultispacemgr.h>
-//#include "../wshed/vincent_transform.h"
 #include <list>
 #include <time.h>
-//#include "glvlminima.h"
-#include <libsgl/sglsignal.h>
 #include "bild.h"
+
+//#include "../wshed/vincent_transform.h"
+//#include "glvlminima.h"
 
 
 using namespace boost;
@@ -37,7 +36,7 @@ using namespace boost;
 @author Enrico Reimer, 1.01.2005,hayd,,@[e/ea],-131.-221. 143
 */
 
-class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
+class GLvlMasterView : public GLvlView{
 	SGLqtSpace * mw;
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
@@ -51,24 +50,12 @@ class GLvlMasterView : public GLvlView,public SGLqtMultiSpaceMgr{
 public:
 	GLvlMasterView();
 	~GLvlMasterView();
-	static SGLshPtr<Bild<GLubyte> > MasterImg;
-	static list<GLvlPlaneView *> views;
 	void newPlane();
 	void doConfig();
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
 	bool loadData();
-/*	class MemCreateNotify:public MemConsumer::NotifyCreateSlot<MemCreateNotify>
-	{
-		public:
-		void operator()(const MemConsumer &newob) const;
-	}TexCreate;
-	class MemDeleteNotify:public MemConsumer::NotifyDeleteSlot<MemDeleteNotify>
-	{
-		public:
-		void operator()(const MemConsumer &newob) const;
-	}TexDelete;*/
 
 protected:
 	void doBenchmark();
