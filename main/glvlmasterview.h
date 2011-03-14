@@ -55,7 +55,6 @@ public:
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
 	void onMsg(QString msg,bool canskip);
-	bool loadData();
 
 protected:
 	void doBenchmark();

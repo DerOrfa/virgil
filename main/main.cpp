@@ -23,6 +23,9 @@
 #include <list>
 
 #include <exception>
+#include <isis/DataStorage/io_factory.hpp>
+#include <isis/CoreUtils/singletons.hpp>
+#include "glvlmultiviewmanager.h"
 
 int main( int argc, char ** argv )
 {
@@ -37,6 +40,10 @@ int main( int argc, char ** argv )
 	}
 
 	SGLprintState("Lese Daten ein ...");
+
+	std::list<isis::data::Image> images=isis::data::IOFactory::load(argv[1]);
+
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(images.front());
 
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 

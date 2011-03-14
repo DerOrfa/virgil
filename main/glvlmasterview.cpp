@@ -175,12 +175,11 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 /*!
 	\fn GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator)
  */
-bool GLvlMasterView::loadData()
+/*bool GLvlMasterView::loadData()
 {
-#warning implement me
-/*  Data<GLubyte,4> dat;i->second.convert_to(dat);
-	loadData(i->first,dat);*/
-/*    glview->registerDynamicTex(*tex);
+  Data<GLubyte,4> dat;i->second.convert_to(dat);
+	loadData(i->first,dat);
+	glview->registerDynamicTex(*tex);
         actionNewPlane->setEnabled(tex->valid);
 
     rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
@@ -190,8 +189,8 @@ bool GLvlMasterView::loadData()
             *.6);
     glview->resizeMode=SGLBaseCam::scaleView;
     glview->registerObj(rahmen);
-    */
 }
+	*/
 
 GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}
 void GLvlMasterView::SelectSlot::operator()(/*Protocol prot,Data<float,4> dat*/)

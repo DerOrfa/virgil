@@ -2,12 +2,9 @@
 # -------------------------------------------
 # Subdir relative project main directory: ./main
 # Target is an application:  virgil
-LIBS += -lqt4_glue \
-    -lsgl \
-	-lboost_signals-mt -lisis_core
-QMAKE_CXXFLAGS_DEBUG += -g3 \
-    -O0
-DEFINES = GL_GLEXT_PROTOTYPES
+LIBS += -lqt4_glue -lsgl -lboost_signals-mt -lisis_core
+QMAKE_CXXFLAGS_DEBUG += -g3 -O0
+DEFINES = GL_GLEXT_PROTOTYPES _ENABLE_LOG=1 _ENABLE_DEBUG=1
 TARGET = virgil
 TEMPLATE = app
 QT += opengl

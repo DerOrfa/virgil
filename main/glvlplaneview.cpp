@@ -69,13 +69,11 @@ AimZStatus((QWidget*)statusBar())*/
 	AimZStatus.setText("0");
 */
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this);
-	it=isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.begin();
-
 }
 
 GLvlPlaneView::~GLvlPlaneView()
 {
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.erase(it);
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.removeOne(this);
 }
 
 bool GLvlPlaneView::loadCfg()

@@ -51,7 +51,6 @@ public:
 	void jumpTo(const SGLVektor &to);
 
 	SGLshPtr<GLvlPlaneCursor> cursor;
-	list<GLvlPlaneView *>::iterator it;
 	virtual void onMouseDblClick(QMouseEvent *e);
 	private:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
