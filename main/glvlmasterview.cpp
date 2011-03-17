@@ -37,6 +37,7 @@ using namespace boost;
 GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 {
 	setupSpace(new SGLqtSpace(glViewContainer));
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
@@ -45,12 +46,11 @@ GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 /*	if(glview->StdLight){
 		glview->StdLight->Abnahme.Linear=0;
 		glview->StdLight->Abnahme.Quadratisch=0;
-		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die mÃ¼ssen nie neu generiert werden => Ã¤nderungen werden nur duch reinit wirksam
+		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => Änderungen werden nur duch reinit wirksam
 	}
 */
 
-	mw = glview;
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().onNewSpace(mw);
+	manager.onNewSpace(glview);
 
 /*	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
@@ -59,10 +59,16 @@ GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 
 	GLvlView::activeCam=glview->Camera;
 
+
 /*	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
 */
 //	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
+
+	if(manager.master_images.size()){
+		glview->resizeMode=SGLBaseCam::scaleView;
+		glview->registerObj(manager.master_images.front().frame);
+	}
 }
 
 
@@ -79,12 +85,12 @@ void GLvlMasterView::newPlane()
 		SGLprintError("Cannot create Plane, do valid data available");
 		return;
 	}
-        GLvlPlaneView *view =new GLvlPlaneView (mw);
+//        GLvlPlaneView *view =new GLvlPlaneView (mw);
 
 //	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
-	view->init();
+/*	view->init();
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().onNewSpace(view->glview);
 	view->showInOthers(view->actionShowThisInOthers->isChecked());
 	view->showOthersHere(view->actionShowOthersHere->isChecked());
@@ -94,12 +100,7 @@ void GLvlMasterView::newPlane()
 
 	updatePlanes.connect(cam->myPlane->compileNextTime);
 	view->onCamChanged();
-}
-
-void GLvlMasterView::closeEvent(QCloseEvent *e)
-{
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().removeAllChilds();
-	GLvlView::closeEvent(e);
+	*/
 }
 
 

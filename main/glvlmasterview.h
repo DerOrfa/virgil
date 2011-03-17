@@ -37,7 +37,6 @@ using namespace boost;
 */
 
 class GLvlMasterView : public GLvlView{
-	SGLqtSpace * mw;
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
 	class SelectSlot:public SGLSlot
@@ -58,7 +57,6 @@ public:
 
 protected:
 	void doBenchmark();
-	void closeEvent(QCloseEvent *e);
 };
 
 #endif

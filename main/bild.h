@@ -27,6 +27,8 @@
 #include <typeinfo>
 #include <libsgl/sglshptr.h>
 #include <limits>
+#include <isis/DataStorage/image.hpp>
+#include "imgframe.h"
 
 class dim
 {
@@ -56,17 +58,17 @@ public:
 	inline float setElsize(float s){return Elsize=s;}
 };
 
-template <class T> class Bild
+template <class T> class Bild : public isis::data::TypedImage<T>
 {
 public:
 	union {dim xsize;dim Columns;};
 	union {dim ysize;dim Rows;};
 	union {dim zsize;dim Bands;dim layer;};
 	inline unsigned int size()const{return xsize*ysize*zsize;}
-	struct ValRange{T min,max;};
-/*private:
-	ValRange range;*/
+private:
+	std::pair<T,T> range;
 public:
+	SGLshPtr< ImgFrame > frame;
 /*	ValRange getValRange()
 	{
 		std::less<T> l;
@@ -83,52 +85,38 @@ public:
 		}
 		return range;
 	}*/
-	Bild(unsigned short x,unsigned short y,unsigned short z)
+	Bild(const isis::data::Image &src):isis::data::TypedImage<T>(src),range(isis::data::Image::getMinMaxAs<T>()),frame(new ImgFrame)
+			//@todo we actually only have to copy/convert the first volume
 	{
-		xsize.setCnt(x);
-		ysize.setCnt(y);
-		zsize.setCnt(z);
-		xsize.setElsize(0);
-		ysize.setElsize(0);
-		zsize.setElsize(0);
-/*		range.max=numeric_limits<T>::min();
-		range.min=numeric_limits<T>::max();*/
+		const isis::util::FixedVector<size_t,4> voxels=this->getSizeAsVector();
+		const isis::util::fvector4 voxelsize=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("voxelSize");
+		xsize.setCnt(voxels[0]);
+		ysize.setCnt(voxels[1]);
+		zsize.setCnt(voxels[2]);
+		xsize.setElsize(voxelsize[0]);
+		ysize.setElsize(voxelsize[1]);
+		zsize.setElsize(voxelsize[2]);
+
+		const isis::util::fvector4 fov=src.getFoV();
+		const isis::util::fvector4 origin=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("indexOrigin");
+		const isis::util::fvector4 rowVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("rowVec")*fov[isis::data::rowDim]+origin;
+		const isis::util::fvector4 colVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("columnVec")*fov[isis::data::columnDim]+origin;
+		const isis::util::fvector4 sliceVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("sliceVec")*fov[isis::data::sliceDim]+origin;
+		for(int i=0;i<3;i++){
+			frame->rowVec[i]=rowVec[i];
+			frame->colVec[i]=colVec[i];
+			frame->sliceVec[i]=sliceVec[i];
+			frame->origin[i]=origin[i];
+		}
 	}
 	virtual ~Bild(){}
-	inline virtual T &at(const unsigned int index)=0;
-	inline T &at(const short x,const unsigned short y,const unsigned short z){
-		return at(x+(y*xsize)+(z*xsize*ysize));
+	inline T& at(unsigned short x,unsigned short y,const unsigned short z){
+		return isis::data::Image::voxel<T>(x,y,z);
 	}
 	inline T *copy_line(const unsigned short y,const unsigned short z,void *dst){
-		return ((T*)memcpy(dst,&at(0,y,z),xsize*sizeof(T)))+xsize;
+//		return ((T*)memcpy(dst,&at(0,y,z),xsize*sizeof(T)))+xsize;
 	}
 };
 
-template <class T> class Bild_mem:public Bild<T>
-{
-protected:
-	T *data;
-public:
-	void reinit(unsigned short x,unsigned short y,unsigned short z,T initVal)
-	{
-		this->xsize.cnt=x;
-		this->ysize.cnt=y;
-		this->zsize.cnt=z;
-		if(data)free(data);
-		init(initVal);
-	}
-	void init(T initVal)
-	{
-		if(initVal==0)data=(T*)calloc(this->size(),sizeof(T));
-		else
-		{
-			data=(T*)malloc(this->size()*sizeof(T));
-			for(int i=this->size()-1;i>=0;i--)data[i]=initVal;
-		}
-	}
-	Bild_mem(unsigned short x,unsigned short y,unsigned short z,T initVal):Bild<T>(x,y,z){init(initVal);}
-	virtual ~Bild_mem(){free(data);}
-	inline T &at(const unsigned int index){return data[index];}
-};
 
 #endif

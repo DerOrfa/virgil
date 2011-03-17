@@ -5,7 +5,6 @@ GLvlMultiviewManager::GLvlMultiviewManager()
 }
 
 
-GLvlMultiviewManager::addImage(const isis::data::Image &img){
-
-
+void GLvlMultiviewManager::addImage(const isis::data::Image &img){
+	master_images.append(Bild<GLubyte>(img));
 }

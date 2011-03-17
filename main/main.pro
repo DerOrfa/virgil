@@ -2,9 +2,15 @@
 # -------------------------------------------
 # Subdir relative project main directory: ./main
 # Target is an application:  virgil
-LIBS += -lqt4_glue -lsgl -lboost_signals-mt -lisis_core
-QMAKE_CXXFLAGS_DEBUG += -g3 -O0
-DEFINES = GL_GLEXT_PROTOTYPES _ENABLE_LOG=1 _ENABLE_DEBUG=1
+LIBS += -lqt4_glue \
+    -lsgl \
+    -lboost_signals-mt \
+    -lisis_core
+QMAKE_CXXFLAGS_DEBUG += -g3 \
+    -O0
+DEFINES = GL_GLEXT_PROTOTYPES \
+    _ENABLE_LOG=1 \
+    _ENABLE_DEBUG=1
 TARGET = virgil
 TEMPLATE = app
 QT += opengl
@@ -21,7 +27,8 @@ HEADERS += glvlcutplane.h \
     glvlposlistener.h \
     bild_odin.h \
     glvlview.h \
-    glvlmultiviewmanager.h
+    glvlmultiviewmanager.h \
+    imgframe.h
 SOURCES += main.cpp \
     glvlcutplane.cpp \
     glvlmasterview.cpp \
@@ -31,4 +38,5 @@ SOURCES += main.cpp \
     glvlvolumetex.cpp \
     glvlposlistener.cpp \
     glvlview.cpp \
-    glvlmultiviewmanager.cpp
+    glvlmultiviewmanager.cpp \
+    imgframe.cpp

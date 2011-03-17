@@ -29,6 +29,8 @@
 
 int main( int argc, char ** argv )
 {
+	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
+
 	QApplication a(argc,argv);
 	unsigned short verbose = 3;
 	switch(verbose)
@@ -45,7 +47,6 @@ int main( int argc, char ** argv )
 
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(images.front());
 
-	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w =new GLvlMasterView;
