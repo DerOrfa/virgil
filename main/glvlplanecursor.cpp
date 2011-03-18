@@ -26,7 +26,7 @@ bool GLvlPlaneCursor::goTo(SGLVektor pos)
 	if(OldPos!=pos)
 	{
 		OldPos=pos;
-		MoveTo(SGLVektor(pos));
+		SetPosAndScale(pos.SGLV_X,pos.SGLV_Y,pos.SGLV_Z,1);
 		compileNextTime();
 		return true;
 	}
@@ -78,7 +78,7 @@ void GLvlPlaneCursor::setSize(int size)
 	for(int x=0;x<size;x++)
 	for(int y=0;y<size;y++)
 	for(int z=0;z<size;z++)
-		(i++)->MoveTo(x-size/2.+.5,y-size/2.+.5,z-size/2.+.5);
+		(i++)->SetPosAndScale(x-size/2.+.5,y-size/2.+.5,z-size/2.+.5,1);
 			
 //	compileSubObjects();Sollte eig. automatisch gehen
 	compileNextTime();

@@ -49,8 +49,10 @@ int main( int argc, char ** argv )
 
 
 	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView *w =new GLvlMasterView;
+	GLvlMasterView *w = new GLvlMasterView;
+	GLvlPlaneView *p = new GLvlPlaneView;
 	w->show();
+	p->show();
 
 	SGLprintState("fertsch");
 	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );

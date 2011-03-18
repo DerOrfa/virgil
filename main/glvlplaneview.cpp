@@ -45,12 +45,12 @@
 
 using namespace boost;
 
-GLvlPlaneView::GLvlPlaneView(SGLqtSpace* mw):GLvlView(mw),cursor(new GLvlPlaneCursor())/*,
+GLvlPlaneView::GLvlPlaneView():cursor(new GLvlPlaneCursor())/*,
 AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
 {
-	setupSpace(new SGLqtSpace(mw,glViewContainer));
+	setupSpace(glViewContainer);
 	glview->resizeMode=SGLBaseCam::moveCam;
 
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));

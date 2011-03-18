@@ -11,7 +11,7 @@ class GLvlView : public QMainWindow,public Ui_GLvlView
 {
 	Q_OBJECT
 public:
-	GLvlView(SGLqtSpace* mw);
+	GLvlView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();
 	SGLqtSpace * glview;
@@ -23,7 +23,7 @@ public:
 	void	selectView(const SGLVektor dir[3]);
 
 protected:
-	void setupSpace(SGLqtSpace *space);
+	void setupSpace(QWidget *parent=NULL);
 	void closeEvent(QCloseEvent *e);
 	SGLshPtr<SGLBaseCam> myCam;
 

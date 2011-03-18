@@ -36,7 +36,7 @@ class GLvlPlaneView: public GLvlView
 {
 	Q_OBJECT
 public:
-	GLvlPlaneView(SGLqtSpace* mw);
+	GLvlPlaneView();
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();

@@ -1,18 +1,20 @@
 #include "glvlview.h"
+#include "glvlmultiviewmanager.h"
+#include "isis/CoreUtils/singletons.hpp"
 
-GLvlView::GLvlView(SGLqtSpace* mw):QMainWindow(NULL),onGotFocus(myCam),glview(NULL)
-//Das MasterWnd darf erst durch die app gelöscht werden
+GLvlView::GLvlView():QMainWindow(NULL),onGotFocus(myCam)
 {
 	setupUi(this);
 	selfChange=false;
 //	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
 }
 
-void GLvlView::setupSpace(SGLqtSpace *space)
+void GLvlView::setupSpace(QWidget *parent)
 {
-	glview = space;
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
+	glview = new SGLqtSpace(&manager.context,parent);
 	glview->gotFocus.connect(onGotFocus);
-	glview->keyIgnore[Qt::Key_Escape]=true; // we want dont libsgl to close the widget when esc is pressed
+	glview->keyIgnore[Qt::Key_Escape]=true; // we dont want libsgl to close the widget when esc is pressed
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
 }
 

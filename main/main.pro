@@ -25,7 +25,6 @@ HEADERS += glvlcutplane.h \
     glvlvolumetex.h \
     bild.h \
     glvlposlistener.h \
-    bild_odin.h \
     glvlview.h \
     glvlmultiviewmanager.h \
     imgframe.h

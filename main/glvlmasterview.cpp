@@ -34,30 +34,31 @@
 
 using namespace boost;
 
-GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
+GLvlMasterView::GLvlMasterView():onDataSelect(this)
 {
-	setupSpace(new SGLqtSpace(glViewContainer));
-	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
+	setupSpace(glViewContainer);
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
 
-	//Lichtabnahme komplett aus
-/*	if(glview->StdLight){
+	if(glview->StdLight){
 		glview->StdLight->Abnahme.Linear=0;
 		glview->StdLight->Abnahme.Quadratisch=0;
 		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => Änderungen werden nur duch reinit wirksam
 	}
-*/
 
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 	manager.onNewSpace(glview);
+	glview->setGridsSize(150);
+	GLvlView::activeCam=glview->Camera;
+	glview->Camera->MoveCamTo(SGLVektor(0,0,-300));
+	glview->Camera->ResetUpVect(180);
 
 /*	for(unsigned short i=0;i<Regs.size();i++)
 		newPlane(new EWndRegistry(*Regs[i],masterReg));
 */
 // 	GLvlSegment::setup(glview,tex);
 
-	GLvlView::activeCam=glview->Camera;
 
 
 /*	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
@@ -66,8 +67,9 @@ GLvlMasterView::GLvlMasterView():GLvlView( NULL ),onDataSelect(this)
 //	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
 
 	if(manager.master_images.size()){
+		const Bild<GLubyte> &img=manager.master_images.front();
 		glview->resizeMode=SGLBaseCam::scaleView;
-		glview->registerObj(manager.master_images.front().frame);
+		glview->registerObj(img.frame);
 	}
 }
 
