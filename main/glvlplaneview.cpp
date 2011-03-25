@@ -50,8 +50,10 @@ AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
 {
+	setObjectName("PlaneView");
 	setupSpace(glViewContainer);
 	glview->resizeMode=SGLBaseCam::moveCam;
+	glview->Grids.doGrid=0;
 
 	connect(glview,SIGNAL(destroyed(QObject *)),SLOT(lostView()));
 	connect(glview,SIGNAL(mouseMoved(QMouseEvent *,SGLVektor )),SLOT(mouseMovedInGL(QMouseEvent *,SGLVektor )));
@@ -125,13 +127,13 @@ void GLvlPlaneView::lostView()
  */
 void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 {
-	if(cursor->goTo(weltKoord))
+//	if(cursor->goTo(weltKoord))
 	{
-		bool here=showCursHereBtn->isChecked()/*,there=showCursThereBtn->isChecked()*/;
-		if(here /*&& there*/)glview->sendRedraw();
+/*		bool here=showCursHereBtn->isChecked(),there=showCursThereBtn->isChecked();
+		if(here && there)glview->sendRedraw();
 		else if(here)glview->updateGL();
 //		else if(there)glview->sendRedrawOther();
-		unsigned short stellen=/*fangToggle->isChecked() ? 0:*/2;
+		unsigned short stellen=fangToggle->isChecked() ? 0:2;
 
 		if(stellen)
 		{
@@ -145,7 +147,7 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 			AimYStatus.setText("Y: "+QString::number(int(cursor->OldPos[1]))+"mm");
 			AimZStatus.setText("Z: "+QString::number(int(cursor->OldPos[2]))+"mm");
 		}
-/*		if(!Pins->empty())
+		if(!Pins->empty())
 		{
 			SGLVektor len= weltKoord-Pins->back()->pos;
 			QString lenStr=stellen?
@@ -166,7 +168,7 @@ void GLvlPlaneView::init()
 	show();
 	glview->defaultCam(cam);
 
-	glview->registerObj(cursor);
+//	glview->registerObj(cursor);
 
 	cam->connect(glview,
 		SIGNAL(pressedMouseMoveRel(QMouseEvent *,float ,float )),
@@ -177,10 +179,11 @@ void GLvlPlaneView::init()
 //	cursor->setFang(fangToggle->isOn());
 //	cursor->setSize(spinCursorSize->value());
 
-	glview->registerObj(cam->myPlane);
+//	glview->registerObj(cam->myPlane);
 
 	connect(cam.get(),SIGNAL(camChanged()),SLOT(onCamChanged()));
 	loadCfg();
+	showInOthers(true);
 }
 
 void GLvlPlaneView::onMouseDblClick(QMouseEvent *e)

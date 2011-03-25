@@ -12,10 +12,16 @@ GLvlView::GLvlView():QMainWindow(NULL),onGotFocus(myCam)
 void GLvlView::setupSpace(QWidget *parent)
 {
 	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
-	glview = new SGLqtSpace(&manager.context,parent);
+	glview = manager.createSharedSpace(parent);
 	glview->gotFocus.connect(onGotFocus);
 	glview->keyIgnore[Qt::Key_Escape]=true; // we dont want libsgl to close the widget when esc is pressed
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
+
+	if(manager.master_images.size()){
+		const Bild<GLubyte> &img=manager.master_images.front();
+		glview->resizeMode=SGLBaseCam::scaleView;
+		glview->showObj(img.frame);
+	}
 }
 
 /*$SPECIALIZATION$*/

@@ -36,6 +36,7 @@ using namespace boost;
 
 GLvlMasterView::GLvlMasterView():onDataSelect(this)
 {
+	setObjectName("PlaneView");
 	setupSpace(glViewContainer);
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
@@ -48,7 +49,6 @@ GLvlMasterView::GLvlMasterView():onDataSelect(this)
 	}
 
 	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
-	manager.onNewSpace(glview);
 	glview->setGridsSize(150);
 	GLvlView::activeCam=glview->Camera;
 	glview->Camera->MoveCamTo(SGLVektor(0,0,-300));
@@ -65,12 +65,6 @@ GLvlMasterView::GLvlMasterView():onDataSelect(this)
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
 */
 //	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
-
-	if(manager.master_images.size()){
-		const Bild<GLubyte> &img=manager.master_images.front();
-		glview->resizeMode=SGLBaseCam::scaleView;
-		glview->registerObj(img.frame);
-	}
 }
 
 
