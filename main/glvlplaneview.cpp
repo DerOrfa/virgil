@@ -41,6 +41,7 @@
 
 #include <isis/CoreUtils/singletons.hpp>
 #include "glvlmultiviewmanager.h"
+#include "main.h"
 
 
 using namespace boost;
@@ -52,6 +53,7 @@ AimZStatus((QWidget*)statusBar())*/
 {
 	setObjectName("PlaneView");
 	setupSpace(glViewContainer);
+	init();
 	glview->resizeMode=SGLBaseCam::moveCam;
 	glview->Grids.doGrid=0;
 
@@ -71,6 +73,7 @@ AimZStatus((QWidget*)statusBar())*/
 	AimZStatus.setText("0");
 */
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this);
+
 }
 
 GLvlPlaneView::~GLvlPlaneView()
@@ -106,11 +109,13 @@ void GLvlPlaneView::showInOthers(bool toggle)
 	if(!cam){SGLprintError("Die aktuelle Camera ist keine PLaneCam");return;}
 	if(toggle)
 	{
+		LOG(Debug,isis::info) << "Showing " << this->objectName().toStdString() << "'s camera in others.";
 		glview->sendShowObj(cam);
 		glview->sendShowObj(cam->myPlane);
 	}
 	else
 	{
+		LOG(Debug,isis::info) << "Stop showing " << this->objectName().toStdString() << "'s camera in others.";
 		glview->sendUnshowObj(cam);
 		glview->sendUnshowObj(cam->myPlane);
 	}
@@ -164,7 +169,7 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 
 void GLvlPlaneView::init()
 {
-	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam(tex));
+	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam());
 	show();
 	glview->defaultCam(cam);
 
@@ -182,7 +187,7 @@ void GLvlPlaneView::init()
 //	glview->registerObj(cam->myPlane);
 
 	connect(cam.get(),SIGNAL(camChanged()),SLOT(onCamChanged()));
-	loadCfg();
+//	loadCfg();
 	showInOthers(true);
 }
 

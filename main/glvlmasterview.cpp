@@ -48,7 +48,6 @@ GLvlMasterView::GLvlMasterView():onDataSelect(this)
 		glview->StdLight->CamLight();//StdLight is (hoffentlich immer) ein Cameralicht, die müssen nie neu generiert werden => Änderungen werden nur duch reinit wirksam
 	}
 
-	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 	glview->setGridsSize(150);
 	GLvlView::activeCam=glview->Camera;
 	glview->Camera->MoveCamTo(SGLVektor(0,0,-300));

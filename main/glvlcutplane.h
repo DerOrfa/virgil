@@ -29,7 +29,7 @@ class GLvlCutPlane : public SGL3DPlane
 		SelectSlot(GLvlCutPlane* p);
 	}onDataSelect;
 public:
-	GLvlCutPlane(SGLshPtr<GLvlVolumeTex> volumeTex);
+	GLvlCutPlane();
 	void resetTexKoord();
 };
 

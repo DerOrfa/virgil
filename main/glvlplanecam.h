@@ -34,7 +34,7 @@ class GLvlPlaneCam : public QObject, public SGLBaseCam
 {
 Q_OBJECT
 public:
-	GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex);
+	GLvlPlaneCam();
 	void generate();
 	SGLshPtr<GLvlCutPlane> myPlane;
 	GLfloat farbe[3];

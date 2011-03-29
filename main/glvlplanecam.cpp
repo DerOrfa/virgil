@@ -34,9 +34,7 @@
 #include <qslider.h>
 
 
-GLvlPlaneCam::GLvlPlaneCam(SGLshPtr<GLvlVolumeTex> tex):
-SGLBaseCam(0,0,150),
-myPlane(new GLvlCutPlane(tex))
+GLvlPlaneCam::GLvlPlaneCam():SGLBaseCam(0,0,150),myPlane(new GLvlCutPlane)
 {
 	myPlane->is_free=true;
 	showCross=true;

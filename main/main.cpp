@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "glvlmasterview.h"
+#include "main.h"
 
 #include <qapplication.h>
 #include <list>
@@ -29,6 +30,8 @@
 
 int main( int argc, char ** argv )
 {
+	ENABLE_LOG( Runtime, isis::util::DefaultMsgPrint, isis::warning );
+	ENABLE_LOG( Debug, isis::util::DefaultMsgPrint, isis::info );
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	QApplication a(argc,argv);
@@ -50,9 +53,9 @@ int main( int argc, char ** argv )
 
 	SGLprintState("Initialisiere Schnittstelle ...");
 	GLvlMasterView *w = new GLvlMasterView;
-	GLvlPlaneView *p = new GLvlPlaneView;
+	(new GLvlPlaneView)->show();;
+	(new GLvlPlaneView)->show();;
 	w->show();
-	p->show();
 
 	SGLprintState("fertsch");
 	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );

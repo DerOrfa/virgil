@@ -27,7 +27,8 @@ HEADERS += glvlcutplane.h \
     glvlposlistener.h \
     glvlview.h \
     glvlmultiviewmanager.h \
-    imgframe.h
+    imgframe.h \
+    main.h
 SOURCES += main.cpp \
     glvlcutplane.cpp \
     glvlmasterview.cpp \
