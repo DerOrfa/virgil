@@ -12,7 +12,7 @@
 #include "glvlcutplane.h"
 #include <assert.h>
 
-GLvlCutPlane::GLvlCutPlane():SGL3DPlane(0,0),onDataSelect(this)
+GLvlCutPlane::GLvlCutPlane():SGL3DPlane(0,0)
 {
 	useCenter=false;
 	IgnoreLight=true;;
@@ -35,11 +35,4 @@ void GLvlCutPlane::resetTexKoord()
 			EckVektoren[i]->SGLV_Z
 			);
 	compileNextTime();
-}
-
-GLvlCutPlane::SelectSlot::SelectSlot(GLvlCutPlane* p):plane(p)
-{}
-
-void GLvlCutPlane::SelectSlot::operator()()
-{
 }

@@ -6,7 +6,6 @@ GLvlView::GLvlView():QMainWindow(NULL),onGotFocus(myCam)
 {
 	setupUi(this);
 	selfChange=false;
-//	connect(dialogeselect_DatasetAction,SIGNAL(activated()),SLOT(selectDataDlg()));
 }
 
 void GLvlView::setupSpace(QWidget *parent)
@@ -16,12 +15,6 @@ void GLvlView::setupSpace(QWidget *parent)
 	glview->gotFocus.connect(onGotFocus);
 	glview->keyIgnore[Qt::Key_Escape]=true; // we dont want libsgl to close the widget when esc is pressed
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
-
-	if(manager.master_images.size()){
-		const Bild<GLubyte> &img=manager.master_images.front();
-		glview->resizeMode=SGLBaseCam::scaleView;
-		glview->showObj(img.frame);
-	}
 }
 
 /*$SPECIALIZATION$*/
@@ -222,8 +215,6 @@ void GLvlView::closeEvent(QCloseEvent *e)
 	delete myReg;*/
 	e->accept();
 }
-
-
 
 SGLVektor GLvlView::default_oben[3]={SGLVektor(0,0,-200),SGLVektor(0,0,0),SGLVektor(0,1,0)};
 SGLVektor GLvlView::default_unten[3]={SGLVektor(0,0,200),SGLVektor(0,0,0),SGLVektor(0,1,0)};

@@ -21,13 +21,7 @@
 */
 class GLvlCutPlane : public SGL3DPlane
 {
-	class SelectSlot:public SGLSlot
-	{
-		GLvlCutPlane *plane;
-	public:
-		void operator()();
-		SelectSlot(GLvlCutPlane* p);
-	}onDataSelect;
+	GLvlVolumeTex master_tex;
 public:
 	GLvlCutPlane();
 	void resetTexKoord();

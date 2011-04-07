@@ -64,8 +64,6 @@ public Q_SLOTS:
 	void sichtVonLinks();
 
 	virtual void onMsg(QString msg,bool canskip);
-private Q_SLOTS:
-	void selectDataDlg();
 };
 
 #endif // GLVLVIEW_H

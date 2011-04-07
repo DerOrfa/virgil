@@ -52,6 +52,8 @@ AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
 {
 	setObjectName("PlaneView");
+	setWindowTitle("PlaneView");
+
 	setupSpace(glViewContainer);
 	init();
 	glview->resizeMode=SGLBaseCam::moveCam;
@@ -72,8 +74,15 @@ AimZStatus((QWidget*)statusBar())*/
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
 */
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this);
+	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this); //register myself at the view manager
 
+	selector=new QComboBox(centralWidget());
+	centralWidget()->layout()->addWidget(selector);
+
+	connect(selector,SIGNAL(activated(int)),SLOT(onSelectMasterImg(int)));
+	connect(&isis::util::Singletons::get<GLvlMultiviewManager,10>(),SIGNAL(newData()),SLOT(onImgListChange()));
+
+	onImgListChange(); // first update
 }
 
 GLvlPlaneView::~GLvlPlaneView()
@@ -267,9 +276,10 @@ void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 	}
 }
 
-void GLvlView::selectDataDlg()
+void GLvlPlaneView::onSelectMasterImg(int index)
 {
 	qWarning("Implement me");
+	const Bild<GLubyte> &img=isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images.at(index);
 }
 
 void GLvlPlaneView::jumpToCursor(){jumpTo(cursor->OldPos);}
@@ -279,3 +289,23 @@ void GLvlPlaneView::jumpTo(const SGLVektor &to)
 	glview->sendRedraw();
 	onCamChanged();
 }
+
+void GLvlPlaneView::onImgListChange(){
+	selector->clear();
+
+	if(not isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images.isEmpty()){
+		glViewContainer->setEnabled(true);
+
+		Q_FOREACH(const isis::util::PropertyMap &img_prop,(isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images)){
+			QString entry("S");
+			entry+=QString::fromStdString(img_prop.getPropertyAs<std::string>("sequenceNumber"));
+			if(img_prop.hasProperty("sequenceDescription"))
+				entry+="_"+QString::fromStdString(img_prop.getPropertyAs<std::string>("sequenceDescription"));
+			selector->addItem(entry);
+		}
+		onSelectMasterImg(selector->currentIndex());
+	} else {
+		glViewContainer->setEnabled(false);
+	}
+}
+

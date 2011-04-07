@@ -39,13 +39,6 @@ using namespace boost;
 class GLvlMasterView : public GLvlView{
 	SGLshPtr<SGLCube> rahmen;
 	SGLSignal<void ()> updatePlanes;
-	class SelectSlot:public SGLSlot
-	{
-		GLvlMasterView *master;
-		public:
-			void operator()();
-			SelectSlot(GLvlMasterView* p);
-	}onDataSelect;
 public:
 	GLvlMasterView();
 	~GLvlMasterView();

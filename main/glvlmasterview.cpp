@@ -34,10 +34,17 @@
 
 using namespace boost;
 
-GLvlMasterView::GLvlMasterView():onDataSelect(this)
+GLvlMasterView::GLvlMasterView()
 {
-	setObjectName("PlaneView");
+	setObjectName("Overview");setWindowTitle("Overview");
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
+
 	setupSpace(glViewContainer);
+	if(manager.master_images.size()){
+		const Bild<GLubyte> &img=manager.master_images.front();
+		glview->resizeMode=SGLBaseCam::scaleView;
+		glview->showObj(img.frame);
+	}
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
@@ -63,7 +70,6 @@ GLvlMasterView::GLvlMasterView():onDataSelect(this)
 /*	if(!GLvlView::configDlg)GLvlView::configDlg = new ConfigDlg;
 	if(!GLvlView::pinsDlg)GLvlView::pinsDlg = new GLvlPinsDlg(this,glview);
 */
-//	GLvlMasterView::dataDialog->onSelect.connect(onDataSelect);
 }
 
 
@@ -188,10 +194,3 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 }
 	*/
 
-GLvlMasterView::SelectSlot::SelectSlot(GLvlMasterView* p):master(p){}
-void GLvlMasterView::SelectSlot::operator()(/*Protocol prot,Data<float,4> dat*/)
-{
-	qWarning("Implement me");
- /* Data<GLubyte,4> data;dat.convert_to(dat);
-  master->loadData(prot,data);*/
-}

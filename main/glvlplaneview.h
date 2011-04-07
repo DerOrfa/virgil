@@ -23,6 +23,7 @@
 
 #include <qlabel.h>
 #include <libsgl/primitives/sglquader.h>
+#include <QComboBox>
 
 #include "glvlplanecam.h"
 #include "glvlplanecursor.h"
@@ -56,7 +57,11 @@ public:
 	QLabel	AimXStatus,AimYStatus,AimZStatus;
 
 public Q_SLOTS:
+	void	onSelectMasterImg(int index);
 	void	lostView();
+	void	onImgListChange();
+private:
+	QComboBox *selector;
 private Q_SLOTS:
 	void mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord);
 protected:

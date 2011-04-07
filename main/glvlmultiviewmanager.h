@@ -9,10 +9,10 @@
 
 class GLvlMultiviewManager : public SGLqtMultiSpaceMgr
 {
+Q_OBJECT
 public:
 	QList<Bild<GLubyte> > master_images;
 	GLvlMultiviewManager();
-	SGLshPtr<Bild<GLubyte> > masterImg;
 	QLinkedList<GLvlPlaneView *> planeViews;
 	void addImage(const isis::data::Image &img);
 Q_SIGNALS:

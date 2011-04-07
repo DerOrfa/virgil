@@ -46,6 +46,10 @@ GLvlPlaneCam::GLvlPlaneCam():SGLBaseCam(0,0,150),myPlane(new GLvlCutPlane)
 //	myPlane->is_free=false; // wird eh durch registrierung gesetzt
 }
 
+GLvlPlaneCam::setMasterTex(Bild<GLubyte> data){
+
+}
+
 void GLvlPlaneCam::generate()
 {
 	if(showCross)
