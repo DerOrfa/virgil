@@ -21,7 +21,6 @@
 */
 class GLvlCutPlane : public SGL3DPlane
 {
-	GLvlVolumeTex master_tex;
 public:
 	GLvlCutPlane();
 	void resetTexKoord();

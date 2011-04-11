@@ -38,7 +38,6 @@ public:
 	void generate();
 	SGLshPtr<GLvlCutPlane> myPlane;
 	GLfloat farbe[3];
-	setMasterTex(Bild<GLubyte> data);
 Q_SIGNALS:
 	void camChanged();
 public Q_SLOTS:

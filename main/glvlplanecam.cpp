@@ -46,10 +46,6 @@ GLvlPlaneCam::GLvlPlaneCam():SGLBaseCam(0,0,150),myPlane(new GLvlCutPlane)
 //	myPlane->is_free=false; // wird eh durch registrierung gesetzt
 }
 
-GLvlPlaneCam::setMasterTex(Bild<GLubyte> data){
-
-}
-
 void GLvlPlaneCam::generate()
 {
 	if(showCross)
@@ -95,7 +91,7 @@ void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 	{
 		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01);
 		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
-		//movecam ist nicht nÃ¶tig, da move_cam_with_aim true ist
+		//movecam ist nicht nötig, da move_cam_with_aim true ist
 		compileNextTime();
 		camChanged();
 	}

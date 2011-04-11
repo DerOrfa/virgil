@@ -78,11 +78,14 @@ AimZStatus((QWidget*)statusBar())*/
 
 	selector=new QComboBox(centralWidget());
 	centralWidget()->layout()->addWidget(selector);
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 
 	connect(selector,SIGNAL(activated(int)),SLOT(onSelectMasterImg(int)));
-	connect(&isis::util::Singletons::get<GLvlMultiviewManager,10>(),SIGNAL(newData()),SLOT(onImgListChange()));
 
-	onImgListChange(); // first update
+	connect(&manager,SIGNAL(newData()),SLOT(onImgListChange()));
+
+	// first update
+	onImgListChange();
 }
 
 GLvlPlaneView::~GLvlPlaneView()
@@ -278,8 +281,14 @@ void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
 
 void GLvlPlaneView::onSelectMasterImg(int index)
 {
-	qWarning("Implement me");
-	const Bild<GLubyte> &img=isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images.at(index);
+	Bild &img=isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images[index];
+
+	SGLshPtr<GLvlPlaneCam> cam=dynamic_pointer_cast<GLvlPlaneCam>(glview->Camera);
+	if(!cam){
+		SGLprintError("Die aktuelle Camera ist keine PLaneCam");return;
+	} else {
+		cam->myPlane->Mat->SetTex(img.getTex());
+	}
 }
 
 void GLvlPlaneView::jumpToCursor(){jumpTo(cursor->OldPos);}
@@ -292,6 +301,7 @@ void GLvlPlaneView::jumpTo(const SGLVektor &to)
 
 void GLvlPlaneView::onImgListChange(){
 	selector->clear();
+	int current=selector->currentIndex();
 
 	if(not isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images.isEmpty()){
 		glViewContainer->setEnabled(true);
@@ -303,7 +313,9 @@ void GLvlPlaneView::onImgListChange(){
 				entry+="_"+QString::fromStdString(img_prop.getPropertyAs<std::string>("sequenceDescription"));
 			selector->addItem(entry);
 		}
-		onSelectMasterImg(selector->currentIndex());
+		if(current!=selector->currentIndex()){
+			onSelectMasterImg(selector->currentIndex());
+		}
 	} else {
 		glViewContainer->setEnabled(false);
 	}

@@ -41,7 +41,7 @@ GLvlMasterView::GLvlMasterView()
 
 	setupSpace(glViewContainer);
 	if(manager.master_images.size()){
-		const Bild<GLubyte> &img=manager.master_images.front();
+		const Bild &img=manager.master_images.front();
 		glview->resizeMode=SGLBaseCam::scaleView;
 		glview->showObj(img.frame);
 	}

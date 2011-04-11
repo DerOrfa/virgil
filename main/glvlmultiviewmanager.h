@@ -5,13 +5,14 @@
 #include <libsgl/sglsignal.h>
 
 #include "glvlplaneview.h"
+#include "bild.h"
 #include <isis/DataStorage/image.hpp>
 
 class GLvlMultiviewManager : public SGLqtMultiSpaceMgr
 {
 Q_OBJECT
 public:
-	QList<Bild<GLubyte> > master_images;
+	QList<Bild> master_images;
 	GLvlMultiviewManager();
 	QLinkedList<GLvlPlaneView *> planeViews;
 	void addImage(const isis::data::Image &img);

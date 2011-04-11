@@ -29,6 +29,7 @@
 #include <limits>
 #include <isis/DataStorage/image.hpp>
 #include "imgframe.h"
+#include "glvlvolumetex.h"
 
 class dim
 {
@@ -58,35 +59,23 @@ public:
 	inline float setElsize(float s){return Elsize=s;}
 };
 
-template <class T> class Bild : public isis::data::TypedImage<T>
+class Bild : public isis::data::Image
 {
 public:
 	union {dim xsize;dim Columns;};
 	union {dim ysize;dim Rows;};
 	union {dim zsize;dim Bands;dim layer;};
 	inline unsigned int size()const{return xsize*ysize*zsize;}
-private:
-	std::pair<T,T> range;
+	SGLshPtr< GLvlVolumeTex > tex;
 public:
 	SGLshPtr< ImgFrame > frame;
-/*	ValRange getValRange()
-	{
-		std::less<T> l;
-		if(l(range.max, range.min))
-		{
-			SGLprintState("Scanning %s data",typeid(T).name());
-			for(unsigned int i=0;i<this->size();i++)
-			{
-				const T& dummy=at(i);
-				if(dummy>range.max)range.max=dummy;
-				if(dummy<range.min)range.min=dummy;
-			}
-			SGLprintState("max: %f, min %f",range.max,range.min);
-		}
-		return range;
-	}*/
-	Bild(const isis::data::Image &src):isis::data::TypedImage<T>(src),range(isis::data::Image::getMinMaxAs<T>()),frame(new ImgFrame)
-			//@todo we actually only have to copy/convert the first volume
+	const SGLshPtr<SGLBaseTex> getTex(){
+		if(!tex)
+			tex.reset(new GLvlVolumeTex(*this));
+		return boost::static_pointer_cast<SGLBaseTex>(tex);
+	}
+
+	Bild(const isis::data::Image &src):isis::data::Image(src),frame(new ImgFrame)
 	{
 		const isis::util::FixedVector<size_t,4> voxels=this->getSizeAsVector();
 		const isis::util::fvector4 voxelsize=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("voxelSize");
@@ -110,12 +99,6 @@ public:
 		}
 	}
 	virtual ~Bild(){}
-	inline T& at(unsigned short x,unsigned short y,const unsigned short z){
-		return isis::data::Image::voxel<T>(x,y,z);
-	}
-	inline T *copy_line(const unsigned short y,const unsigned short z,void *dst){
-//		return ((T*)memcpy(dst,&at(0,y,z),xsize*sizeof(T)))+xsize;
-	}
 };
 
 
