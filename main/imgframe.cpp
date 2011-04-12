@@ -6,6 +6,7 @@ ImgFrame::ImgFrame()
 	rowVec.SetColor(255,0,0);
 	colVec.SetColor(0,255,0);
 	sliceVec.SetColor(0,0,255);
+	origin.SetColor(255,255,255);
 }
 
 void ImgFrame::generate(){
