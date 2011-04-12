@@ -24,6 +24,7 @@ GLvlVolumeTex::GLvlVolumeTex(const isis::data::Image &img):SGLBaseTex(),rowDim(i
 {
 	weich=true;
 	repeat=MipMap=false;
+	repeat=true;
 //	identity=true;
 	TexType=GL_TEXTURE_3D;
 
@@ -87,6 +88,7 @@ void GLvlVolumeTex::calcMatr(SGLVektor offset)
 	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
 	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
 	*/
+	qWarning("implement me");
 }
 
 bool GLvlVolumeTex::load(const isis::data::Image &data)
@@ -96,7 +98,8 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 		isis::data::MemChunk<GLushort> &target;
 		copyToChunk(isis::data::MemChunk<GLushort> &ch):target(ch){};
 		bool operator()( GLushort &vox, const isis::util::FixedVector<size_t, 4> &pos ){
-			target.voxel<GLushort>(pos[0]+1,pos[1]+1,pos[2]+1) = vox;
+			target.voxel<GLushort>((pos[0]+1)*2,pos[1]+1,pos[2]+1) = vox;
+			target.voxel<GLushort>((pos[0]+1)*2+1,pos[1]+1,pos[2]+1) = std::numeric_limits<GLushort>::max();
 		}
 	};
 	if(!sglChkExt("GL_ARB_texture_non_power_of_two","NPOT-textures are not supportet. Aborting...",0))
@@ -109,6 +112,7 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	copyToChunk copyOp(chunk);
 	const_cast<isis::data::Image&>(data).foreachVoxel(copyOp); //yea ... go, tell your mom
 
+	glBindTexture(GL_TEXTURE_3D,ID);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
 			   GL_LUMINANCE_ALPHA,GL_UNSIGNED_SHORT,&chunk.voxel<GLushort>(0,0));
