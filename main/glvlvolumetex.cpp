@@ -81,8 +81,9 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 		isis::data::MemChunk<GLushort> &target;
 		copyToChunk(isis::data::MemChunk<GLushort> &ch):target(ch){};
 		bool operator()( GLushort &vox, const isis::util::FixedVector<size_t, 4> &pos ){
-			target.voxel<GLushort>((pos[0]+1)*2,pos[1]+1,pos[2]+1) = vox;
-			target.voxel<GLushort>((pos[0]+1)*2+1,pos[1]+1,pos[2]+1) = std::numeric_limits<GLushort>::max();
+			GLushort *vp=&target.voxel<GLushort>((pos[0]+1)*2,pos[1]+1,pos[2]+1);
+			*(vp++) = vox;
+			*vp =  std::numeric_limits<GLushort>::max();
 		}
 	};
 	if(!sglChkExt("GL_ARB_texture_non_power_of_two","NPOT-textures are not supportet. Aborting...",0))
@@ -110,7 +111,7 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %s-Textur belegt",data.getVolume()/float(1024*1024),MBSize,chunk.getSizeAsString().c_str());}
+		if(MBSize>1){ SGLprintState("%G MB Texturspeicher für ein %s-Bild belegt",MBSize,data.getSizeAsString().c_str());}
 		loaded=false;
 	}
 
