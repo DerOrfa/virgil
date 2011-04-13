@@ -22,9 +22,7 @@
 
 GLvlVolumeTex::GLvlVolumeTex(const isis::data::Image &img):SGLBaseTex(),rowDim(img,isis::data::rowDim),colDim(img,isis::data::columnDim),sliceDim(img,isis::data::sliceDim)
 {
-	weich=true;
-	repeat=MipMap=false;
-	repeat=true;
+	weich=repeat=MipMap=false;
 //	identity=true;
 	TexType=GL_TEXTURE_3D;
 
@@ -68,27 +66,12 @@ SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Tex
 /*!
 	\fn GLvlVolumeTex::calcMatr()
  */
-void GLvlVolumeTex::calcMatr(SGLVektor offset)
+void GLvlVolumeTex::calcMatr(const isis::util::PropertyMap &prop)
 {
-/*	for(int i=0;i<15;i++)
-		((GLdouble*)mm2tex_Matrix)[i]=0;
-	((GLdouble*)mm2tex_Matrix)[15]=1;
 
-	offset =
-		SGLVektor(rowDim.startgap_mm,colDim.startgap_mm,sliceDim.startgap_mm)
-		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden
+//		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden
 		//eig mÃ¼sste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
-		-offset-GLvlVolumeTex::masteroffset;
-
-	mm2tex_Matrix[0][0]=1/Info.X.outer_mm_size();
-	mm2tex_Matrix[1][1]=1/Info.Y.outer_mm_size();
-	mm2tex_Matrix[2][2]=1/Info.Z.outer_mm_size();
-
-	mm2tex_Matrix[3][0]=mm2tex_Matrix[0][0]*offset.SGLV_X;
-	mm2tex_Matrix[3][1]=mm2tex_Matrix[1][1]*offset.SGLV_Y;
-	mm2tex_Matrix[3][2]=mm2tex_Matrix[2][2]*offset.SGLV_Z;
-	*/
-	qWarning("implement me");
+//		-offset-GLvlVolumeTex::masteroffset;
 }
 
 bool GLvlVolumeTex::load(const isis::data::Image &data)
@@ -127,10 +110,29 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	{
 		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %s-Textur belegt",data.getVolume(),MBSize,chunk.getSizeAsString().c_str());}
+		if(MBSize>1){ SGLprintState("%G MB Bilddaten gelesen, %G MB Texturspeicher für eine %s-Textur belegt",data.getVolume()/float(1024*1024),MBSize,chunk.getSizeAsString().c_str());}
 		loaded=false;
 	}
-//	Info.calcGaps(1,xsize-Info.X.getCnt('X')-1,1,ysize-Info.Y.getCnt('Y')-1,1,zsize-Info.Z.getCnt('Z')-1);
+
+	const isis::util::fvector4 offset=data.getPropertyAs<isis::util::fvector4>("indexOrigin");
+
+	//fill the orientation matrix
+	data.getPropertyAs<isis::util::fvector4>("rowVec").copyTo(mm2tex_Matrix[0]);
+	data.getPropertyAs<isis::util::fvector4>("columnVec").copyTo(mm2tex_Matrix[1]);
+	data.getPropertyAs<isis::util::fvector4>("sliceVec").copyTo(mm2tex_Matrix[2]);
+	memset(mm2tex_Matrix[3],0,sizeof(GLdouble)*4);
+	((GLdouble*)mm2tex_Matrix)[15]=1;
+
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glScalef(1/rowDim.outer_mm_size(),1/colDim.outer_mm_size(),1/sliceDim.outer_mm_size()); //norm the image to uvw-mapping (0..1)
+	glTranslatef(rowDim.startgap_mm,colDim.startgap_mm,sliceDim.startgap_mm); //apply offset from the transparent border
+	glMultMatrixd(&mm2tex_Matrix[0][0]); //apply the orientation
+	glTranslatef(-offset[0],-offset[1],-offset[2]); // move to the index origin
+	saveMatrix(GL_TEXTURE);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
 	return true;
 }
 

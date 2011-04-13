@@ -44,17 +44,13 @@ int main( int argc, char ** argv )
 	default:SGLshowInfos=SGLshowWarnings=SGLshowState=true;
 	}
 
-
-
-
-	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView *w = new GLvlMasterView;
-	(new GLvlPlaneView)->show();;
-	w->show();
-
 	SGLprintState("Lese Daten ein ...");
 	std::list<isis::data::Image> images=isis::data::IOFactory::load(argv[1]);
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(images.front());
+
+	SGLprintState("Initialisiere Schnittstelle ...");
+	(new GLvlMasterView)->show();
+	(new GLvlPlaneView)->show();
 
 	SGLprintState("fertsch");
 	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );

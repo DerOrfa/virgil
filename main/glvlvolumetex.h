@@ -74,8 +74,8 @@ public:
 
 	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
-	void calcMatr(SGLVektor offset=SGLVektor(0,0,0));
-//	GLdouble mm2tex_Matrix[4][4];
+	void calcMatr(const isis::util::PropertyMap &prop);
+	GLdouble mm2tex_Matrix[4][4];
 
 	static SGLVektor masteroffset;
 private:

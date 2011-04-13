@@ -46,8 +46,6 @@ public:
 	void showCursThere(bool toggle);
 	void showCursHere(bool toggle);
 	void showSegmentAt(unsigned int index);
-	void resizeCurrSegment(short topdelta,short bottomdelta);
-	void selectCurrSegment();
 	void jumpToCursor();
 	void jumpTo(const SGLVektor &to);
 

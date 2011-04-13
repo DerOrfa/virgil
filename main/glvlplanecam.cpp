@@ -61,13 +61,16 @@ void GLvlPlaneCam::generate()
 	recalcEcken();
 	myPlane->resetTexKoord();
 
+	// prevent nvidia from optimizing out the setting
+// 	glLineWidth(1); glColor3f(0,0,0);
+
 	glLineWidth(2);
 	glBegin(GL_LINES);
-		glColor3f(255,0,0);
+		glColor3f(1,0,0);
 		Ecken[0]->DrawPureVertex();
 		Ecken[1]->DrawPureVertex();
 
-		glColor3f(0,255,0);
+		glColor3f(0,1,0);
 		Ecken[1]->DrawPureVertex();
 		Ecken[2]->DrawPureVertex();
 
@@ -75,11 +78,20 @@ void GLvlPlaneCam::generate()
 		Ecken[2]->DrawPureVertex();
 		Ecken[3]->DrawPureVertex();
 
-		glColor3f(0,0,255);
+		glColor3f(0,0,1);
 		Ecken[3]->DrawPureVertex();
 		Ecken[0]->DrawPureVertex();
 	glEnd();
+
 	glLineWidth(1);
+
+	glColor3f(1,1,1);
+	glBegin(GL_LINES);
+		Pos.DrawPureVertex();Ecken[0]->DrawPureVertex();
+		Pos.DrawPureVertex();Ecken[1]->DrawPureVertex();
+		Pos.DrawPureVertex();Ecken[2]->DrawPureVertex();
+		Pos.DrawPureVertex();Ecken[3]->DrawPureVertex();
+	glEnd();
 }
 
 /*!

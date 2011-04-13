@@ -39,7 +39,7 @@ ELSE(${CMAKE_PROJECT_NAME}_DEBUG_LOG)
 ENDIF(${CMAKE_PROJECT_NAME}_DEBUG_LOG)
 
 find_path(SGL_INCLUDE_DIR "libsgl/qt4_glue/sglqtspace.h")
-INCLUDE_DIRECTORIES(${ISIS_INCLUDE_DIRS} ${SGL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${ISIS_INCLUDE_DIRS} ${SGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 find_library(SGL_LIBRARY "sgl")
 find_library(SGL_QT_LIBRARY "qt4_glue")
@@ -48,7 +48,7 @@ find_library(SGL_QT_LIBRARY "qt4_glue")
 qt4_wrap_ui(UI_H main/GLvlView.ui)
 qt4_wrap_cpp(MOCS main/glvlplanecam.h main/glvlplanecursor.h main/glvlplaneview.h main/glvlview.h main/glvlmultiviewmanager.h)
 
-add_executable(virgil ${MOCS}
+add_executable(virgil ${MOCS} ${UI_H}
 	main/main.cpp
 	main/glvlcutplane.cpp
 	main/glvlmasterview.cpp
@@ -62,4 +62,4 @@ add_executable(virgil ${MOCS}
 	main/imgframe.cpp
 	main/glvlplanecursor.cpp
 )
-target_link_libraries(virgil ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY})
+target_link_libraries(virgil ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY})
