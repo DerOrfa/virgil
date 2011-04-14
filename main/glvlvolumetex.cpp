@@ -76,14 +76,14 @@ void GLvlVolumeTex::calcMatr(const isis::util::PropertyMap &prop)
 
 bool GLvlVolumeTex::load(const isis::data::Image &data)
 {
-	class copyToChunk:public isis::data::Chunk::VoxelOp<GLushort>{
+	class copyToChunk:public isis::data::Chunk::VoxelOp<GLubyte>{
 	public:
-		isis::data::MemChunk<GLushort> &target;
-		copyToChunk(isis::data::MemChunk<GLushort> &ch):target(ch){};
-		bool operator()( GLushort &vox, const isis::util::FixedVector<size_t, 4> &pos ){
-			GLushort *vp=&target.voxel<GLushort>((pos[0]+1)*2,pos[1]+1,pos[2]+1);
+		isis::data::MemChunk<GLubyte> &target;
+		copyToChunk(isis::data::MemChunk<GLubyte> &ch):target(ch){};
+		bool operator()( GLubyte &vox, const isis::util::FixedVector<size_t, 4> &pos ){
+			GLubyte *vp=&target.voxel<GLubyte>((pos[0]+1)*2,pos[1]+1,pos[2]+1);
 			*(vp++) = vox;
-			*vp =  std::numeric_limits<GLushort>::max();
+			*vp =  std::numeric_limits<GLubyte>::max();
 		}
 	};
 	if(!sglChkExt("GL_ARB_texture_non_power_of_two","NPOT-textures are not supportet. Aborting...",0))
@@ -91,15 +91,15 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 
 	//Größe der Textur ("+2" ist für den Rand)
 	const isis::util::FixedVector<size_t,4> size=data.getSizeAsVector()+2;
-	isis::data::MemChunk<GLushort> chunk(size[isis::data::rowDim]*2,size[isis::data::columnDim],size[isis::data::sliceDim]);
+	isis::data::MemChunk<GLubyte> chunk(size[isis::data::rowDim]*2,size[isis::data::columnDim],size[isis::data::sliceDim]);
 
 	copyToChunk copyOp(chunk);
 	const_cast<isis::data::Image&>(data).foreachVoxel(copyOp); //yea ... go, tell your mom
 
 	glBindTexture(GL_TEXTURE_3D,ID);
-	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
+	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE8_ALPHA8,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
-			   GL_LUMINANCE_ALPHA,GL_UNSIGNED_SHORT,&chunk.voxel<GLushort>(0,0));
+			   GL_LUMINANCE_ALPHA,GL_UNSIGNED_BYTE,&chunk.voxel<GLubyte>(0,0));
 
 	GLuint gluerr = glGetError();
 	if(gluerr)
@@ -116,13 +116,19 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	}
 
 	const isis::util::fvector4 offset=data.getPropertyAs<isis::util::fvector4>("indexOrigin");
+	const isis::util::fvector4 row=data.getPropertyAs<isis::util::fvector4>("rowVec");
+	const isis::util::fvector4 col=data.getPropertyAs<isis::util::fvector4>("columnVec");
+	const isis::util::fvector4 slice=data.getPropertyAs<isis::util::fvector4>("sliceVec");
 
 	//fill the orientation matrix
-	data.getPropertyAs<isis::util::fvector4>("rowVec").copyTo(mm2tex_Matrix[0]);
-	data.getPropertyAs<isis::util::fvector4>("columnVec").copyTo(mm2tex_Matrix[1]);
-	data.getPropertyAs<isis::util::fvector4>("sliceVec").copyTo(mm2tex_Matrix[2]);
-	memset(mm2tex_Matrix[3],0,sizeof(GLdouble)*4);
+	memset(mm2tex_Matrix,0,sizeof(GLdouble)*4*4);
 	((GLdouble*)mm2tex_Matrix)[15]=1;
+
+	for(int i=0;i<3;i++){
+		mm2tex_Matrix[i][0]=row[i];
+		mm2tex_Matrix[i][1]=col[i];
+		mm2tex_Matrix[i][2]=slice[i];
+	}
 
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
