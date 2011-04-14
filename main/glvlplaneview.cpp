@@ -196,8 +196,7 @@ void GLvlPlaneView::init()
 //	cursor->setFang(fangToggle->isOn());
 //	cursor->setSize(spinCursorSize->value());
 
-//	glview->registerObj(cam->myPlane);
-
+	glview->registerObj(cam->myPlane);
 	connect(cam.get(),SIGNAL(camChanged()),SLOT(onCamChanged()));
 //	loadCfg();
 	showInOthers(true);

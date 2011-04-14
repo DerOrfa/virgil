@@ -84,14 +84,6 @@ void GLvlPlaneCam::generate()
 	glEnd();
 
 	glLineWidth(1);
-
-	glColor3f(1,1,1);
-	glBegin(GL_LINES);
-		Pos.DrawPureVertex();Ecken[0]->DrawPureVertex();
-		Pos.DrawPureVertex();Ecken[1]->DrawPureVertex();
-		Pos.DrawPureVertex();Ecken[2]->DrawPureVertex();
-		Pos.DrawPureVertex();Ecken[3]->DrawPureVertex();
-	glEnd();
 }
 
 /*!
