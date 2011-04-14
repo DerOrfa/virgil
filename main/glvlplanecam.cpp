@@ -36,14 +36,13 @@
 
 GLvlPlaneCam::GLvlPlaneCam():SGLBaseCam(0,0,150),myPlane(new GLvlCutPlane)
 {
-	myPlane->is_free=true;
-	showCross=true;
-	move_cam_with_aim=true;
+	move_cam_with_aim=myPlane->is_free=true;
+	showCross=false;
+
 	farbe[0]=farbe[1]=farbe[2]=1;
 	Compile();//damit die EckVektoren stimmen
 	myPlane->LinkEckVekt(Ecken,4);
 	link(*myPlane.get());
-//	myPlane->is_free=false; // wird eh durch registrierung gesetzt
 }
 
 void GLvlPlaneCam::generate()
@@ -62,7 +61,7 @@ void GLvlPlaneCam::generate()
 	myPlane->resetTexKoord();
 
 	// prevent nvidia from optimizing out the setting
-// 	glLineWidth(1); glColor3f(0,0,0);
+	// 	glLineWidth(1); glColor3f(0,0,0);
 
 	glLineWidth(2);
 	glBegin(GL_LINES);

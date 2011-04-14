@@ -53,27 +53,6 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	return std::numeric_limits<unsigned int>::max();
 }
 
-SGLVektor GLvlVolumeTex::texIndex2texKoord(const unsigned int &idx)//Liefert Texturraumkoordinaten aus Voxelindexen
-{
-/*	const double x=Info.X.Index2TexKoord(idx%Info.X.getCnt('X'));
-	const double y=Info.Y.Index2TexKoord((idx/Info.X.getCnt('X'))%Info.Y.getCnt('Y'));
-	const double z=Info.Z.Index2TexKoord(idx/(Info.X.getCnt('X')*Info.Y.getCnt('Y')));
-	*/
-	qWarning("implement me");
-	return SGLVektor(0,0,0);
-}
-
-/*!
-	\fn GLvlVolumeTex::calcMatr()
- */
-void GLvlVolumeTex::calcMatr(const isis::util::PropertyMap &prop)
-{
-
-//		+SGLVektor(Info.X.getElsize('X')/2,Info.Y.getElsize('Y')/2,Info.Z.getElsize('Z')/2)//@todo warum muss das um nen halben Pixel verschoben werden
-		//eig müsste GL_NEAREST doch von -.5 bis .5 in der Farbe des Eintrages zeichnen, und nicht 0 bis 1
-//		-offset-GLvlVolumeTex::masteroffset;
-}
-
 bool GLvlVolumeTex::load(const isis::data::Image &data)
 {
 	class copyToChunk:public isis::data::Chunk::VoxelOp<GLubyte>{
@@ -119,22 +98,24 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	const isis::util::fvector4 row=data.getPropertyAs<isis::util::fvector4>("rowVec");
 	const isis::util::fvector4 col=data.getPropertyAs<isis::util::fvector4>("columnVec");
 	const isis::util::fvector4 slice=data.getPropertyAs<isis::util::fvector4>("sliceVec");
+	const isis::util::fvector4 scale(1/rowDim.outer_mm_size(),1/colDim.outer_mm_size(),1/sliceDim.outer_mm_size());
 
 	//fill the orientation matrix
-	memset(mm2tex_Matrix,0,sizeof(GLdouble)*4*4);
-	((GLdouble*)mm2tex_Matrix)[15]=1;
+	GLdouble mat[4][4];
+	memset(mat,0,sizeof(GLdouble)*4*4);
+	mat[3][3]=1;
 
 	for(int i=0;i<3;i++){
-		mm2tex_Matrix[i][0]=row[i];
-		mm2tex_Matrix[i][1]=col[i];
-		mm2tex_Matrix[i][2]=slice[i];
+		mat[i][0]=row[i];
+		mat[i][1]=col[i];
+		mat[i][2]=slice[i];
 	}
 
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
-	glScalef(1/rowDim.outer_mm_size(),1/colDim.outer_mm_size(),1/sliceDim.outer_mm_size()); //norm the image to uvw-mapping (0..1)
+	glScalef(scale[0],scale[1],scale[2]); //norm the image to uvw-mapping (0..1)
 	glTranslatef(rowDim.startgap_mm,colDim.startgap_mm,sliceDim.startgap_mm); //apply offset from the transparent border
-	glMultMatrixd(&mm2tex_Matrix[0][0]); //apply the orientation
+	glMultMatrixd(&mat[0][0]); //apply the orientation
 	glTranslatef(-offset[0],-offset[1],-offset[2]); // move to the index origin
 	saveMatrix(GL_TEXTURE);
 	glPopMatrix();
@@ -143,4 +124,3 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	return true;
 }
 
-SGLVektor GLvlVolumeTex::masteroffset(0,0,0);

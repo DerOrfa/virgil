@@ -39,8 +39,8 @@ public:
 	public:
 		dimData(const isis::data::Image &img,isis::data::dimensions dim):m_img(img),m_dim(dim){
 			v_size = m_img.getPropertyAs<isis::util::fvector4>("voxelSize")[dim];
-			if(m_img.hasProperty("voxelGap"))
-				v_gap = m_img.getPropertyAs<isis::util::fvector4>("voxelGap")[dim];
+			v_gap = m_img.hasProperty("voxelGap") ? m_img.getPropertyAs<isis::util::fvector4>("voxelGap")[dim]:0;
+
 			inner_mm_size = img.getFoV()[dim];
 			calcGap(1,1);
 		}
@@ -72,16 +72,10 @@ public:
 
 	GLvlVolumeTex(const isis::data::Image &img);
 
-	SGLVektor texIndex2texKoord(const unsigned int &idx);
 	unsigned int texKoord2texIndex(const SGLVektor &koord);
-	void calcMatr(const isis::util::PropertyMap &prop);
-	GLdouble mm2tex_Matrix[4][4];
 
-	static SGLVektor masteroffset;
 private:
 	bool load(const isis::data::Image &img);
-protected:
-	bool npot;
 };
 
 #endif
