@@ -76,7 +76,7 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	const_cast<isis::data::Image&>(data).foreachVoxel(copyOp); //yea ... go, tell your mom
 
 	glBindTexture(GL_TEXTURE_3D,ID);
-	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE8_ALPHA8,
+	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
 			   GL_LUMINANCE_ALPHA,GL_UNSIGNED_BYTE,&chunk.voxel<GLubyte>(0,0));
 

@@ -15,7 +15,6 @@ public:
 	virtual bool loadCfg();
 	virtual bool saveCfg();
 	SGLqtSpace * glview;
-	void showOthersHere(bool toggle);
 	void showObjList();
 	SGLshPtr<GLvlVolumeTex> tex;
 //	static GLvlSegmentDialog* wshed;
@@ -56,6 +55,7 @@ public Q_SLOTS:
 	void	setCoordCam();
 	void	onCamChanged();
 	void	selectViewMode(int view);
+	void showOthersHere(bool toggle);
 	void sichtVonHinten();
 	void sichtVonVorn();
 	void sichtVonOben();

@@ -54,7 +54,21 @@ AimZStatus((QWidget*)statusBar())*/
 	setObjectName("PlaneView");
 	setWindowTitle("PlaneView");
 
+	QAction *actionShowThisInOthers=new QAction("&show this slice in other planeviews",this);
+	QAction *actionShowOthersHere = new QAction("show &other slices here",this);
+
+	actionShowThisInOthers->setCheckable(true);
+	actionShowThisInOthers->setChecked(true);
+
+	actionShowOthersHere->setCheckable(true);
+	menuViews->addAction(actionShowThisInOthers);
+	menuViews->addAction(actionShowOthersHere);
+
+	this->connect(actionShowOthersHere,SIGNAL(toggled(bool)),SLOT(showOthersHere(bool)));
+	this->connect(actionShowThisInOthers,SIGNAL(toggled(bool)),SLOT(showInOthers(bool)));
+
 	setupSpace(glViewContainer);
+
 	init();
 	glview->resizeMode=SGLBaseCam::moveCam;
 	glview->Grids.doGrid=0;
@@ -85,6 +99,7 @@ AimZStatus((QWidget*)statusBar())*/
 	connect(&manager,SIGNAL(newData()),SLOT(onImgListChange()));
 
 	// first update
+	showOthersHere(actionShowOthersHere->isChecked());
 	onImgListChange();
 }
 
@@ -181,8 +196,8 @@ void GLvlPlaneView::mouseMovedInGL(QMouseEvent *e,SGLVektor weltKoord)
 
 void GLvlPlaneView::init()
 {
-	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam());
 	show();
+	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam());
 	glview->defaultCam(cam);
 
 //	glview->registerObj(cursor);

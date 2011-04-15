@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
+    <width>483</width>
     <height>436</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>cursor</string>
+          <string>position</string>
          </property>
         </widget>
        </item>
@@ -83,7 +83,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Camera</string>
+          <string>camera</string>
          </property>
         </widget>
        </item>
@@ -143,7 +143,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>478</width>
+     <width>483</width>
      <height>24</height>
     </rect>
    </property>
@@ -152,8 +152,6 @@
      <string>Views</string>
     </property>
     <addaction name="actionNewPlane"/>
-    <addaction name="actionShowThisInOthers"/>
-    <addaction name="actionShowOthersHere"/>
    </widget>
    <addaction name="menuViews"/>
   </widget>

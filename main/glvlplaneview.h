@@ -41,7 +41,6 @@ public:
 	virtual ~GLvlPlaneView();
 	virtual bool loadCfg();
 	virtual bool saveCfg();
-	void showInOthers(bool toggle);
 	void init();
 	void showCursThere(bool toggle);
 	void showCursHere(bool toggle);
@@ -58,6 +57,7 @@ public Q_SLOTS:
 	void	onSelectMasterImg(int index);
 	void	lostView();
 	void	onImgListChange();
+	void showInOthers(bool toggle);
 private:
 	QComboBox *selector;
 private Q_SLOTS:
