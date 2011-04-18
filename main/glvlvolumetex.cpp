@@ -55,29 +55,19 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 
 bool GLvlVolumeTex::load(const isis::data::Image &data)
 {
-	class copyToChunk:public isis::data::Chunk::VoxelOp<GLubyte>{
-	public:
-		isis::data::MemChunk<GLubyte> &target;
-		copyToChunk(isis::data::MemChunk<GLubyte> &ch):target(ch){};
-		bool operator()( GLubyte &vox, const isis::util::FixedVector<size_t, 4> &pos ){
-			target.voxel<GLubyte>(pos[0],pos[1],pos[2])=vox;
-		}
-	};
 	if(!sglChkExt("GL_ARB_texture_non_power_of_two","NPOT-textures are not supportet. Aborting...",0))
 		exit(-1);
 
-	//Größe der Textur ("+2" ist für den Rand)
 	const isis::util::FixedVector<size_t,4> size=data.getSizeAsVector();
-	isis::data::MemChunk<GLubyte> chunk(size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim]);
+	std::auto_ptr<GLubyte> mem((GLubyte*)malloc(sizeof(GLubyte)*data.getVolume()));
+	data.copyToMem<GLubyte>(mem.get());
 
-	copyToChunk copyOp(chunk);
-	const_cast<isis::data::Image&>(data).foreachVoxel(copyOp); //yea ... go, tell your mom
 
 	glBindTexture(GL_TEXTURE_3D,ID);
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
-			   GL_LUMINANCE,GL_UNSIGNED_BYTE,&chunk.voxel<GLubyte>(0,0));
+			   GL_LUMINANCE,GL_UNSIGNED_BYTE,mem.get());
 
 	GLuint gluerr = glGetError();
 	if(gluerr)
