@@ -60,17 +60,15 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 		isis::data::MemChunk<GLubyte> &target;
 		copyToChunk(isis::data::MemChunk<GLubyte> &ch):target(ch){};
 		bool operator()( GLubyte &vox, const isis::util::FixedVector<size_t, 4> &pos ){
-			GLubyte *vp=&target.voxel<GLubyte>((pos[0]+1)*2,pos[1]+1,pos[2]+1);
-			*(vp++) = vox;
-			*vp =  std::numeric_limits<GLubyte>::max();
+			target.voxel<GLubyte>(pos[0],pos[1],pos[2])=vox;
 		}
 	};
 	if(!sglChkExt("GL_ARB_texture_non_power_of_two","NPOT-textures are not supportet. Aborting...",0))
 		exit(-1);
 
 	//Größe der Textur ("+2" ist für den Rand)
-	const isis::util::FixedVector<size_t,4> size=data.getSizeAsVector()+2;
-	isis::data::MemChunk<GLubyte> chunk(size[isis::data::rowDim]*2,size[isis::data::columnDim],size[isis::data::sliceDim]);
+	const isis::util::FixedVector<size_t,4> size=data.getSizeAsVector();
+	isis::data::MemChunk<GLubyte> chunk(size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim]);
 
 	copyToChunk copyOp(chunk);
 	const_cast<isis::data::Image&>(data).foreachVoxel(copyOp); //yea ... go, tell your mom
@@ -79,7 +77,7 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
-			   GL_LUMINANCE_ALPHA,GL_UNSIGNED_BYTE,&chunk.voxel<GLubyte>(0,0));
+			   GL_LUMINANCE,GL_UNSIGNED_BYTE,&chunk.voxel<GLubyte>(0,0));
 
 	GLuint gluerr = glGetError();
 	if(gluerr)
@@ -99,7 +97,7 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	const isis::util::fvector4 row=data.getPropertyAs<isis::util::fvector4>("rowVec");
 	const isis::util::fvector4 col=data.getPropertyAs<isis::util::fvector4>("columnVec");
 	const isis::util::fvector4 slice=data.getPropertyAs<isis::util::fvector4>("sliceVec");
-	const isis::util::fvector4 scale(1/rowDim.outer_mm_size(),1/colDim.outer_mm_size(),1/sliceDim.outer_mm_size());
+	const isis::util::fvector4 scale=isis::util::fvector4(1,1,1)/data.getFoV();// @todo its 0/0 = NaN but we dont use it, so we dont care ... or do we ?
 
 	//fill the orientation matrix
 	GLdouble mat[4][4];
@@ -115,7 +113,6 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
 	glScalef(scale[0],scale[1],scale[2]); //norm the image to uvw-mapping (0..1)
-	glTranslatef(rowDim.startgap_mm,colDim.startgap_mm,sliceDim.startgap_mm); //apply offset from the transparent border
 	glMultMatrixd(&mat[0][0]); //apply the orientation
 	glTranslatef(-offset[0],-offset[1],-offset[2]); // move to the index origin
 	saveMatrix(GL_TEXTURE);
