@@ -263,23 +263,37 @@ void GLvlView::onMsg(QString msg,bool canskip){}
 
 void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 {
-	short top_resize=0,bottom_resize=0;
-	bool done=false;
-	if(e->buttons() & Qt::ControlModifier)
+	const Qt::KeyboardModifiers btn=e->modifiers();
+	/*if(btn & (Qt::ShiftModifier|Qt::ControlModifier))
 	{
-		done=true;
-		top_resize=e->delta() > 0 ? -1:1;
-	}
-	if(e->buttons() & Qt::ShiftModifier)
-	{
-		done=true;
-		bottom_resize=e->delta() > 0 ? -1:1;
-	}
-	if(done)
-	{
+		bool segmentResize=false;
+		short top_resize=0,bottom_resize=0;
+		if(btn & Qt::ControlModifier)
+		{
+			segmentResize=true;
+			top_resize=e->delta() > 0 ? -1:1;
+		}
+		else if(btn & Qt::ShiftModifier)
+		{
+			segmentResize=true;
+			bottom_resize=e->delta() > 0 ? -1:1;
+		}
+
 		onResizeSegment(top_resize,bottom_resize);
 		e->accept();
-	}else e->ignore();
+	}
+	else*/ if(btn & Qt::AltModifier)
+	{
+		SGLshPtr< SGLBaseCam > cam=glview->Camera;
+		const int deg = e->delta();
+
+		const SGLVektor move=cam->getLookVektor()*deg/12000.;
+		cam->MoveAim(move[0],move[1],move[2]);
+		glview->sendRedraw();
+		onCamChanged();
+		e->accept();
+	}else
+		e->ignore();
 }
 
 void GLvlPlaneView::mouseReleaseEvent(QMouseEvent * e )
