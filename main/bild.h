@@ -78,7 +78,7 @@ public:
 	Bild(const isis::data::Image &src):isis::data::Image(src),frame(new ImgFrame)
 	{
 		const isis::util::FixedVector<size_t,4> voxels=this->getSizeAsVector();
-		const isis::util::fvector4 voxelsize=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("voxelSize");
+		const isis::util::fvector3 voxelsize=isis::util::PropertyMap::getPropertyAs<isis::util::fvector3>("voxelSize");
 		xsize.setCnt(voxels[0]);
 		ysize.setCnt(voxels[1]);
 		zsize.setCnt(voxels[2]);
@@ -86,11 +86,11 @@ public:
 		ysize.setElsize(voxelsize[1]);
 		zsize.setElsize(voxelsize[2]);
 
-		const isis::util::fvector4 fov=src.getFoV();
-		const isis::util::fvector4 origin=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("indexOrigin");
-		const isis::util::fvector4 rowVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("rowVec")*fov[isis::data::rowDim]+origin;
-		const isis::util::fvector4 colVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("columnVec")*fov[isis::data::columnDim]+origin;
-		const isis::util::fvector4 sliceVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector4>("sliceVec")*fov[isis::data::sliceDim]+origin;
+		const isis::util::fvector3 fov=src.getFoV();
+		const isis::util::fvector3 origin=isis::util::PropertyMap::getPropertyAs<isis::util::fvector3>("indexOrigin");
+		const isis::util::fvector3 rowVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector3>("rowVec")*fov[isis::data::rowDim]+origin;
+		const isis::util::fvector3 colVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector3>("columnVec")*fov[isis::data::columnDim]+origin;
+		const isis::util::fvector3 sliceVec=isis::util::PropertyMap::getPropertyAs<isis::util::fvector3>("sliceVec")*fov[isis::data::sliceDim]+origin;
 		for(int i=0;i<3;i++){
 			frame->rowVec[i]=rowVec[i];
 			frame->colVec[i]=colVec[i];

@@ -39,7 +39,7 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short yindex=colDim.TexCoord2Index(koord.SGLV_Y);
 	const unsigned short zindex=sliceDim.TexCoord2Index(koord.SGLV_Z);
 
-	//UngÃ¼ltige Koord werden numeric_limits<unsigned short>::max(), was ja auch gÃ¶ÃŸer als Info.X.getCnt('X') is
+	//Ungültige Koord werden numeric_limits<unsigned short>::max(), was ja auch gößer als Info.X.getCnt('X') ist
 	//@todo hab ich jetzt beschlossen ...
 	if(	xindex >= Info.X.getCnt('X') ||
 		yindex >= Info.Y.getCnt('Y') ||
@@ -59,15 +59,14 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 		exit(-1);
 
 	const isis::util::FixedVector<size_t,4> size=data.getSizeAsVector();
-	std::auto_ptr<GLubyte> mem((GLubyte*)malloc(sizeof(GLubyte)*data.getVolume()));
-	data.copyToMem<GLubyte>(mem.get());
+	const isis::data::ValueArray<GLubyte> buff=data.copyAsValueArray<GLubyte>();
 
 
 	glBindTexture(GL_TEXTURE_3D,ID);
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	glTexImage3D(GL_TEXTURE_3D,0,GL_LUMINANCE12_ALPHA4,
 			   size[isis::data::rowDim],size[isis::data::columnDim],size[isis::data::sliceDim],0,
-			   GL_LUMINANCE,GL_UNSIGNED_BYTE,mem.get());
+			   GL_LUMINANCE,GL_UNSIGNED_BYTE,buff.begin().operator->());
 
 	GLuint gluerr = glGetError();
 	if(gluerr)
@@ -83,11 +82,11 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 		loaded=false;
 	}
 
-	const isis::util::fvector4 offset=data.getPropertyAs<isis::util::fvector4>("indexOrigin");
-	const isis::util::fvector4 row=data.getPropertyAs<isis::util::fvector4>("rowVec");
-	const isis::util::fvector4 col=data.getPropertyAs<isis::util::fvector4>("columnVec");
-	const isis::util::fvector4 slice=data.getPropertyAs<isis::util::fvector4>("sliceVec");
-	const isis::util::fvector4 scale=isis::util::fvector4(1,1,1)/data.getFoV();// @todo its 0/0 = NaN but we dont use it, so we dont care ... or do we ?
+	const isis::util::fvector3 offset=data.getPropertyAs<isis::util::fvector3>("indexOrigin");
+	const isis::util::fvector3 row=data.getPropertyAs<isis::util::fvector3>("rowVec");
+	const isis::util::fvector3 col=data.getPropertyAs<isis::util::fvector3>("columnVec");
+	const isis::util::fvector3 slice=data.getPropertyAs<isis::util::fvector3>("sliceVec");
+	const isis::util::fvector3 scale=isis::util::fvector3(1,1,1)/data.getFoV();// @todo its 0/0 = NaN but we dont use it, so we dont care ... or do we ?
 
 	//fill the orientation matrix
 	GLdouble mat[4][4];

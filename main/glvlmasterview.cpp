@@ -174,23 +174,3 @@ void GLvlMasterView::onMsg(QString msg,bool canskip)
 }
 
 
-/*!
-	\fn GLvlMasterView::loadData(FileIO::ProtocolDataMap::iterator)
- */
-/*bool GLvlMasterView::loadData()
-{
-  Data<GLubyte,4> dat;i->second.convert_to(dat);
-	loadData(i->first,dat);
-	glview->registerDynamicTex(*tex);
-        actionNewPlane->setEnabled(tex->valid);
-
-    rahmen->setDiag(GLvlVolumeTex::masteroffset,tex->Info.size+GLvlVolumeTex::masteroffset);
-    rahmen->DrahtGitter(true);
-    glview->setGridsSize(
-            int(std::max(std::max(tex->Info.size.SGLV_X, tex->Info.size.SGLV_Y), tex->Info.size.SGLV_Z))
-            *.6);
-    glview->resizeMode=SGLBaseCam::scaleView;
-    glview->registerObj(rahmen);
-}
-	*/
-

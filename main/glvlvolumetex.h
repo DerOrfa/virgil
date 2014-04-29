@@ -13,7 +13,7 @@
 #define GLVLVOLUMETEX_H
 
 #include <libsgl/util/sgltextur.h>
-#include <isis/DataStorage/image.hpp>
+#include <DataStorage/image.hpp>
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
@@ -37,8 +37,8 @@ public:
 		float v_gap;
 	public:
 		dimData(const isis::data::Image &img,isis::data::dimensions dim):m_img(img),m_dim(dim){
-			v_size = m_img.getPropertyAs<isis::util::fvector4>("voxelSize")[dim];
-			v_gap = m_img.hasProperty("voxelGap") ? m_img.getPropertyAs<isis::util::fvector4>("voxelGap")[dim]:0;
+			v_size = m_img.getPropertyAs<isis::util::fvector3>("voxelSize")[dim];
+			v_gap = m_img.hasProperty("voxelGap") ? m_img.getPropertyAs<isis::util::fvector3>("voxelGap")[dim]:0;
 		}
 
 		inline unsigned short TexCoord2Index(const double Coord)
