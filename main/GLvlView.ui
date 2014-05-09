@@ -153,7 +153,16 @@
     </property>
     <addaction name="actionNewPlane"/>
    </widget>
+   <widget class="QMenu" name="menuGo_to">
+    <property name="title">
+     <string>go to</string>
+    </property>
+    <addaction name="actionSagittal"/>
+    <addaction name="actionCoronal"/>
+    <addaction name="actionAxial"/>
+   </widget>
    <addaction name="menuViews"/>
+   <addaction name="menuGo_to"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNewPlane">
@@ -170,6 +179,30 @@
    </property>
    <property name="text">
     <string>show others here</string>
+   </property>
+  </action>
+  <action name="actionSagittal">
+   <property name="text">
+    <string>sagittal</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionCoronal">
+   <property name="text">
+    <string>coronal</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionAxial">
+   <property name="text">
+    <string>axial</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>

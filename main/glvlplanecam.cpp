@@ -92,7 +92,7 @@ void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 {
 	if(e->buttons()&Qt::MidButton)
 	{
-		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.01);
+		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.02);
 		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
 		//movecam ist nicht nötig, da move_cam_with_aim true ist
 		compileNextTime();

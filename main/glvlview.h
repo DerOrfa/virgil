@@ -35,7 +35,6 @@ private:
 		void operator()(int reason){
 			if(GLvlView::activeCam!=myCam)
 			{
-				std::cout << "aktiveCam:" << GLvlView::activeCam << std::endl << GLvlView::activeCam->Pos << std::endl;
 				GLvlView::activeCam=myCam;
 			}
 
@@ -43,7 +42,7 @@ private:
 	}onGotFocus;
 
 	bool selfChange;
-	static SGLVektor default_oben[3],default_unten[3],default_vorn[3],default_hinten[3],default_rechts[3],default_links[3];
+	static SGLVektor sagittal[3],axial[3],coronal[3];
 
 public Q_SLOTS:
 	/*$PUBLIC_SLOTS$*/
@@ -55,13 +54,10 @@ public Q_SLOTS:
 	void	setCoordCam();
 	void	onCamChanged();
 	void	selectViewMode(int view);
-	void showOthersHere(bool toggle);
-	void sichtVonHinten();
-	void sichtVonVorn();
-	void sichtVonOben();
-	void sichtVonUnten();
-	void sichtVonRechts();
-	void sichtVonLinks();
+	void	showOthersHere(bool toggle);
+	void	on_actionSagittal_triggered(bool);
+	void	on_actionAxial_triggered(bool);
+	void	on_actionCoronal_triggered(bool);
 
 	virtual void onMsg(QString msg,bool canskip);
 	void on_actionNewPlane_triggered(bool);

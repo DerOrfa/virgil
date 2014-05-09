@@ -52,13 +52,14 @@ void GLvlView::setCoordAim()
 
 void GLvlView::setRollDeg(int deg)
 {
-	if(selfChange)return;
-	assert(glview && glview->Camera);
-	glview->Camera->ViewMatr.outDated=true;
-	glview->Camera->UpVect=GLvlView::default_oben[0];
-	glview->Camera->ReCalcUpVect(false,deg);
-	glview->Camera->Compile();
-	glview->sendRedraw();
+// 	if(selfChange)return;
+// 	assert(glview && glview->Camera);
+// 	glview->Camera->ViewMatr.outDated=true;
+// 	glview->Camera->UpVect=SGLVektor(0,1,0);
+// 	glview->Camera->ReCalcUpVect(false,deg);
+// 	glview->Camera->Compile();
+// 	glview->sendRedraw();
+#warning Implement me
 }
 
 void GLvlView::setCoordCam()
@@ -102,12 +103,10 @@ void GLvlView::onCamChanged()
 }
 
 
-void GLvlView::sichtVonHinten(){selectView(GLvlView::default_hinten);}
-void GLvlView::sichtVonVorn(){selectView(GLvlView::default_vorn);}
-void GLvlView::sichtVonOben(){selectView(GLvlView::default_oben);}
-void GLvlView::sichtVonUnten(){selectView(GLvlView::default_unten);}
-void GLvlView::sichtVonRechts(){selectView(GLvlView::default_rechts);}
-void GLvlView::sichtVonLinks(){selectView(GLvlView::default_links);}
+
+void GLvlView::on_actionAxial_triggered(bool){selectView(GLvlView::axial);}
+void GLvlView::on_actionCoronal_triggered(bool){selectView(GLvlView::coronal);}
+void GLvlView::on_actionSagittal_triggered(bool){selectView(GLvlView::sagittal);}
 
 
 void GLvlView::selectView(const SGLVektor dir[3])
@@ -222,14 +221,9 @@ void GLvlView::on_actionNewPlane_triggered(bool)
 }
 
 
-SGLVektor GLvlView::default_oben[3]={SGLVektor(0,0,-200),SGLVektor(0,0,0),SGLVektor(0,1,0)};
-SGLVektor GLvlView::default_unten[3]={SGLVektor(0,0,200),SGLVektor(0,0,0),SGLVektor(0,1,0)};
-
-SGLVektor GLvlView::default_vorn[3]={SGLVektor(-200,0,0),SGLVektor(0,0,0),SGLVektor(0,1,0)};
-SGLVektor GLvlView::default_hinten[3]={SGLVektor(200,0,0),SGLVektor(0,0,0),SGLVektor(0,1,0)};
-
-SGLVektor GLvlView::default_rechts[3]={SGLVektor(0,200,0),SGLVektor(0,0,0),SGLVektor(0,0,-1)};
-SGLVektor GLvlView::default_links[3]={SGLVektor(0,-200,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
+SGLVektor GLvlView::sagittal[3]={SGLVektor(-400,0,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
+SGLVektor GLvlView::axial[3]={SGLVektor(0,0,400),SGLVektor(0,0,0),SGLVektor(0,-1,0)};
+SGLVektor GLvlView::coronal[3]={SGLVektor(0,-400,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};
 
 //GLvlSegmentDialog* GLvlView::wshed=NULL;
 //GLvlPinsDlg* GLvlView::pinsDlg=NULL;
