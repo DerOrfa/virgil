@@ -39,10 +39,11 @@ GLvlMasterView::GLvlMasterView()
 	setObjectName("Overview");setWindowTitle("Overview");
 	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 
+	glViewContainer->setObjectName("MasterViewContainer");
 	setupSpace(glViewContainer);
+	glview->resizeMode=SGLBaseCam::scaleView;
 	if(manager.master_images.size()){
 		const Bild &img=manager.master_images.front();
-		glview->resizeMode=SGLBaseCam::scaleView;
 		glview->showObj(img.frame);
 	}
 
@@ -75,33 +76,6 @@ GLvlMasterView::GLvlMasterView()
 
 GLvlMasterView::~GLvlMasterView()
 {
-}
-
-
-/*$SPECIALIZATION$*/
-void GLvlMasterView::newPlane()
-{
-	if(!tex->valid)
-	{
-		SGLprintError("Cannot create Plane, do valid data available");
-		return;
-	}
-//        GLvlPlaneView *view =new GLvlPlaneView (mw);
-
-//	((GLvlView*)this)->connect(view->fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
-//	((GLvlView*)this)->connect(view->viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));
-
-/*	view->init();
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().onNewSpace(view->glview);
-	view->showInOthers(view->actionShowThisInOthers->isChecked());
-	view->showOthersHere(view->actionShowOthersHere->isChecked());
-
-	SGLshPtr<GLvlPlaneCam> cam= boost::dynamic_pointer_cast<GLvlPlaneCam>(view->glview->Camera);
-	if(!cam){SGLprintError("Die Kamera des Planeview ist keine PlaneCam??");return;}
-
-	updatePlanes.connect(cam->myPlane->compileNextTime);
-	view->onCamChanged();
-	*/
 }
 
 

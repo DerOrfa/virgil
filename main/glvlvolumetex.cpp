@@ -27,7 +27,7 @@ GLvlVolumeTex::GLvlVolumeTex(const isis::data::Image &img):SGLBaseTex(),rowDim(i
 	TexType=GL_TEXTURE_3D;
 
 	if(ID!=0)freeTexture();
-	sglChkExt("GL_EXT_texture3D","Höchstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
+	sglChkExt("GL_EXT_texture3D","HÃ¶chstwarscheinlich lassen sich keine nennenswerten Datenmengen laden.",2);
 
 	glGenTextures(1, &ID);
 	valid=load(img);
@@ -39,7 +39,7 @@ unsigned int GLvlVolumeTex::texKoord2texIndex(const SGLVektor &koord)//Liefert V
 	const unsigned short yindex=colDim.TexCoord2Index(koord.SGLV_Y);
 	const unsigned short zindex=sliceDim.TexCoord2Index(koord.SGLV_Z);
 
-	//Ungültige Koord werden numeric_limits<unsigned short>::max(), was ja auch gößer als Info.X.getCnt('X') ist
+	//UngÃ¼ltige Koord werden numeric_limits<unsigned short>::max(), was ja auch gÃ¶ÃŸer als Info.X.getCnt('X') ist
 	//@todo hab ich jetzt beschlossen ...
 	if(	xindex >= Info.X.getCnt('X') ||
 		yindex >= Info.Y.getCnt('Y') ||
@@ -76,9 +76,9 @@ bool GLvlVolumeTex::load(const isis::data::Image &data)
 	}
 	else
 	{
-		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schließlich habe ich grad Daten reingelesen - nur weiß sie das selbst nich)
+		loaded=true;//autolademechanismus austrixen (die Tex is geladen, schlieÃŸlich habe ich grad Daten reingelesen - nur weiÃŸ sie das selbst nich)
 		float MBSize=getTexByteSize()/float(1024*1024);
-		if(MBSize>1){ SGLprintState("%G MB Texturspeicher für ein %s-Bild belegt",MBSize,data.getSizeAsString().c_str());}
+		if(MBSize>1){ SGLprintState("%G MB Texturspeicher fÃ¼r ein %s-Bild belegt",MBSize,data.getSizeAsString().c_str());}
 		loaded=false;
 	}
 

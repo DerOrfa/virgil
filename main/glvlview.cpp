@@ -2,7 +2,7 @@
 #include "glvlmultiviewmanager.h"
 #include "isis/CoreUtils/singletons.hpp"
 
-GLvlView::GLvlView():QMainWindow(NULL),onGotFocus(myCam)
+GLvlView::GLvlView():onGotFocus(myCam)
 {
 	setupUi(this);
 	selfChange=false;
@@ -215,6 +215,12 @@ void GLvlView::closeEvent(QCloseEvent *e)
 	delete myReg;*/
 	e->accept();
 }
+
+void GLvlView::on_actionNewPlane_triggered(bool)
+{
+    (new GLvlPlaneView)->show();
+}
+
 
 SGLVektor GLvlView::default_oben[3]={SGLVektor(0,0,-200),SGLVektor(0,0,0),SGLVektor(0,1,0)};
 SGLVektor GLvlView::default_unten[3]={SGLVektor(0,0,200),SGLVektor(0,0,0),SGLVektor(0,1,0)};

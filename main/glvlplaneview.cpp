@@ -51,22 +51,18 @@ AimXStatus((QWidget*)statusBar()),
 AimYStatus((QWidget*)statusBar()),
 AimZStatus((QWidget*)statusBar())*/
 {
+	setAttribute(Qt::WA_DeleteOnClose);
 	setObjectName("PlaneView");
 	setWindowTitle("PlaneView");
 
-	QAction *actionShowThisInOthers=new QAction("&show this slice in other planeviews",this);
 	QAction *actionShowOthersHere = new QAction("show &other slices here",this);
 
-	actionShowThisInOthers->setCheckable(true);
-	actionShowThisInOthers->setChecked(true);
-
 	actionShowOthersHere->setCheckable(true);
-	menuViews->addAction(actionShowThisInOthers);
 	menuViews->addAction(actionShowOthersHere);
 
 	this->connect(actionShowOthersHere,SIGNAL(toggled(bool)),SLOT(showOthersHere(bool)));
-	this->connect(actionShowThisInOthers,SIGNAL(toggled(bool)),SLOT(showInOthers(bool)));
 
+	glViewContainer->setObjectName("PlaneViewContainer");
 	setupSpace(glViewContainer);
 
 	init();
@@ -88,11 +84,11 @@ AimZStatus((QWidget*)statusBar())*/
 	AimYStatus.setText("0");
 	AimZStatus.setText("0");
 */
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.push_front(this); //register myself at the view manager
+	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
+	manager.planeViews.push_front(this); //register myself at the view manager
 
 	selector=new QComboBox(centralWidget());
 	centralWidget()->layout()->addWidget(selector);
-	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 
 	connect(selector,SIGNAL(activated(int)),SLOT(onSelectMasterImg(int)));
 
@@ -106,6 +102,7 @@ AimZStatus((QWidget*)statusBar())*/
 GLvlPlaneView::~GLvlPlaneView()
 {
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().planeViews.removeOne(this);
+	qDebug("Removing view 0x%x",this);
 }
 
 bool GLvlPlaneView::loadCfg()
@@ -198,6 +195,7 @@ void GLvlPlaneView::init()
 {
 	show();
 	SGLshPtr<GLvlPlaneCam> cam(new GLvlPlaneCam());
+	cam->ResetUpVect(180); //were working with an upside down coordinate system
 	glview->defaultCam(cam);
 
 //	glview->registerObj(cursor);

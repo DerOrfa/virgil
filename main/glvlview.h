@@ -64,6 +64,7 @@ public Q_SLOTS:
 	void sichtVonLinks();
 
 	virtual void onMsg(QString msg,bool canskip);
+	void on_actionNewPlane_triggered(bool);
 };
 
 #endif // GLVLVIEW_H

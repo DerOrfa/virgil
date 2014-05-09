@@ -49,8 +49,6 @@ int main( int argc, char ** argv )
 	isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(images.front());
 
 	SGLprintState("Initialisiere Schnittstelle ...");
-	(new GLvlPlaneView)->show();
-	(new GLvlPlaneView)->show();
 	(new GLvlMasterView)->show();
 
 	SGLprintState("fertsch");

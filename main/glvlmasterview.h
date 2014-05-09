@@ -42,7 +42,6 @@ class GLvlMasterView : public GLvlView{
 public:
 	GLvlMasterView();
 	~GLvlMasterView();
-	void newPlane();
 	void doConfig();
 	void doBenchmark(time_t benchLen);
 //	void loadWShedDlg();
