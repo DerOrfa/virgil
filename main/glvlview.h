@@ -58,6 +58,7 @@ public Q_SLOTS:
 	void	on_actionSagittal_triggered(bool);
 	void	on_actionAxial_triggered(bool);
 	void	on_actionCoronal_triggered(bool);
+// 	void	on_actionOpen_file_triggered(bool);
 
 	virtual void onMsg(QString msg,bool canskip);
 	void on_actionNewPlane_triggered(bool);

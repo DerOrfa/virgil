@@ -99,6 +99,13 @@ public:
 		}
 	}
 	virtual ~Bild(){}
+	std::string genName()const{
+		std::string ret("S");
+		ret+=getPropertyAs<std::string>("sequenceNumber");
+		if(hasProperty("sequenceDescription"))
+			ret+="_"+getPropertyAs<std::string>("sequenceDescription");
+		return ret;
+	}
 };
 
 

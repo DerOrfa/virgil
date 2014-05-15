@@ -27,6 +27,26 @@
 #include <isis/DataStorage/io_factory.hpp>
 #include <isis/CoreUtils/singletons.hpp>
 #include "glvlmultiviewmanager.h"
+#include <QFileOpenEvent>
+
+class EventHandler : public QObject
+{
+public:
+	EventHandler( QObject *parent=NULL):QObject(parent){}
+protected:
+     bool eventFilter(QObject *obj, QEvent *event){
+		switch(event->type())
+		{
+		case QEvent::FileOpen:{
+				event->accept();
+				BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(static_cast<QFileOpenEvent*>(event)->file().toStdString()))
+					isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
+				return true;
+			}break;
+		default:return QObject::eventFilter(obj, event);
+		}
+	}
+};
 
 int main( int argc, char ** argv )
 {
@@ -35,6 +55,9 @@ int main( int argc, char ** argv )
 	std::set_terminate(__gnu_cxx::__verbose_terminate_handler);
 
 	QApplication a(argc,argv);
+	EventHandler *handle= new EventHandler(&a);
+	a.installEventFilter(handle);
+
 	unsigned short verbose = 3;
 	switch(verbose)
 	{
@@ -44,12 +67,18 @@ int main( int argc, char ** argv )
 	default:SGLshowInfos=SGLshowWarnings=SGLshowState=true;
 	}
 
-	SGLprintState("Lese Daten ein ...");
-	std::list<isis::data::Image> images=isis::data::IOFactory::load(argv[1]);
-	isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(images.front());
+	if(argc<=1){
+		BOOST_FOREACH(QString file,QFileDialog::getOpenFileNames(NULL,"Open image data","","*.nii"))
+			BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(file.toStdString()))
+				isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
+
+	} else 
+		BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(argv[1]))
+			isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
 
 	SGLprintState("Initialisiere Schnittstelle ...");
 	(new GLvlMasterView)->show();
+
 
 	SGLprintState("fertsch");
 	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );

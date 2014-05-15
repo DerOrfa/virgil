@@ -1,6 +1,7 @@
 #include "glvlview.h"
 #include "glvlmultiviewmanager.h"
 #include "isis/CoreUtils/singletons.hpp"
+#include "isis/DataStorage/io_factory.hpp"
 
 GLvlView::GLvlView():onGotFocus(myCam)
 {
@@ -219,6 +220,14 @@ void GLvlView::on_actionNewPlane_triggered(bool)
 {
     (new GLvlPlaneView)->show();
 }
+
+// void GLvlView::on_actionOpen_file_triggered(bool)
+// {
+// 	BOOST_FOREACH(QString file,QFileDialog::getOpenFileNames(this,"Open image data","","*.nii"))
+// 		BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(file.toStdString()))
+// 			isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
+// }
+// 
 
 
 SGLVektor GLvlView::sagittal[3]={SGLVektor(-400,0,0),SGLVektor(0,0,0),SGLVektor(0,0,1)};

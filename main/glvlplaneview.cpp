@@ -332,12 +332,8 @@ void GLvlPlaneView::onImgListChange(){
 	if(not isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images.isEmpty()){
 		glViewContainer->setEnabled(true);
 
-		Q_FOREACH(const isis::util::PropertyMap &img_prop,(isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images)){
-			QString entry("S");
-			entry+=QString::fromStdString(img_prop.getPropertyAs<std::string>("sequenceNumber"));
-			if(img_prop.hasProperty("sequenceDescription"))
-				entry+="_"+QString::fromStdString(img_prop.getPropertyAs<std::string>("sequenceDescription"));
-			selector->addItem(entry);
+		Q_FOREACH(const Bild &img,(isis::util::Singletons::get<GLvlMultiviewManager,10>().master_images)){
+			selector->addItem(QString::fromStdString(img.genName()));
 		}
 		if(current!=selector->currentIndex()){
 			onSelectMasterImg(selector->currentIndex());
