@@ -16,7 +16,8 @@ set(QT_USE_OPENGL TRUE)
 
 INCLUDE(${QT_USE_FILE})
 
-FIND_PACKAGE(Boost REQUIRED COMPONENTS signals)
+FIND_PACKAGE(Boost REQUIRED)
+find_library(LIBFTGL ftgl)
 
 set(DEFINES -DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS)
 add_definitions(-DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS -DQT_NO_KEYWORDS)
@@ -47,7 +48,7 @@ find_library(SGL_QT_LIBRARY "qt4_glue")
 
 
 qt4_wrap_ui(UI_H main/GLvlView.ui)
-qt4_wrap_cpp(MOCS main/glvlplanecam.h main/glvlplanecursor.h main/glvlplaneview.h main/glvlview.h main/glvlmultiviewmanager.h)
+qt4_wrap_cpp(MOCS main/glvlplanecam.h main/glvlplanecursor.h main/glvlplaneview.h main/glvlview.h main/glvlmultiviewmanager.h OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
 add_executable(virgil ${MOCS} ${UI_H}
 	main/main.cpp
@@ -63,4 +64,4 @@ add_executable(virgil ${MOCS} ${UI_H}
 	main/imgframe.cpp
 	main/glvlplanecursor.cpp
 )
-target_link_libraries(virgil ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+target_link_libraries(virgil ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES})

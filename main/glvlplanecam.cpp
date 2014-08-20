@@ -30,7 +30,6 @@
 //
 #include "glvlplanecam.h"
 #include "glvlplaneview.h"
-
 #include <qslider.h>
 
 
@@ -92,8 +91,8 @@ void GLvlPlaneCam::schieben(QMouseEvent * e,float relMoveX,float relMoveY)
 {
 	if(e->buttons()&Qt::MidButton)
 	{
-		SGLVektor schiebVekt=getLookVektor()*-(relMoveY*.02);
-		MoveAim(schiebVekt.SGLV_X,schiebVekt.SGLV_Y,schiebVekt.SGLV_Z);
+		const dvector schiebVekt=getLookVektor()*-(relMoveY*.02);
+		MoveAim(schiebVekt[0],schiebVekt[1],schiebVekt[2]);
 		//movecam ist nicht nötig, da move_cam_with_aim true ist
 		compileNextTime();
 		camChanged();

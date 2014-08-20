@@ -20,8 +20,8 @@
 #ifndef GLVLPLANECURSOR_H
 #define GLVLPLANECURSOR_H
 
-#include <libsgl/sglmetaobj.h>
-#include <libsgl/primitives/sglquader.h>
+#include <sglmetaobj.h>
+#include <primitives/sglquader.h>
 #include <qobject.h>
 
 
@@ -32,7 +32,7 @@ class GLvlPlaneCursor : public QObject, public SGLMetaObj
 {
 	Q_OBJECT
 public:
-	list<SGLCube> Cubes;
+	std::list<SGLCube> Cubes;
 	// es scheint, daß die smart-pointer einen Zeiger auf andere Referenzen halten, und sie bekommen große probs,
 	// wenn sich diese in Folge von reallozierung verlagern => deshalb kein vector
 	void compileSubObjects();

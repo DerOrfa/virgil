@@ -12,7 +12,7 @@
 #ifndef GLVLVOLUMETEX_H
 #define GLVLVOLUMETEX_H
 
-#include <libsgl/util/sgltextur.h>
+#include <util/sgltextur.h>
 #include <DataStorage/image.hpp>
 
 #ifdef __APPLE__

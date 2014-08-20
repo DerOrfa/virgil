@@ -24,8 +24,8 @@
 #include <list>
 
 #include <exception>
-#include <isis/DataStorage/io_factory.hpp>
-#include <isis/CoreUtils/singletons.hpp>
+#include <DataStorage/io_factory.hpp>
+#include <CoreUtils/singletons.hpp>
 #include "glvlmultiviewmanager.h"
 #include <QFileOpenEvent>
 

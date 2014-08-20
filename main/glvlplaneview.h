@@ -22,13 +22,12 @@
 #define GLVLPLANEVIEW_H
 
 #include <qlabel.h>
-#include <libsgl/primitives/sglquader.h>
+#include <primitives/sglquader.h>
 #include <QComboBox>
 
 #include "glvlplanecam.h"
 #include "glvlplanecursor.h"
 #include "glvlview.h"
-
 //#include "glvlsegmentdialog.h"
 //#include "PlaneView.h"
 //#include "../wshed/.h"

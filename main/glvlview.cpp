@@ -1,7 +1,8 @@
 #include "glvlview.h"
 #include "glvlmultiviewmanager.h"
-#include "isis/CoreUtils/singletons.hpp"
-#include "isis/DataStorage/io_factory.hpp"
+
+#include <CoreUtils/singletons.hpp>
+#include <DataStorage/io_factory.hpp>
 
 GLvlView::GLvlView():onGotFocus(myCam)
 {

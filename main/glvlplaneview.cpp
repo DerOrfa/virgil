@@ -39,10 +39,10 @@
 #include <qlineedit.h>
 #include <QWheelEvent>
 
-#include <isis/CoreUtils/singletons.hpp>
 #include "glvlmultiviewmanager.h"
 #include "main.h"
 
+#include <CoreUtils/singletons.hpp>
 
 using namespace boost;
 
@@ -285,7 +285,7 @@ void GLvlPlaneView::wheelEvent ( QWheelEvent * e )
 		SGLshPtr< SGLBaseCam > cam=glview->Camera;
 		const int deg = e->delta();
 
-		const SGLVektor move=cam->getLookVektor()*deg/12000.;
+		const dvector move=cam->getLookVektor()*deg/12000.;
 		cam->MoveAim(move[0],move[1],move[2]);
 		glview->sendRedraw();
 		onCamChanged();

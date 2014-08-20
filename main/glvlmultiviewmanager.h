@@ -1,12 +1,12 @@
 #ifndef GLVLMULTIVIEWMANAGER_H
 #define GLVLMULTIVIEWMANAGER_H
 
-#include <libsgl/qt4_glue/sglqtmultispacemgr.h>
-#include <libsgl/sglsignal.h>
+#include <qt4_glue/sglqtmultispacemgr.h>
+#include <sglsignal.h>
+#include <DataStorage/image.hpp>
 
 #include "glvlplaneview.h"
 #include "bild.h"
-#include <isis/DataStorage/image.hpp>
 
 class GLvlMultiviewManager : public SGLqtMultiSpaceMgr
 {

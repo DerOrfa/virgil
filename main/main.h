@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <isis/CoreUtils/log.hpp>
+#include <CoreUtils/log.hpp>
 #include <QObject>
 
 struct Runtime {static const char *name() {return "virgil";}; enum {use = _ENABLE_LOG};};

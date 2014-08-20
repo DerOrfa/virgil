@@ -30,7 +30,7 @@
 #include <qaction.h>
 #include <qtabwidget.h>
 
-#include <isis/CoreUtils/singletons.hpp>
+#include <CoreUtils/singletons.hpp>
 
 using namespace boost;
 

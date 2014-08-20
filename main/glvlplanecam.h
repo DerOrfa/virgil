@@ -20,13 +20,12 @@
 #ifndef GLVLPLANECAM_H
 #define GLVLPLANECAM_H
 
-#include <libsgl/helper/sglcamera.h>
-#include <libsgl/primitives/sglvieleck.h>
+#include <helper/sglcamera.h>
+#include <primitives/sglvieleck.h>
 #include <qobject.h>
 #include <QMouseEvent>
 #include "glvlvolumetex.h"
 #include "glvlcutplane.h"
-
 /**
 @author Enrico Reimer,,,
 */

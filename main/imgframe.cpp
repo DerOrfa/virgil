@@ -14,10 +14,10 @@ void ImgFrame::generate(){
 	colVec.DrawVektor(origin);
 	sliceVec.DrawVektor(origin);
 
-	SGLVektor row_col=rowVec+colVec-origin;
-	SGLVektor slice_col=sliceVec+colVec-origin;
-	SGLVektor row_slice=sliceVec+rowVec-origin;
-	SGLVektor row_slice_col=row_slice+colVec-origin;
+	const SGLVektor row_col=dvector(rowVec+colVec-origin);
+	const SGLVektor slice_col=dvector(sliceVec+colVec-origin);
+	const SGLVektor row_slice=dvector(sliceVec+rowVec-origin);
+	const SGLVektor row_slice_col=dvector(row_slice+colVec-origin);
 
 	glColor3f(0,0,0);
 

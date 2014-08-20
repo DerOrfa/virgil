@@ -18,12 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "glvlplanecursor.h"
+#include <boost/numeric/ublas/matrix_expression.hpp>
 
 bool GLvlPlaneCursor::goTo(SGLVektor pos)
 {
 	if(fang)for(int i=0;i<3;i++)
 		pos[i]=rint(pos[i]);
-	if(OldPos!=pos)
+	if(boost::numeric::ublas::norm_1(OldPos-pos))
 	{
 		OldPos=pos;
 		SetPosAndScale(pos.SGLV_X,pos.SGLV_Y,pos.SGLV_Z,1);
@@ -45,7 +46,7 @@ void GLvlPlaneCursor::compileSubObjects()
 {
 	Objs.clear();
 	TrObjs.clear();
-	for(list<SGLCube>::iterator i=Cubes.begin();i!=Cubes.end();i++)
+	for(std::list<SGLCube>::iterator i=Cubes.begin();i!=Cubes.end();i++)
 		Objs.push_back(i->Compile(false));
 }
 
@@ -65,7 +66,7 @@ void GLvlPlaneCursor::setFang(bool fang)
  */
 void GLvlPlaneCursor::setSize(int size)
 {
-	list<SGLCube>::iterator i;
+	std::list<SGLCube>::iterator i;
 	if(Cubes.size())
 		Cubes.resize(size*size*size,*(i=Cubes.begin()));
 	else 

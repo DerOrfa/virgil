@@ -13,7 +13,7 @@
 #define GLVLPOSLISTENER_H
 
 #include <set>
-#include <libsgl/sglsignal.h>
+#include <sglsignal.h>
 #include <qstring.h>
 /**
 @author Enrico Reimer,,,

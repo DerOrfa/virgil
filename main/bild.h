@@ -22,12 +22,12 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <libsgl/sglmisc.h>
+#include <sglmisc.h>
 #include <math.h>
 #include <typeinfo>
-#include <libsgl/sglshptr.h>
+#include <sglshptr.h>
 #include <limits>
-#include <isis/DataStorage/image.hpp>
+#include <DataStorage/image.hpp>
 #include "imgframe.h"
 #include "glvlvolumetex.h"
 
