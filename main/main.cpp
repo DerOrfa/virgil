@@ -80,6 +80,7 @@ int main( int argc, char ** argv )
 	BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(files)){
 		const Bild &i=isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);//register loaded image in handler
 		master->glview->showObj(i.frame); // and show it in the master view
+		master->glview->showObj(i.label); // and show it in the master view
 	}
 
 	SGLprintState("fertsch");

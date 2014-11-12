@@ -26,6 +26,7 @@
 #include <math.h>
 #include <typeinfo>
 #include <libsgl/sglshptr.h>
+#include <libsgl/text/sgl3dtext.h>
 #include <limits>
 #include <DataStorage/image.hpp>
 #include "imgframe.h"
@@ -69,6 +70,7 @@ public:
 	SGLshPtr< GLvlVolumeTex > tex;
 public:
 	SGLshPtr< ImgFrame > frame;
+	SGLshPtr< SGL3DText > label;
 	const SGLshPtr<SGLBaseTex> getTex();
 
 	Bild(const isis::data::Image &src);
