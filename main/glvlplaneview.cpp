@@ -105,28 +105,6 @@ GLvlPlaneView::~GLvlPlaneView()
 	qDebug("Removing view 0x%x",this);
 }
 
-bool GLvlPlaneView::loadCfg()
-{
-	qWarning("Implement me");
-/*	schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->setOn(myReg->getbVal("Andere anzeigen",true));
-	schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->setOn(myReg->getbVal("In anderen anzeigen",true));
-	*/
-	return GLvlView::loadCfg();
-}
-
-bool GLvlPlaneView::saveCfg()
-{
-	qWarning("Implement me");
-	GLvlView::saveCfg();
-/*	if(schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isVisible())
-		myReg->setbVal("Andere anzeigen",schalterdiesen_Schnitt_in_anderen_Ansichten_zeigenAction->isOn());
-	if(schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isVisible())
-		myReg->setbVal("In Anderen anzeigen",schalterandere_Schnitte_in_dieser_Ansicht_zeigenAction->isOn());
-		*/
-}
-
-
-
 void GLvlPlaneView::showInOthers(bool toggle)
 {
 	SGLshPtr<GLvlPlaneCam> cam=dynamic_pointer_cast<GLvlPlaneCam>(glview->Camera);

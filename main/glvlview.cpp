@@ -4,7 +4,7 @@
 #include <CoreUtils/singletons.hpp>
 #include <DataStorage/io_factory.hpp>
 
-GLvlView::GLvlView():onGotFocus(myCam)
+GLvlView::GLvlView()
 {
 	setupUi(this);
 	selfChange=false;
@@ -14,6 +14,7 @@ void GLvlView::setupSpace(QWidget *parent)
 {
 	GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 	glview = manager.createSharedSpace(parent);
+	onGotFocus.setCam(glview->Camera);
 	glview->gotFocus.connect(onGotFocus);
 	glview->keyIgnore[Qt::Key_Escape]=true; // we dont want libsgl to close the widget when esc is pressed
 	connect(glview,SIGNAL(camChanged()),SLOT(onCamChanged()));
@@ -134,69 +135,6 @@ void	GLvlView::selectViewMode(int mode)
 			glview->resizeMode=SGLBaseCam::scaleView;break;
 		default: SGLprintWarning("Unbekannter ViewMode %d",mode);return;break;
 	}
-}
-
-/*!
-	\fn GLvlView::loadCam()
- */
-bool GLvlView::loadCfg()
-{
-#warning "Implement me, pleeease"
-/*	myCam=glview->Camera;
-	ERegistry CamReg("Camera",myReg);
-	myCam->Pos.SGLV_X=CamReg.getdVal("Pos.x",0);
-	myCam->Pos.SGLV_Y=CamReg.getdVal("Pos.y",0);
-	myCam->Pos.SGLV_Z=CamReg.getdVal("Pos.z",200);
-
-	myCam->LookAt.SGLV_X=CamReg.getdVal("Aim.x",0);
-	myCam->LookAt.SGLV_Y=CamReg.getdVal("Aim.y",0);
-	myCam->LookAt.SGLV_Z=CamReg.getdVal("Aim.z",0);
-
-	myCam->UpVect.SGLV_X=CamReg.getdVal("Up.x",0);
-	myCam->UpVect.SGLV_Y=CamReg.getdVal("Up.y",1);
-	myCam->UpVect.SGLV_Z=CamReg.getdVal("Up.z",0);
-	*/
-
-	myCam->ViewMatr.outDated=true;
-	myCam->Compile();
-
-	int mode;
-/*	QString sMode=myReg->getsVal("ResizeMode",scaleMode->text(glview->resizeMode));
-	for(mode=scaleMode->count()-1;mode>=0 && sMode!=scaleMode->text(mode);mode--);
-	scaleMode->setCurrentItem(mode);
-	selectViewMode(mode);*/
-	return true;
-}
-
-
-/*!
-	\fn GLvlView::saveCam()
- */
-bool GLvlView::saveCfg()
-{
-#warning "implement me"
-/*	ERegistry CamReg("Camera",myReg);
-	bool ret;
-	if(!myCam)
-	{
-		SGLprintWarning("Kopie der Kamera fehlt, versuche aktuelle Kamera zu ermitteln");
-		myCam=glview->Camera;
-	}
-	ret=CamReg.setdVal("Pos.x",myCam->Pos.SGLV_X);
-	ret&=CamReg.setdVal("Pos.y",myCam->Pos.SGLV_Y);
-	ret&=CamReg.setdVal("Pos.z",myCam->Pos.SGLV_Z);
-
-	ret&=CamReg.setdVal("Aim.x",myCam->LookAt.SGLV_X);
-	ret&=CamReg.setdVal("Aim.y",myCam->LookAt.SGLV_Y);
-	ret&=CamReg.setdVal("Aim.z",myCam->LookAt.SGLV_Z);
-
-	ret&=CamReg.setdVal("Up.x",myCam->UpVect.SGLV_X);
-	ret&=CamReg.setdVal("Up.y",myCam->UpVect.SGLV_Y);
-	ret&=CamReg.setdVal("Up.z",myCam->UpVect.SGLV_Z);
-
-	ret&=myReg->setsVal("ResizeMode",scaleMode->currentText());
-	*/
-	return true;
 }
 
 void GLvlView::showOthersHere(bool toggle)

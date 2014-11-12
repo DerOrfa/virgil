@@ -12,8 +12,6 @@ class GLvlView : public QMainWindow,public Ui_GLvlView
 	Q_OBJECT
 public:
 	GLvlView();
-	virtual bool loadCfg();
-	virtual bool saveCfg();
 	SGLqtSpace * glview;
 	void showObjList();
 	SGLshPtr<GLvlVolumeTex> tex;
@@ -24,20 +22,22 @@ public:
 protected:
 	void setupSpace(QWidget *parent=NULL);
 	void closeEvent(QCloseEvent *e);
-	SGLshPtr<SGLBaseCam> myCam;
 
 private:
 	class SGLgotFocusSlot:public  SGLSlot
 	{
-		const SGLshPtr<SGLBaseCam> &myCam;
+		SGLshPtr<SGLBaseCam> myCam;
 	public:
-		SGLgotFocusSlot(const SGLshPtr<SGLBaseCam> &_myCam):myCam(_myCam){}
+		void setCam(const SGLshPtr<SGLBaseCam> &_myCam){
+			Q_ASSERT(_myCam);
+			myCam=_myCam;
+		}
 		void operator()(int reason){
+			Q_ASSERT(myCam);
 			if(GLvlView::activeCam!=myCam)
 			{
 				GLvlView::activeCam=myCam;
 			}
-
 		}
 	}onGotFocus;
 

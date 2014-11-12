@@ -38,8 +38,6 @@ class GLvlPlaneView: public GLvlView
 public:
 	GLvlPlaneView();
 	virtual ~GLvlPlaneView();
-	virtual bool loadCfg();
-	virtual bool saveCfg();
 	void init();
 	void showCursThere(bool toggle);
 	void showCursHere(bool toggle);
