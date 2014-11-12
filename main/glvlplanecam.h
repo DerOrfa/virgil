@@ -20,8 +20,8 @@
 #ifndef GLVLPLANECAM_H
 #define GLVLPLANECAM_H
 
-#include <helper/sglcamera.h>
-#include <primitives/sglvieleck.h>
+#include <libsgl/helper/sglcamera.h>
+#include <libsgl/primitives/sglvieleck.h>
 #include <qobject.h>
 #include <QMouseEvent>
 #include "glvlvolumetex.h"

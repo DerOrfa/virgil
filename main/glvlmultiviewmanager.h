@@ -1,8 +1,8 @@
 #ifndef GLVLMULTIVIEWMANAGER_H
 #define GLVLMULTIVIEWMANAGER_H
 
-#include <qt4_glue/sglqtmultispacemgr.h>
-#include <sglsignal.h>
+#include <libsgl/qt4_glue/sglqtmultispacemgr.h>
+#include <libsgl/sglsignal.h>
 #include <DataStorage/image.hpp>
 
 #include "glvlplaneview.h"
@@ -15,7 +15,7 @@ public:
 	QList<Bild> master_images;
 	GLvlMultiviewManager();
 	QLinkedList<GLvlPlaneView *> planeViews;
-	void addImage(const isis::data::Image &img);
+	const Bild& addImage(const isis::data::Image& img);
 Q_SIGNALS:
 	void newData();
 };

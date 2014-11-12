@@ -22,10 +22,10 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <sglmisc.h>
+#include <libsgl/sglmisc.h>
 #include <math.h>
 #include <typeinfo>
-#include <sglshptr.h>
+#include <libsgl/sglshptr.h>
 #include <limits>
 #include <DataStorage/image.hpp>
 #include "imgframe.h"

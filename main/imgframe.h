@@ -1,7 +1,7 @@
 #ifndef IMGFRAME_H
 #define IMGFRAME_H
 
-#include <sglobj.h>
+#include <libsgl/sglobj.h>
 
 class ImgFrame : public SGLObj{
 public:

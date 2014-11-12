@@ -1,8 +1,8 @@
 #ifndef GLVLVIEW_H
 #define GLVLVIEW_H
 
-#include <sglsignal.h>
-#include <qt4_glue/sglqtspace.h>
+#include <libsgl/sglsignal.h>
+#include <libsgl/qt4_glue/sglqtspace.h>
 #include "ui_GLvlView.h"
 #include "glvlvolumetex.h"
 

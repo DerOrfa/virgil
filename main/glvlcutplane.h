@@ -12,8 +12,8 @@
 #ifndef GLVLCUTPLANE_H
 #define GLVLCUTPLANE_H
 
-#include <sglsignal.h>
-#include <primitives/sglvieleck.h>
+#include <libsgl/sglsignal.h>
+#include <libsgl/primitives/sglvieleck.h>
 #include "glvlvolumetex.h"
 
 /**

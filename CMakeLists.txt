@@ -10,6 +10,7 @@ SET(ISIS_DIR /usr/share/isis/cmake CACHE PATH "The directory where the isis cmak
 find_package(ISIS REQUIRED)
 find_package(Qt4 REQUIRED )
 FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(Freetype REQUIRED)
 
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_OPENGL TRUE)
@@ -17,7 +18,6 @@ set(QT_USE_OPENGL TRUE)
 INCLUDE(${QT_USE_FILE})
 
 FIND_PACKAGE(Boost REQUIRED)
-find_library(LIBFTGL ftgl)
 
 set(DEFINES -DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS)
 add_definitions(-DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS -DQT_NO_KEYWORDS)
@@ -64,4 +64,4 @@ add_executable(virgil ${MOCS} ${UI_H}
 	main/imgframe.cpp
 	main/glvlplanecursor.cpp
 )
-target_link_libraries(virgil ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES})
+target_link_libraries(virgil ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES} ${FREETYPE_LIBRARIES})

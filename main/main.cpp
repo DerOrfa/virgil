@@ -67,18 +67,20 @@ int main( int argc, char ** argv )
 	default:SGLshowInfos=SGLshowWarnings=SGLshowState=true;
 	}
 
-	if(argc<=1){
+	isis::util::slist files;
+	if(argc<=1)
 		BOOST_FOREACH(QString file,QFileDialog::getOpenFileNames(NULL,"Open image data","","*.nii"))
-			BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(file.toStdString()))
-				isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
-
-	} else 
-		BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(argv[1]))
-			isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);
+			files.push_back(file.toStdString());
+	else 
+		files=isis::util::slist(argv+1,argv+argc);
 
 	SGLprintState("Initialisiere Schnittstelle ...");
-	(new GLvlMasterView)->show();
-
+	GLvlMasterView* master = new GLvlMasterView;
+	
+	BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(files)){
+		const Bild &i=isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);//register loaded image in handler
+		master->glview->showObj(i.frame); // and show it in the master view
+	}
 
 	SGLprintState("fertsch");
 	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );

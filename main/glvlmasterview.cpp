@@ -42,10 +42,7 @@ GLvlMasterView::GLvlMasterView()
 	glViewContainer->setObjectName("MasterViewContainer");
 	setupSpace(glViewContainer);
 	glview->resizeMode=SGLBaseCam::scaleView;
-	if(manager.master_images.size()){
-		const Bild &img=manager.master_images.front();
-		glview->showObj(img.frame);
-	}
+	show();
 
 //	((GLvlView*)this)->connect(fileSegmentierungAction,SIGNAL(activated()),SLOT(loadWShedDlg()));
 //	((GLvlView*)this)->connect(viewsNeue_SichtAction,SIGNAL(activated()),SLOT(newPlane()));

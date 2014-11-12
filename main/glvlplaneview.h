@@ -22,7 +22,7 @@
 #define GLVLPLANEVIEW_H
 
 #include <qlabel.h>
-#include <primitives/sglquader.h>
+#include <libsgl/primitives/sglquader.h>
 #include <QComboBox>
 
 #include "glvlplanecam.h"
