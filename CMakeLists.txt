@@ -52,6 +52,7 @@ qt4_wrap_cpp(MOCS main/glvlplanecam.h main/glvlplanecursor.h main/glvlplaneview.
 
 add_executable(virgil ${MOCS} ${UI_H}
 	main/main.cpp
+	main/bild.cpp
 	main/glvlcutplane.cpp
 	main/glvlmasterview.cpp
 	main/glvlplanecam.cpp
