@@ -181,15 +181,9 @@ void GLvlPlaneView::init()
 	cam->connect(glview,
 		SIGNAL(pressedMouseMoveRel(QMouseEvent *,float ,float )),
 		SLOT(schieben(QMouseEvent *,float ,float )));
-//	cursor->connect( fangToggle, SIGNAL( toggled(bool) ),SLOT(setFang(bool)));
-//	cursor->connect( spinCursorSize, SIGNAL( valueChanged(int) ),SLOT(setSize(int)));
-
-//	cursor->setFang(fangToggle->isOn());
-//	cursor->setSize(spinCursorSize->value());
 
 	glview->registerObj(cam->myPlane);
 	connect(cam.get(),SIGNAL(camChanged()),SLOT(onCamChanged()));
-//	loadCfg();
 	showInOthers(true);
 }
 
@@ -292,6 +286,9 @@ void GLvlPlaneView::onSelectMasterImg(int index)
 		SGLprintError("Die aktuelle Camera ist keine PLaneCam");return;
 	} else {
 		cam->myPlane->Mat->SetTex(img.getTex());
+		cam->myPlane->compileNextTime();
+		glview->sendRedraw();
+		glview->sendRedrawOther();
 	}
 }
 

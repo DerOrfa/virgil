@@ -157,7 +157,7 @@ void GLvlView::closeEvent(QCloseEvent *e)
 
 void GLvlView::on_actionNewPlane_triggered(bool)
 {
-    (new GLvlPlaneView)->show();
+    new GLvlPlaneView;
 }
 
 // void GLvlView::on_actionOpen_file_triggered(bool)

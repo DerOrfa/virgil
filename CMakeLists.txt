@@ -45,6 +45,7 @@ INCLUDE_DIRECTORIES(${ISIS_INCLUDE_DIRS} ${SGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINA
 
 find_library(SGL_LIBRARY "sgl")
 find_library(SGL_QT_LIBRARY "qt4_glue")
+find_library(LIBFTGL ftgl)
 
 
 qt4_wrap_ui(UI_H main/GLvlView.ui)
@@ -65,4 +66,4 @@ add_executable(virgil ${MOCS} ${UI_H}
 	main/imgframe.cpp
 	main/glvlplanecursor.cpp
 )
-target_link_libraries(virgil ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES} ${FREETYPE_LIBRARIES})
+target_link_libraries(virgil ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES} ${FREETYPE_LIBRARIES} ${LIBFTGL})
