@@ -68,24 +68,30 @@ int main( int argc, char ** argv )
 	}
 
 	isis::util::slist files;
+	GLvlMasterView master;
 	if(argc<=1)
-		BOOST_FOREACH(QString file,QFileDialog::getOpenFileNames(NULL,"Open image data","","*.nii"))
+		BOOST_FOREACH(QString file,QFileDialog::getOpenFileNames(&master,"Open image data","","*.nii"))
 			files.push_back(file.toStdString());
 	else 
 		files=isis::util::slist(argv+1,argv+argc);
 
-	SGLprintState("Initialisiere Schnittstelle ...");
-	GLvlMasterView* master = new GLvlMasterView;
+	std::list< isis::data::Image > images=isis::data::IOFactory::load(files);
 	
-	BOOST_FOREACH(const isis::data::Image &img,isis::data::IOFactory::load(files)){
-		const Bild &i=isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);//register loaded image in handler
-		master->glview->showObj(i.frame); // and show it in the master view
-		master->glview->showObj(i.label); // and show it in the master view
-	}
+	if(!images.empty()){
+		SGLprintState("Initializing interface ...");
+		
+		BOOST_FOREACH(const isis::data::Image &img,images){
+			const Bild &i=isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);//register loaded image in handler
+			master.glview->showObj(i.frame); // and show it in the master view
+			master.glview->showObj(i.label); // and show it in the master view
+		}
 
-	SGLprintState("fertsch");
-	a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
-	return a.exec();
+		SGLprintState("fertsch");
+		a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
+		return a.exec();
+	} else {
+		QMessageBox::warning(&master,"No data","No images where loaded, closing ...");
+	}
 }
 
 
