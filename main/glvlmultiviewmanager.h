@@ -16,6 +16,8 @@ public:
 	GLvlMultiviewManager();
 	QLinkedList<GLvlPlaneView *> planeViews;
 	const Bild& addImage(const isis::data::Image& img);
+	void removeImage(int index=0);
+	void clear();
 Q_SIGNALS:
 	void newData();
 };

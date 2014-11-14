@@ -80,15 +80,18 @@ int main( int argc, char ** argv )
 	if(!images.empty()){
 		SGLprintState("Initializing interface ...");
 		
+		GLvlMultiviewManager &manager=isis::util::Singletons::get<GLvlMultiviewManager,10>();
 		BOOST_FOREACH(const isis::data::Image &img,images){
-			const Bild &i=isis::util::Singletons::get<GLvlMultiviewManager,10>().addImage(img);//register loaded image in handler
+			const Bild &i=manager.addImage(img);//register loaded image in handler
 			master.glview->showObj(i.frame); // and show it in the master view
 			master.glview->showObj(i.label); // and show it in the master view
 		}
 
 		SGLprintState("fertsch");
 		a.connect( &a, SIGNAL(lastWindowClosed()), SLOT(quit()) );
-		return a.exec();
+		int ret= a.exec();
+		manager.clear();
+		return ret;
 	} else {
 		QMessageBox::warning(&master,"No data","No images where loaded, closing ...");
 	}
