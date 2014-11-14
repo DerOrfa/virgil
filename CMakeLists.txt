@@ -6,18 +6,18 @@ project(virgil)
 # find and configure the isis core library
 ###########################################################
 SET(ISIS_DIR /usr/share/isis/cmake CACHE PATH "The directory where the isis cmake configuration script is located.")
+SET(Boost_USE_STATIC_LIBS ON)
 
 find_package(ISIS REQUIRED)
 find_package(Qt4 REQUIRED )
-FIND_PACKAGE(OpenGL REQUIRED)
-FIND_PACKAGE(Freetype REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
 
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_OPENGL TRUE)
 
 INCLUDE(${QT_USE_FILE})
-
-FIND_PACKAGE(Boost REQUIRED)
 
 set(DEFINES -DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS)
 add_definitions(-DGL_GLEXT_PROTOTYPES -DBOOST_HAS_PTHREADS -DQT_NO_KEYWORDS)
@@ -45,8 +45,7 @@ INCLUDE_DIRECTORIES(${ISIS_INCLUDE_DIRS} ${SGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINA
 
 find_library(SGL_LIBRARY "sgl")
 find_library(SGL_QT_LIBRARY "qt4_glue")
-find_library(LIBFTGL ftgl)
-
+find_library(LIBFTGL "${CMAKE_STATIC_LIBRARY_PREFIX}ftgl${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
 qt4_wrap_ui(UI_H main/GLvlView.ui)
 qt4_wrap_cpp(MOCS main/glvlplanecam.h main/glvlplanecursor.h main/glvlplaneview.h main/glvlview.h main/glvlmultiviewmanager.h OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
@@ -66,4 +65,4 @@ add_executable(virgil ${MOCS} ${UI_H}
 	main/imgframe.cpp
 	main/glvlplanecursor.cpp
 )
-target_link_libraries(virgil ${ISIS_LIB} ${ISIS_LIB_DEPENDS} ${OPENGL_LIBRARIES} ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${QT_LIBRARIES} ${FREETYPE_LIBRARIES} ${LIBFTGL})
+target_link_libraries(virgil ${SGL_LIBRARY} ${SGL_QT_LIBRARY} ${Boost_LIBRARIES} ${ISIS_LIB} ${OPENGL_LIBRARIES} ${QT_LIBRARIES} ${LIBFTGL} ${FREETYPE_LIBRARIES} )
